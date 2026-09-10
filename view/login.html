@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="Inicio de sesión de Ruta Segura, plataforma de educación vial."
+  >
+
+  <title>Iniciar sesión | Ruta Segura</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="min-h-screen bg-[#f4f6f3] font-sans text-[#172026] antialiased">
+  <main class="grid min-h-screen lg:grid-cols-2">
+
+    
+    <section
+      class="relative hidden min-h-screen overflow-hidden bg-gradient-to-br
+             from-[#252d32] via-[#181e22] to-[#101417] p-[3rem]
+             text-white lg:flex lg:flex-col xl:p-[5rem]"
+      aria-labelledby="hero-title"
+    >
+      <div
+        class="pointer-events-none absolute -bottom-[5rem] -right-[13rem]
+               h-[8rem] w-[45rem] -rotate-[28deg]
+               border-y-[0.125rem] border-white/10"
+        aria-hidden="true"
+      ></div>
+
+      <div
+        class="pointer-events-none absolute bottom-[8rem] -right-[4rem]
+               h-[0.3rem] w-[30rem] -rotate-[28deg]
+               bg-[repeating-linear-gradient(90deg,#f5c518_0_3.5rem,transparent_3.5rem_5.5rem)]"
+        aria-hidden="true"
+      ></div>
+
+    
+      <header class="relative z-10 flex items-center gap-[0.8rem]">
+        <div
+          class="flex items-center gap-[0.2rem] rounded-[0.55rem]
+                 bg-[#090c0e] p-[0.4rem]"
+          aria-hidden="true"
+        >
+          <span class="size-[0.55rem] rounded-full bg-[#d9363e]"></span>
+          <span class="size-[0.55rem] rounded-full bg-[#f5c518]"></span>
+          <span class="size-[0.55rem] rounded-full bg-[#168653]"></span>
+        </div>
+
+        <span class="text-[1.1rem] font-extrabold tracking-tight">
+          Ruta Segura
+        </span>
+      </header>
+
+     
+      <div class="relative z-10 my-auto max-w-[39rem] py-[5rem]">
+        <p
+          class="mb-[1.4rem] flex items-center gap-[0.7rem]
+                 text-[0.8rem] font-extrabold uppercase
+                 tracking-[0.14em] text-[#f5c518]"
+        >
+          <span class="h-[0.18rem] w-[2rem] bg-[#f5c518]"></span>
+          Educación vial para todos
+        </p>
+
+        <h1
+          id="hero-title"
+          class="text-[3.5rem] font-extrabold leading-[1]
+                 tracking-[-0.055em] xl:text-[4.8rem]"
+        >
+          Aprende las reglas.
+          <span class="block">Protege cada camino.</span>
+        </h1>
+
+        <p
+          class="mt-[1.7rem] max-w-[34rem] text-[1.1rem]
+                 leading-[1.75] text-[#cbd2d5]"
+        >
+          Practica con lecciones breves, conoce las leyes de tránsito y
+          conviértete en una persona más segura en la vía.
+        </p>
+
+     
+        <div
+          class="mt-[2.7rem] inline-flex items-center gap-[1rem]
+                 rounded-[0.9rem] border-[0.0625rem] border-white/20
+                 bg-white/5 p-[0.8rem] pr-[1.3rem]"
+        >
+          <span
+            class="grid size-[3rem] place-items-center rounded-full
+                   border-[0.125rem] border-white bg-[#168653]
+                   text-[1.25rem] font-extrabold"
+            aria-hidden="true"
+          >
+            ✓
+          </span>
+
+          <p class="text-[0.85rem] leading-[1.45] text-[#dfe5e7]">
+            Tu próxima lección
+            <strong class="block text-white">empieza aquí</strong>
+          </p>
+        </div>
+      </div>
+
+     
+      <footer
+        class="relative z-10 flex items-center gap-[0.8rem]
+               text-[0.72rem] font-bold uppercase
+               tracking-[0.08em] text-[#8f9a9f]"
+      >
+        <span>Señales</span>
+        <span class="size-[0.3rem] rounded-full bg-[#f5c518]"></span>
+        <span>Decisiones</span>
+        <span class="size-[0.3rem] rounded-full bg-[#f5c518]"></span>
+        <span>Vidas</span>
+      </footer>
+    </section>
+
+    
+    <section
+      class="flex min-h-screen flex-col items-center justify-center
+             bg-[linear-gradient(rgba(21,26,30,0.035)_0.0625rem,transparent_0.0625rem),linear-gradient(90deg,rgba(21,26,30,0.035)_0.0625rem,transparent_0.0625rem)]
+             bg-[size:2rem_2rem] p-[1.3rem] sm:p-[3rem]"
+      aria-labelledby="login-title"
+    >
+      <div class="w-full max-w-[30rem]">
+
+      
+        <header class="mb-[3rem] flex items-center gap-[0.8rem] lg:hidden">
+          <div
+            class="flex items-center gap-[0.2rem] rounded-[0.55rem]
+                   bg-[#101417] p-[0.4rem]"
+            aria-hidden="true"
+          >
+            <span class="size-[0.55rem] rounded-full bg-[#d9363e]"></span>
+            <span class="size-[0.55rem] rounded-full bg-[#f5c518]"></span>
+            <span class="size-[0.55rem] rounded-full bg-[#168653]"></span>
+          </div>
+
+          <span class="text-[1.1rem] font-extrabold tracking-tight">
+            Ruta Segura
+          </span>
+        </header>
+
+       
+        <div
+          class="mb-[1.2rem] inline-flex items-center gap-[0.55rem]
+                 rounded-full bg-[#e0efe7] px-[0.8rem] py-[0.45rem]
+                 text-[0.72rem] font-extrabold uppercase
+                 tracking-[0.06em] text-[#0f6840]"
+        >
+          <span
+            class="size-[0.5rem] rounded-full bg-[#168653]
+                   ring-[0.25rem] ring-[#168653]/10"
+          ></span>
+
+          Continúa tu recorrido
+        </div>
+
+        <h2
+          id="login-title"
+          class="text-[2.4rem] font-extrabold leading-[1.15]
+                 tracking-[-0.045em]"
+        >
+          Bienvenido de vuelta
+        </h2>
+
+        <p class="mb-[2.2rem] mt-[0.75rem] leading-[1.65] text-[#68747b]">
+          Ingresa a tu cuenta para seguir aprendiendo.
+        </p>
+
+       
+        <form action="/login" method="post">
+
+          
+          <div>
+            <label
+              for="email"
+              class="text-[0.85rem] font-extrabold"
+            >
+              Correo electrónico
+            </label>
+
+            <div class="relative mt-[0.55rem]">
+              <span
+                class="pointer-events-none absolute left-[1rem] top-1/2
+                       -translate-y-1/2 text-[0.9rem] font-extrabold
+                       text-[#8a959a]"
+                aria-hidden="true"
+              >
+                @
+              </span>
+
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                placeholder="tu@correo.com"
+                required
+                class="min-h-[3.5rem] w-full rounded-[0.7rem]
+                       border-[0.0625rem] border-[#dbe0dc]
+                       bg-white/80 py-[0.8rem] pl-[2.8rem] pr-[1rem]
+                       text-[#172026] outline-none transition
+                       placeholder:text-[#9aa3a7]
+                       focus:border-[#168653] focus:bg-white
+                       focus:ring-[0.25rem] focus:ring-[#168653]/15"
+              >
+            </div>
+          </div>
+
+          
+          <div class="mt-[1.4rem]">
+            <div class="flex items-center justify-between gap-[1rem]">
+              <label
+                for="password"
+                class="text-[0.85rem] font-extrabold"
+              >
+                Contraseña
+              </label>
+
+              <a
+                href="/recuperar-contrasena"
+                class="text-[0.78rem] font-bold text-[#0f6840]
+                       underline decoration-[0.08rem]
+                       underline-offset-[0.2rem]
+                       hover:text-[#168653]
+                       focus:outline-[0.18rem]
+                       focus:outline-offset-[0.2rem]
+                       focus:outline-[#f5c518]"
+              >
+                ¿La olvidaste?
+              </a>
+            </div>
+
+            <div class="relative mt-[0.55rem]">
+              <span
+                class="pointer-events-none absolute left-[1rem] top-1/2
+                       -translate-y-1/2 text-[0.75rem] text-[#8a959a]"
+                aria-hidden="true"
+              >
+                ●
+              </span>
+
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Ingresa tu contraseña"
+                minlength="8"
+                required
+                class="min-h-[3.5rem] w-full rounded-[0.7rem]
+                       border-[0.0625rem] border-[#dbe0dc]
+                       bg-white/80 py-[0.8rem] pl-[2.8rem] pr-[1rem]
+                       text-[#172026] outline-none transition
+                       placeholder:text-[#9aa3a7]
+                       focus:border-[#168653] focus:bg-white
+                       focus:ring-[0.25rem] focus:ring-[#168653]/15"
+              >
+            </div>
+          </div>
+
+          
+          <label
+            class="my-[1.3rem] inline-flex cursor-pointer
+                   items-center gap-[0.65rem] text-[0.82rem]
+                   font-semibold text-[#68747b]"
+          >
+            <input
+              type="checkbox"
+              name="remember"
+              class="size-[1.05rem] accent-[#168653]"
+            >
+
+            <span>Recordar mi sesión</span>
+          </label>
+
+          
+          <button
+            type="submit"
+            class="flex min-h-[3.6rem] w-full cursor-pointer
+                   items-center justify-center gap-[0.8rem]
+                   rounded-[0.7rem] bg-[#168653]
+                   font-extrabold text-white shadow-lg
+                   shadow-[#168653]/20 transition
+                   hover:-translate-y-[0.1rem] hover:bg-[#0f6840]
+                   hover:shadow-xl hover:shadow-[#0f6840]/25
+                   focus:outline-[0.18rem]
+                   focus:outline-offset-[0.2rem]
+                   focus:outline-[#f5c518]
+                   active:translate-y-0"
+          >
+            Iniciar sesión
+            <span aria-hidden="true">→</span>
+          </button>
+        </form>
+
+   
+        <div
+          class="my-[1.7rem] flex items-center gap-[0.9rem]
+                 text-[0.8rem] text-[#9aa3a7]"
+        >
+          <span class="h-[0.0625rem] flex-1 bg-[#dbe0dc]"></span>
+          <span>o</span>
+          <span class="h-[0.0625rem] flex-1 bg-[#dbe0dc]"></span>
+        </div>
+
+      
+        <p class="text-center text-[0.9rem] text-[#68747b]">
+          ¿Aún no tienes una cuenta?
+
+          <a
+            href="/registro"
+            class="font-bold text-[#0f6840] underline
+                   decoration-[0.08rem] underline-offset-[0.2rem]
+                   hover:text-[#168653]
+                   focus:outline-[0.18rem]
+                   focus:outline-offset-[0.2rem]
+                   focus:outline-[#f5c518]"
+          >
+            Crear cuenta
+          </a>
+        </p>
+
+       
+        <aside
+          class="mt-[2rem] flex gap-[0.8rem] rounded-r-[0.7rem]
+                 border-l-[0.28rem] border-[#f5c518]
+                 bg-[#fff8d9] p-[1rem]"
+        >
+          <span
+            class="grid size-[1.5rem] shrink-0 place-items-center
+                   rounded-full bg-[#f5c518] text-[0.78rem]
+                   font-black text-[#151a1e]"
+            aria-hidden="true"
+          >
+            !
+          </span>
+
+          <p class="text-[0.75rem] leading-[1.55] text-[#675c25]">
+            <strong class="block text-[#40380f]">Dato vial</strong>
+            El conocimiento también salva vidas. Aprende, practica y
+            comparte la vía con responsabilidad.
+          </p>
+        </aside>
+      </div>
+
+    
+      <footer
+        class="mt-auto flex gap-[0.65rem] pt-[2.5rem]
+               text-[0.7rem] text-[#90999d]"
+      >
+        <a href="/privacidad" class="hover:text-[#168653]">
+          Privacidad
+        </a>
+
+        <span>•</span>
+
+        <a href="/terminos" class="hover:text-[#168653]">
+          Términos
+        </a>
+
+        <span>•</span>
+        <span>Guatemala</span>
+      </footer>
+    </section>
+  </main>
+</body>
+</html>
