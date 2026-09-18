@@ -10,7 +10,6 @@
   >
 
   <title>Iniciar sesión | Ruta Segura</title>
-
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
@@ -173,7 +172,7 @@
         </p>
 
        
-        <form action="/login" method="post">
+        <form id="login-form" action="/login" method="post">
 
           
           <div>
@@ -181,7 +180,7 @@
               for="email"
               class="text-[0.85rem] font-extrabold"
             >
-              Correo electrónico
+              Nombre de usuario
             </label>
 
             <div class="relative mt-[0.55rem]">
@@ -191,15 +190,13 @@
                        text-[#8a959a]"
                 aria-hidden="true"
               >
-                @
+                ●
               </span>
 
               <input
-                id="email"
-                name="email"
-                type="email"
-                autocomplete="email"
-                placeholder="tu@correo.com"
+                id="username"
+                name="username"
+                type="text"
                 required
                 class="min-h-[3.5rem] w-full rounded-[0.7rem]
                        border-[0.0625rem] border-[#dbe0dc]
@@ -369,5 +366,6 @@
       </footer>
     </section>
   </main>
+  <script src="../scripts/login.js"></script>
 </body>
 </html>

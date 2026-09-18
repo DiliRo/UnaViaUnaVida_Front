@@ -590,6 +590,35 @@
     const form = document.querySelector("#register-form");
     const formMessage = document.querySelector("#form-message");
 
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const nombre = document.getElementById("name").value;
+        const nombreUsuario = document.getElementById("username").value;
+        const contrasena = document.getElementById("password").value;
+
+        const response = await fetch("http://localhost:3641/v1/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nombre,
+                nombreUsuario,
+                contrasena
+            })
+        });
+
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            console.log(response.ok)
+        } else {
+            console.log("ni modo")
+        }
+    })
+
     const fields = {
       name: document.querySelector("#name"),
       username: document.querySelector("#username"),
@@ -860,6 +889,9 @@
       );
 
     });
+    
+
+    
   </script>
 </body>
 </html>
