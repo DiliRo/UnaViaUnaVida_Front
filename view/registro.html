@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Registro de usuarios de Ruta Segura."
+  >
+
+  <title>Crear cuenta | Ruta Segura</title>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="min-h-screen bg-[#f4f6f3] font-sans text-[#172026] antialiased">
+  <main class="grid min-h-screen lg:grid-cols-[0.85fr_1.15fr]">
+
+   
+    <section
+      class="relative hidden min-h-screen overflow-hidden bg-gradient-to-br
+             from-[#252d32] via-[#181e22] to-[#101417]
+             p-[3rem] text-white lg:flex lg:flex-col xl:p-[5rem]"
+      aria-labelledby="hero-title"
+    >
+      
+      <div
+        class="pointer-events-none absolute -bottom-[5rem] -right-[13rem]
+               h-[8rem] w-[45rem] -rotate-[28deg]
+               border-y-[0.125rem] border-white/10"
+        aria-hidden="true"
+      ></div>
+
+      <div
+        class="pointer-events-none absolute bottom-[8rem] -right-[4rem]
+               h-[0.3rem] w-[30rem] -rotate-[28deg]
+               bg-[repeating-linear-gradient(90deg,#f5c518_0_3.5rem,transparent_3.5rem_5.5rem)]"
+        aria-hidden="true"
+      ></div>
+
+     
+      <header class="relative z-10 flex items-center gap-[0.8rem]">
+        <div
+          class="flex items-center gap-[0.2rem] rounded-[0.55rem]
+                 bg-[#090c0e] p-[0.4rem]"
+          aria-hidden="true"
+        >
+          <span class="size-[0.55rem] rounded-full bg-[#d9363e]"></span>
+          <span class="size-[0.55rem] rounded-full bg-[#f5c518]"></span>
+          <span class="size-[0.55rem] rounded-full bg-[#168653]"></span>
+        </div>
+
+        <span class="text-[1.1rem] font-extrabold tracking-tight">
+          Ruta Segura
+        </span>
+      </header>
+
+      
+      <div class="relative z-10 my-auto max-w-[38rem] py-[4rem]">
+        <p
+          class="mb-[1.4rem] flex items-center gap-[0.7rem]
+                 text-[0.8rem] font-extrabold uppercase
+                 tracking-[0.14em] text-[#f5c518]"
+        >
+          <span class="h-[0.18rem] w-[2rem] bg-[#f5c518]"></span>
+          Comienza tu recorrido
+        </p>
+
+        <h1
+          id="hero-title"
+          class="text-[3.4rem] font-extrabold leading-[1]
+                 tracking-[-0.055em] xl:text-[4.6rem]"
+        >
+          Aprende hoy.
+          <span class="block">Conduce mejor mañana.</span>
+        </h1>
+
+        <p
+          class="mt-[1.7rem] max-w-[33rem] text-[1.05rem]
+                 leading-[1.75] text-[#cbd2d5]"
+        >
+          Crea tu cuenta para completar lecciones, acumular puntos,
+          mantener tu racha y conocer las normas de tránsito.
+        </p>
+
+     
+        <div class="mt-[2.8rem] grid gap-[0.9rem]">
+          <div
+            class="flex items-center gap-[0.9rem] rounded-[0.8rem]
+                   border-[0.0625rem] border-white/15
+                   bg-white/5 p-[0.9rem]"
+          >
+            <span
+              class="grid size-[2.4rem] shrink-0 place-items-center
+                     rounded-full bg-[#168653] font-extrabold"
+              aria-hidden="true"
+            >
+              ✓
+            </span>
+
+            <p class="text-[0.88rem] text-[#dfe5e7]">
+              Lecciones prácticas de educación vial
+            </p>
+          </div>
+
+          <div
+            class="flex items-center gap-[0.9rem] rounded-[0.8rem]
+                   border-[0.0625rem] border-white/15
+                   bg-white/5 p-[0.9rem]"
+          >
+            <span
+              class="grid size-[2.4rem] shrink-0 place-items-center
+                     rounded-full bg-[#f5c518] font-extrabold
+                     text-[#151a1e]"
+              aria-hidden="true"
+            >
+              ★
+            </span>
+
+            <p class="text-[0.88rem] text-[#dfe5e7]">
+              Puntos, niveles, logros y rachas
+            </p>
+          </div>
+
+          <div
+            class="flex items-center gap-[0.9rem] rounded-[0.8rem]
+                   border-[0.0625rem] border-white/15
+                   bg-white/5 p-[0.9rem]"
+          >
+            <span
+              class="grid size-[2.4rem] shrink-0 place-items-center
+                     rounded-full bg-[#d9363e] font-extrabold"
+              aria-hidden="true"
+            >
+              !
+            </span>
+
+            <p class="text-[0.88rem] text-[#dfe5e7]">
+              Información para transitar con responsabilidad
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <footer
+        class="relative z-10 flex items-center gap-[0.8rem]
+               text-[0.72rem] font-bold uppercase
+               tracking-[0.08em] text-[#8f9a9f]"
+      >
+        <span>Aprende</span>
+        <span class="size-[0.3rem] rounded-full bg-[#f5c518]"></span>
+        <span>Practica</span>
+        <span class="size-[0.3rem] rounded-full bg-[#f5c518]"></span>
+        <span>Avanza</span>
+      </footer>
+    </section>
+
+   
+    <section
+      class="flex min-h-screen flex-col items-center justify-center
+             bg-[linear-gradient(rgba(21,26,30,0.035)_0.0625rem,transparent_0.0625rem),linear-gradient(90deg,rgba(21,26,30,0.035)_0.0625rem,transparent_0.0625rem)]
+             bg-[size:2rem_2rem] p-[1.3rem] sm:p-[3rem]"
+      aria-labelledby="register-title"
+    >
+      <div class="w-full max-w-[38rem] py-[2rem]">
+
+       
+        <header class="mb-[2.5rem] flex items-center gap-[0.8rem] lg:hidden">
+          <div
+            class="flex items-center gap-[0.2rem] rounded-[0.55rem]
+                   bg-[#101417] p-[0.4rem]"
+            aria-hidden="true"
+          >
+            <span class="size-[0.55rem] rounded-full bg-[#d9363e]"></span>
+            <span class="size-[0.55rem] rounded-full bg-[#f5c518]"></span>
+            <span class="size-[0.55rem] rounded-full bg-[#168653]"></span>
+          </div>
+
+          <span class="text-[1.1rem] font-extrabold tracking-tight">
+            Ruta Segura
+          </span>
+        </header>
+
+        <div
+          class="mb-[1.2rem] inline-flex items-center gap-[0.55rem]
+                 rounded-full bg-[#e0efe7] px-[0.8rem] py-[0.45rem]
+                 text-[0.72rem] font-extrabold uppercase
+                 tracking-[0.06em] text-[#0f6840]"
+        >
+          <span
+            class="size-[0.5rem] rounded-full bg-[#168653]
+                   ring-[0.25rem] ring-[#168653]/10"
+          ></span>
+
+          Nuevo usuario
+        </div>
+
+        <h2
+          id="register-title"
+          class="text-[2.4rem] font-extrabold leading-[1.15]
+                 tracking-[-0.045em]"
+        >
+          Crear una cuenta
+        </h2>
+
+        <p class="mb-[2rem] mt-[0.75rem] leading-[1.65] text-[#68747b]">
+          Completa tus datos para comenzar tu formación vial.
+        </p>
+
+       
+        <div
+          id="form-message"
+          class="mb-[1.5rem] hidden rounded-[0.7rem]
+                 border-l-[0.28rem] p-[1rem] text-[0.84rem]"
+          role="alert"
+          aria-live="polite"
+        ></div>
+
+        <form id="register-form" action="/registro" method="post" novalidate>
+          
+          <input type="hidden" name="nivel" value="1">
+          <input type="hidden" name="racha" value="0">
+          <input type="hidden" name="puntos" value="0">
+
+          <div class="grid gap-[1.3rem] sm:grid-cols-2">
+
+           
+            <div class="sm:col-span-2">
+              <label
+                for="name"
+                class="text-[0.85rem] font-extrabold"
+              >
+                Nombre completo
+              </label>
+
+              <div class="relative mt-[0.55rem]">
+                <span
+                  class="pointer-events-none absolute left-[1rem] top-1/2
+                         -translate-y-1/2 text-[#8a959a]"
+                  aria-hidden="true"
+                >
+                  ●
+                </span>
+
+                <input
+                  id="name"
+                  name="nombre"
+                  type="text"
+                  autocomplete="name"
+                  placeholder="Ej. Tiago Solorzano"
+                  minlength="3"
+                  maxlength="80"
+                  required
+                  class="min-h-[3.5rem] w-full rounded-[0.7rem]
+                         border-[0.0625rem] border-[#dbe0dc]
+                         bg-white/80 py-[0.8rem] pl-[2.8rem] pr-[1rem]
+                         outline-none transition
+                         placeholder:text-[#9aa3a7]
+                         focus:border-[#168653] focus:bg-white
+                         focus:ring-[0.25rem] focus:ring-[#168653]/15"
+                >
+              </div>
+
+              <p
+                id="name-error"
+                class="mt-[0.4rem] hidden text-[0.75rem]
+                       font-semibold text-[#d9363e]"
+              ></p>
+            </div>
+
+            
+            <div>
+              <label
+                for="username"
+                class="text-[0.85rem] font-extrabold"
+              >
+                Nombre de usuario
+              </label>
+
+              <div class="relative mt-[0.55rem]">
+                <span
+                  class="pointer-events-none absolute left-[1rem] top-1/2
+                         -translate-y-1/2 font-extrabold text-[#8a959a]"
+                  aria-hidden="true"
+                >
+                  @
+                </span>
+
+                <input
+                  id="username"
+                  name="nombreUsuario"
+                  type="text"
+                  autocomplete="username"
+                  placeholder="Ej. tiagosolorzano"
+                  minlength="4"
+                  maxlength="20"
+                  pattern="[A-Za-z0-9_]+"
+                  required
+                  class="min-h-[3.5rem] w-full rounded-[0.7rem]
+                         border-[0.0625rem] border-[#dbe0dc]
+                         bg-white/80 py-[0.8rem] pl-[2.8rem] pr-[1rem]
+                         outline-none transition
+                         placeholder:text-[#9aa3a7]
+                         focus:border-[#168653] focus:bg-white
+                         focus:ring-[0.25rem] focus:ring-[#168653]/15"
+                >
+              </div>
+
+              <p
+                id="username-error"
+                class="mt-[0.4rem] hidden text-[0.75rem]
+                       font-semibold text-[#d9363e]"
+              ></p>
+            </div>
+
+           
+            <div>
+              <label
+                for="email"
+                class="text-[0.85rem] font-extrabold"
+              >
+                Correo electrónico
+              </label>
+
+              <div class="relative mt-[0.55rem]">
+                <span
+                  class="pointer-events-none absolute left-[1rem] top-1/2
+                         -translate-y-1/2 font-extrabold text-[#8a959a]"
+                  aria-hidden="true"
+                >
+                  @
+                </span>
+
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  placeholder="tu@correo.com"
+                  required
+                  class="min-h-[3.5rem] w-full rounded-[0.7rem]
+                         border-[0.0625rem] border-[#dbe0dc]
+                         bg-white/80 py-[0.8rem] pl-[2.8rem] pr-[1rem]
+                         outline-none transition
+                         placeholder:text-[#9aa3a7]
+                         focus:border-[#168653] focus:bg-white
+                         focus:ring-[0.25rem] focus:ring-[#168653]/15"
+                >
+              </div>
+
+              <p
+                id="email-error"
+                class="mt-[0.4rem] hidden text-[0.75rem]
+                       font-semibold text-[#d9363e]"
+              ></p>
+            </div>
+
+            
+            <div>
+              <label
+                for="password"
+                class="text-[0.85rem] font-extrabold"
+              >
+                Crear contraseña
+              </label>
+
+              <div class="relative mt-[0.55rem]">
+                <span
+                  class="pointer-events-none absolute left-[1rem] top-1/2
+                         -translate-y-1/2 text-[0.75rem] text-[#8a959a]"
+                  aria-hidden="true"
+                >
+                  ●
+                </span>
+
+                <input
+                  id="password"
+                  name="contrasena"
+                  type="password"
+                  autocomplete="new-password"
+                  placeholder="Mínimo 8 caracteres"
+                  minlength="8"
+                  required
+                  class="min-h-[3.5rem] w-full rounded-[0.7rem]
+                         border-[0.0625rem] border-[#dbe0dc]
+                         bg-white/80 py-[0.8rem] pl-[2.8rem] pr-[3.3rem]
+                         outline-none transition
+                         placeholder:text-[#9aa3a7]
+                         focus:border-[#168653] focus:bg-white
+                         focus:ring-[0.25rem] focus:ring-[#168653]/15"
+                >
+
+                <button
+                  type="button"
+                  data-toggle-password="password"
+                  class="absolute right-[0.8rem] top-1/2 grid
+                         size-[2.2rem] -translate-y-1/2
+                         place-items-center rounded-[0.45rem]
+                         text-[#68747b] transition
+                         hover:bg-[#e0efe7] hover:text-[#0f6840]
+                         focus:outline-[0.18rem]
+                         focus:outline-[#f5c518]"
+                  aria-label="Mostrar contraseña"
+                  aria-pressed="false"
+                >
+                  <svg
+                    class="size-[1.25rem]"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+
+              <p
+                id="password-error"
+                class="mt-[0.4rem] hidden text-[0.75rem]
+                       font-semibold text-[#d9363e]"
+              ></p>
+            </div>
+
+            
+            <div>
+              <label
+                for="confirm-password"
+                class="text-[0.85rem] font-extrabold"
+              >
+                Confirmar contraseña
+              </label>
+
+              <div class="relative mt-[0.55rem]">
+                <span
+                  class="pointer-events-none absolute left-[1rem] top-1/2
+                         -translate-y-1/2 text-[0.75rem] text-[#8a959a]"
+                  aria-hidden="true"
+                >
+                  ●
+                </span>
+
+                <input
+                  id="confirm-password"
+                  name="confirmarContrasena"
+                  type="password"
+                  autocomplete="new-password"
+                  placeholder="Repite tu contraseña"
+                  minlength="8"
+                  required
+                  class="min-h-[3.5rem] w-full rounded-[0.7rem]
+                         border-[0.0625rem] border-[#dbe0dc]
+                         bg-white/80 py-[0.8rem] pl-[2.8rem] pr-[3.3rem]
+                         outline-none transition
+                         placeholder:text-[#9aa3a7]
+                         focus:border-[#168653] focus:bg-white
+                         focus:ring-[0.25rem] focus:ring-[#168653]/15"
+                >
+
+                <button
+                  type="button"
+                  data-toggle-password="confirm-password"
+                  class="absolute right-[0.8rem] top-1/2 grid
+                         size-[2.2rem] -translate-y-1/2
+                         place-items-center rounded-[0.45rem]
+                         text-[#68747b] transition
+                         hover:bg-[#e0efe7] hover:text-[#0f6840]
+                         focus:outline-[0.18rem]
+                         focus:outline-[#f5c518]"
+                  aria-label="Mostrar contraseña"
+                  aria-pressed="false"
+                >
+                  <svg
+                    class="size-[1.25rem]"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+
+              <p
+                id="confirm-password-error"
+                class="mt-[0.4rem] hidden text-[0.75rem]
+                       font-semibold text-[#d9363e]"
+              ></p>
+            </div>
+          </div>
+
+          
+          <div class="mt-[1.4rem]">
+            <label
+              class="flex cursor-pointer items-start gap-[0.7rem]
+                     text-[0.8rem] leading-[1.5] text-[#68747b]"
+            >
+              <input
+                id="terms"
+                name="terminos"
+                type="checkbox"
+                required
+                class="mt-[0.15rem] size-[1.05rem] shrink-0
+                       accent-[#168653]"
+              >
+
+              <span>
+                Acepto los
+                <a
+                  href="/terminos"
+                  class="font-bold text-[#0f6840] underline
+                         underline-offset-[0.2rem]"
+                >
+                  términos y condiciones
+                </a>
+                y la
+                <a
+                  href="/privacidad"
+                  class="font-bold text-[#0f6840] underline
+                         underline-offset-[0.2rem]"
+                >
+                  política de privacidad
+                </a>.
+              </span>
+            </label>
+
+            <p
+              id="terms-error"
+              class="mt-[0.4rem] hidden text-[0.75rem]
+                     font-semibold text-[#d9363e]"
+            ></p>
+          </div>
+
+          <button
+            type="submit"
+            class="mt-[1.6rem] flex min-h-[3.6rem] w-full
+                   cursor-pointer items-center justify-center
+                   gap-[0.8rem] rounded-[0.7rem] bg-[#168653]
+                   font-extrabold text-white shadow-lg
+                   shadow-[#168653]/20 transition
+                   hover:-translate-y-[0.1rem] hover:bg-[#0f6840]
+                   hover:shadow-xl hover:shadow-[#0f6840]/25
+                   focus:outline-[0.18rem]
+                   focus:outline-offset-[0.2rem]
+                   focus:outline-[#f5c518]
+                   active:translate-y-0"
+          >
+            Crear cuenta
+            <span aria-hidden="true">→</span>
+          </button>
+        </form>
+
+        <div
+          class="my-[1.7rem] flex items-center gap-[0.9rem]
+                 text-[0.8rem] text-[#9aa3a7]"
+        >
+          <span class="h-[0.0625rem] flex-1 bg-[#dbe0dc]"></span>
+          <span>o</span>
+          <span class="h-[0.0625rem] flex-1 bg-[#dbe0dc]"></span>
+        </div>
+
+        <p class="text-center text-[0.9rem] text-[#68747b]">
+          ¿Ya tienes una cuenta?
+
+          <a
+            href="/login"
+            class="font-bold text-[#0f6840] underline
+                   decoration-[0.08rem] underline-offset-[0.2rem]
+                   hover:text-[#168653]"
+          >
+            Iniciar sesión
+          </a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const form = document.querySelector("#register-form");
+    const formMessage = document.querySelector("#form-message");
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const nombre = document.getElementById("name").value;
+        const nombreUsuario = document.getElementById("username").value;
+        const contrasena = document.getElementById("password").value;
+
+        const response = await fetch("http://localhost:3641/v1/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nombre,
+                nombreUsuario,
+                contrasena
+            })
+        });
+
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            console.log(response.ok)
+        } else {
+            console.log("ni modo")
+        }
+    })
+
+    const fields = {
+      name: document.querySelector("#name"),
+      username: document.querySelector("#username"),
+      email: document.querySelector("#email"),
+      password: document.querySelector("#password"),
+      confirmPassword: document.querySelector("#confirm-password"),
+      terms: document.querySelector("#terms")
+    };
+
+    const inputErrorClasses = [
+      "border-[#d9363e]",
+      "focus:border-[#d9363e]",
+      "focus:ring-[#d9363e]/15"
+    ];
+
+    function showFieldError(input, message) {
+      const errorElement = document.querySelector(`#${input.id}-error`);
+
+      input.classList.add(...inputErrorClasses);
+      input.setAttribute("aria-invalid", "true");
+
+      if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.classList.remove("hidden");
+        input.setAttribute("aria-describedby", errorElement.id);
+      }
+    }
+
+    function clearFieldError(input) {
+      const errorElement = document.querySelector(`#${input.id}-error`);
+
+      input.classList.remove(...inputErrorClasses);
+      input.removeAttribute("aria-invalid");
+      input.removeAttribute("aria-describedby");
+
+      if (errorElement) {
+        errorElement.textContent = "";
+        errorElement.classList.add("hidden");
+      }
+    }
+
+    function showFormMessage(message, type) {
+      formMessage.textContent = message;
+      formMessage.className =
+        "mb-[1.5rem] rounded-[0.7rem] border-l-[0.28rem] p-[1rem] text-[0.84rem] font-semibold";
+
+      if (type === "success") {
+        formMessage.classList.add(
+          "border-[#168653]",
+          "bg-[#e0efe7]",
+          "text-[#0f6840]"
+        );
+      } else {
+        formMessage.classList.add(
+          "border-[#d9363e]",
+          "bg-[#fde8e9]",
+          "text-[#a9242b]"
+        );
+      }
+    }
+
+    function hideFormMessage() {
+      formMessage.textContent = "";
+      formMessage.classList.add("hidden");
+    }
+
+    function validateName() {
+      clearFieldError(fields.name);
+
+      if (fields.name.value.trim() === "") {
+        showFieldError(fields.name, "El nombre completo es obligatorio.");
+        return false;
+      }
+
+      if (fields.name.value.trim().length < 3) {
+        showFieldError(
+          fields.name,
+          "El nombre debe contener al menos 3 caracteres."
+        );
+        return false;
+      }
+
+      return true;
+    }
+
+    function validateUsername() {
+      clearFieldError(fields.username);
+
+      const username = fields.username.value.trim();
+      const usernamePattern = /^[A-Za-z0-9_]+$/;
+
+      if (username === "") {
+        showFieldError(
+          fields.username,
+          "El nombre de usuario es obligatorio."
+        );
+        return false;
+      }
+
+      if (username.length < 4) {
+        showFieldError(
+          fields.username,
+          "El nombre de usuario debe tener al menos 4 caracteres."
+        );
+        return false;
+      }
+
+      if (!usernamePattern.test(username)) {
+        showFieldError(
+          fields.username,
+          "Utiliza únicamente letras, números y guion bajo."
+        );
+        return false;
+      }
+
+      return true;
+    }
+
+    function validateEmail() {
+      clearFieldError(fields.email);
+
+      if (fields.email.value.trim() === "") {
+        showFieldError(fields.email, "El correo electrónico es obligatorio.");
+        return false;
+      }
+
+      if (!fields.email.validity.valid) {
+        showFieldError(
+          fields.email,
+          "Ingresa un correo electrónico válido."
+        );
+        return false;
+      }
+
+      return true;
+    }
+
+    function validatePassword() {
+      clearFieldError(fields.password);
+
+      const password = fields.password.value;
+
+      if (password === "") {
+        showFieldError(fields.password, "La contraseña es obligatoria.");
+        return false;
+      }
+
+      if (password.length < 8) {
+        showFieldError(
+          fields.password,
+          "La contraseña debe contener al menos 8 caracteres."
+        );
+        return false;
+      }
+
+      return true;
+    }
+
+    function validatePasswordConfirmation() {
+      clearFieldError(fields.confirmPassword);
+
+      if (fields.confirmPassword.value === "") {
+        showFieldError(
+          fields.confirmPassword,
+          "Debes confirmar tu contraseña."
+        );
+        return false;
+      }
+
+      if (fields.confirmPassword.value !== fields.password.value) {
+        showFieldError(
+          fields.confirmPassword,
+          "Las contraseñas no coinciden."
+        );
+        return false;
+      }
+
+      return true;
+    }
+
+    function validateTerms() {
+      clearFieldError(fields.terms);
+
+      if (!fields.terms.checked) {
+        showFieldError(
+          fields.terms,
+          "Debes aceptar los términos y condiciones."
+        );
+        return false;
+      }
+
+      return true;
+    }
+
+    fields.name.addEventListener("blur", validateName);
+    fields.username.addEventListener("blur", validateUsername);
+    fields.email.addEventListener("blur", validateEmail);
+    fields.password.addEventListener("blur", validatePassword);
+
+    fields.confirmPassword.addEventListener(
+      "blur",
+      validatePasswordConfirmation
+    );
+
+    fields.terms.addEventListener("change", validateTerms);
+
+    Object.values(fields).forEach((field) => {
+      const eventName = field.type === "checkbox" ? "change" : "input";
+
+      field.addEventListener(eventName, () => {
+        clearFieldError(field);
+        hideFormMessage();
+      });
+    });
+
+    document.querySelectorAll("[data-toggle-password]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const inputId = button.dataset.togglePassword;
+        const passwordInput = document.querySelector(`#${inputId}`);
+        const passwordIsVisible = passwordInput.type === "text";
+
+        passwordInput.type = passwordIsVisible ? "password" : "text";
+
+        button.setAttribute(
+          "aria-label",
+          passwordIsVisible ? "Mostrar contraseña" : "Ocultar contraseña"
+        );
+
+        button.setAttribute(
+          "aria-pressed",
+          String(!passwordIsVisible)
+        );
+      });
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      hideFormMessage();
+
+      const validationResults = [
+        validateName(),
+        validateUsername(),
+        validateEmail(),
+        validatePassword(),
+        validatePasswordConfirmation(),
+        validateTerms()
+      ];
+
+      const formIsValid = validationResults.every(Boolean);
+
+      if (!formIsValid) {
+        showFormMessage(
+          "Revisa los campos marcados antes de crear tu cuenta.",
+          "error"
+        );
+
+        const firstInvalidField = form.querySelector(
+          '[aria-invalid="true"]'
+        );
+
+        firstInvalidField?.focus();
+        return;
+      }
+
+      showFormMessage(
+        "Los datos son válidos. Tu cuenta está lista para ser registrada.",
+        "success"
+      );
+
+    });
+    
+
+    
+  </script>
+</body>
+</html>
