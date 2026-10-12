@@ -302,8 +302,50 @@
             </div>
           </div>
 
+          <div>
+            <label
+              for="email"
+              class="text-[0.85rem] font-extrabold"
+            >
+              Email
+            </label>
+
+            <div class="relative mt-[0.55rem]">
+              <span
+                class="pointer-events-none absolute
+                       left-[1rem] top-1/2
+                       -translate-y-1/2 text-[#8a959a]"
+                aria-hidden="true"
+              >
+                ●
+              </span>
+
+              <input
+                id="email"
+                name="emial"
+                type="text"
+                autocomplete="email"
+                placeholder="Ej. Luis Núñez"
+                minlength="3"
+                maxlength="80"
+                required
+                class="min-h-[3.5rem] w-full
+                       rounded-[0.7rem]
+                       border-[0.0625rem]
+                       border-[#dbe0dc] bg-white/80
+                       py-[0.8rem] pl-[2.8rem] pr-[1rem]
+                       outline-none transition
+                       placeholder:text-[#9aa3a7]
+                       focus:border-[#168653]
+                       focus:bg-white
+                       focus:ring-[0.25rem]
+                       focus:ring-[#168653]/15"
+              >
+            </div>
+          </div>
           <div class="mt-[1.4rem] grid gap-[1.4rem] sm:grid-cols-2">
 
+            
             
             <div>
               <label
@@ -348,6 +390,8 @@
                 >
               </div>
             </div>
+
+            
 
            
             <div>
@@ -402,7 +446,7 @@
                          hover:text-[#0f6840]"
                   aria-label="Mostrar contraseña"
                 >
-                  👁
+                  👁️
                 </button>
               </div>
             </div>
@@ -459,7 +503,7 @@
                          hover:text-[#0f6840]"
                   aria-label="Mostrar contraseña"
                 >
-                  👁
+                  👁️
                 </button>
               </div>
             </div>
@@ -566,7 +610,7 @@
   </main>
 
  
-     <script>
+  <script>
     const form = document.querySelector("#register-form");
     const registerMessage = document.querySelector("#register-message");
 
@@ -597,7 +641,7 @@
         .querySelector("#username")
         .value
         .trim();
-
+      const email = document.querySelector("#email").value
       const contrasena = document.querySelector("#password").value;
       const confirmarContrasena = document.querySelector(
         "#confirm-password"
@@ -627,7 +671,8 @@
             body: JSON.stringify({
               nombre,
               nombreUsuario,
-              contrasena
+              contrasena,
+              email
             })
           }
         );
