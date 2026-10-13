@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Inicio de Ruta Segura, plataforma de educación vial">
+  <title>Inicio | Ruta Segura</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="min-h-screen bg-[#F4F6F3] font-sans text-[#172026] antialiased">
+  <div class="grid min-h-screen lg:grid-cols-[15rem_minmax(0,1fr)]">
+
+    <aside class="flex flex-col bg-[#101417] p-[1.25rem] text-[#FFFFFF] lg:sticky lg:top-0 lg:h-screen">
+      <a href="./inicio.html" class="mb-[2rem] flex items-center gap-[0.75rem]">
+        <span class="flex gap-[0.18rem] rounded-[0.55rem] bg-[#090C0E] p-[0.4rem]" aria-hidden="true">
+          <span class="size-[0.5rem] rounded-full bg-[#D9363E]"></span>
+          <span class="size-[0.5rem] rounded-full bg-[#F5C518]"></span>
+          <span class="size-[0.5rem] rounded-full bg-[#168653]"></span>
+        </span>
+        <span class="font-extrabold tracking-tight">Ruta Segura</span>
+      </a>
+
+      <nav class="grid grid-cols-2 gap-[0.5rem] sm:grid-cols-4 lg:grid-cols-1" aria-label="Navegación principal">
+        <a href="./inicio.html" class="flex items-center gap-[0.75rem] rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.8rem] font-bold">
+          <span aria-hidden="true">⌂</span>
+          <span>Inicio</span>
+        </a>
+
+        <a href="./principal.html" class="flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] font-semibold text-[#CBD2D5] hover:bg-[#252D32] hover:text-[#FFFFFF]">
+          <span aria-hidden="true">◆</span>
+          <span>Mi ruta</span>
+        </a>
+
+        <button type="button" data-view="Módulos" class="future-view flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] text-left font-semibold text-[#CBD2D5] hover:bg-[#252D32] hover:text-[#FFFFFF]">
+          <span aria-hidden="true">▦</span>
+          <span>Módulos</span>
+        </button>
+
+        <button type="button" data-view="Logros" class="future-view flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] text-left font-semibold text-[#CBD2D5] hover:bg-[#252D32] hover:text-[#FFFFFF]">
+          <span aria-hidden="true">★</span>
+          <span>Logros</span>
+        </button>
+
+        <button type="button" data-view="Leyes" class="future-view flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] text-left font-semibold text-[#CBD2D5] hover:bg-[#252D32] hover:text-[#FFFFFF]">
+          <span aria-hidden="true">▤</span>
+          <span>Leyes</span>
+        </button>
+
+        <button type="button" data-view="Perfil" class="future-view flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] text-left font-semibold text-[#CBD2D5] hover:bg-[#252D32] hover:text-[#FFFFFF]">
+          <span aria-hidden="true">●</span>
+          <span>Perfil</span>
+        </button>
+      </nav>
+
+      <div class="mt-[1.5rem] border-t-[0.0625rem] border-[#252D32] pt-[1.5rem] lg:mt-auto">
+        <div class="flex items-center gap-[0.75rem]">
+          <span class="grid size-[2.6rem] place-items-center rounded-full bg-[#E0EFE7] font-extrabold text-[#0F6840]">LN</span>
+          <div>
+            <p class="text-[0.85rem] font-bold">Luis Núñez</p>
+            <p class="text-[0.72rem] text-[#8F9A9F]">Estudiante vial</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    
+    <main class="min-w-0 p-[1rem] sm:p-[1.5rem] xl:p-[2rem]">
+      
+      <section class="relative overflow-hidden rounded-[1rem] bg-[#151A1E] p-[1.5rem] text-[#FFFFFF] shadow-lg shadow-[#151A1E]/10 sm:p-[2.5rem]">
+        <div class="absolute -right-[4rem] -top-[4rem] size-[14rem] rounded-full bg-[#168653]"></div>
+        <div class="absolute -bottom-[5rem] right-[7rem] size-[10rem] rounded-full bg-[#F5C518]"></div>
+
+        <div class="relative z-10 max-w-[46rem]">
+          <p class="text-[0.75rem] font-extrabold uppercase tracking-[0.12em] text-[#F5C518]">Educación vial para todos</p>
+          <h1 class="mt-[0.75rem] text-[2.4rem] font-extrabold leading-[1.05] tracking-[-0.05em] sm:text-[3.5rem]">
+            Una vía, una vida.
+          </h1>
+          <p class="mt-[1rem] max-w-[39rem] text-[1rem] leading-[1.7] text-[#CBD2D5]">
+            Una plataforma para aprender las normas de tránsito de forma sencilla, práctica e interactiva, sin importar si conduces, caminas o utilizas motocicleta.
+          </p>
+
+          <div class="mt-[1.5rem] flex flex-wrap gap-[0.75rem]">
+            <a href="./principal.html" class="rounded-[0.65rem] bg-[#168653] px-[1.2rem] py-[0.8rem] text-[0.85rem] font-extrabold text-[#FFFFFF] hover:bg-[#0F6840]">
+              Comenzar recorrido
+            </a>
+            <a href="#proyecto" class="rounded-[0.65rem] border-[0.0625rem] border-[#DFE5E7] px-[1.2rem] py-[0.8rem] text-[0.85rem] font-bold text-[#FFFFFF] hover:bg-[#252D32]">
+              Conocer el proyecto
+            </a>
+          </div>
+        </div>
+      </section>
+
+      
+      <section class="mt-[1rem] grid gap-[1rem] sm:grid-cols-3" aria-label="Resumen del proyecto">
+        <article class="rounded-[1rem] bg-[#FFFFFF] p-[1.25rem] shadow-lg shadow-[#151A1E]/10">
+          <span class="grid size-[2.7rem] place-items-center rounded-[0.7rem] bg-[#E0EFE7] font-black text-[#0F6840]">✓</span>
+          <strong class="mt-[0.8rem] block text-[1.5rem]" data-counter="3">0</strong>
+          <p class="text-[0.78rem] text-[#68747B]">Módulos de aprendizaje</p>
+        </article>
+
+        <article class="rounded-[1rem] bg-[#FFFFFF] p-[1.25rem] shadow-lg shadow-[#151A1E]/10">
+          <span class="grid size-[2.7rem] place-items-center rounded-[0.7rem] bg-[#FDE8E9] font-black text-[#A9242B]">!</span>
+          <strong class="mt-[0.8rem] block text-[1.5rem]" data-counter="18">0</strong>
+          <p class="text-[0.78rem] text-[#68747B]">Lecciones planificadas</p>
+        </article>
+
+        <article class="rounded-[1rem] bg-[#FFFFFF] p-[1.25rem] shadow-lg shadow-[#151A1E]/10">
+          <span class="grid size-[2.7rem] place-items-center rounded-[0.7rem] bg-[#F5C518] font-black text-[#151A1E]">★</span>
+          <strong class="mt-[0.8rem] block text-[1.5rem]" data-counter="100">0</strong>
+          <p class="text-[0.78rem] text-[#68747B]">Puntos por cada nivel</p>
+        </article>
+      </section>
+
+    
+      <section id="proyecto" class="mt-[1rem] grid gap-[1rem] xl:grid-cols-[1.25fr_0.75fr]">
+        <article class="rounded-[1rem] bg-[#FFFFFF] p-[1.5rem] shadow-lg shadow-[#151A1E]/10 sm:p-[2rem]">
+          <p class="text-[0.72rem] font-extrabold uppercase tracking-[0.1em] text-[#168653]">Nuestro propósito</p>
+          <h2 class="mt-[0.45rem] text-[1.7rem] font-extrabold tracking-[-0.04em]">¿Por qué hacemos este proyecto?</h2>
+          <p class="mt-[1rem] leading-[1.75] text-[#68747B]">
+            Muchas personas comienzan a conducir sin recibir suficiente preparación sobre las normas de tránsito. Además, peatones, pasajeros y ciclistas también necesitan conocer sus derechos y responsabilidades para desplazarse con mayor seguridad.
+          </p>
+          <p class="mt-[0.8rem] leading-[1.75] text-[#68747B]">
+            Ruta Segura busca convertir información compleja en lecciones cortas, ejemplos cotidianos y actividades que ayuden a tomar mejores decisiones en la vía.
+          </p>
+
+          <div class="mt-[1.5rem] rounded-[0.8rem] border-l-[0.3rem] border-[#F5C518] bg-[#F4F6F3] p-[1rem]">
+            <p class="text-[0.75rem] font-extrabold uppercase tracking-[0.08em] text-[#8A959A]">Lo que esperamos</p>
+            <p class="mt-[0.4rem] text-[0.9rem] leading-[1.6] text-[#172026]">
+              Formar usuarios más informados, responsables y conscientes de que cada decisión en la vía puede proteger una vida.
+            </p>
+          </div>
+        </article>
+
+        <div class="grid gap-[1rem]">
+          <article class="rounded-[1rem] bg-[#168653] p-[1.5rem] text-[#FFFFFF] shadow-lg shadow-[#151A1E]/10">
+            <p class="text-[0.72rem] font-extrabold uppercase tracking-[0.1em] text-[#E0EFE7]">Misión</p>
+            <h2 class="mt-[0.45rem] text-[1.35rem] font-extrabold">Educar para proteger</h2>
+            <p class="mt-[0.7rem] text-[0.85rem] leading-[1.65] text-[#FFFFFF]">
+              Facilitar el aprendizaje de la educación vial mediante una experiencia accesible, clara, práctica y motivadora.
+            </p>
+          </article>
+
+          <article class="rounded-[1rem] bg-[#101417] p-[1.5rem] text-[#FFFFFF] shadow-lg shadow-[#151A1E]/10">
+            <p class="text-[0.72rem] font-extrabold uppercase tracking-[0.1em] text-[#F5C518]">Visión</p>
+            <h2 class="mt-[0.45rem] text-[1.35rem] font-extrabold">Vías más seguras</h2>
+            <p class="mt-[0.7rem] text-[0.85rem] leading-[1.65] text-[#CBD2D5]">
+              Ser una herramienta educativa que contribuya a reducir conductas de riesgo y fortalezca la cultura vial en Guatemala.
+            </p>
+          </article>
+        </div>
+      </section>
+
+    
+      <section class="mt-[1rem] rounded-[1rem] bg-[#FFFFFF] p-[1.5rem] shadow-lg shadow-[#151A1E]/10 sm:p-[2rem]">
+        <div class="max-w-[42rem]">
+          <p class="text-[0.72rem] font-extrabold uppercase tracking-[0.1em] text-[#D9363E]">Nuestros valores</p>
+          <h2 class="mt-[0.45rem] text-[1.7rem] font-extrabold tracking-[-0.04em]">El camino que queremos construir</h2>
+        </div>
+
+        <div id="values-container" class="mt-[1.4rem] grid gap-[0.8rem] sm:grid-cols-2 xl:grid-cols-4"></div>
+      </section>
+
+      <footer class="mt-[1rem] flex flex-col gap-[0.5rem] rounded-[0.8rem] bg-[#E0EFE7] p-[1rem] text-[0.78rem] text-[#0F6840] sm:flex-row sm:items-center sm:justify-between">
+        <strong>Ruta Segura</strong>
+        <span>Aprender las reglas también salva vidas.</span>
+      </footer>
+    </main>
+  </div>
+
+ 
+  <div id="toast" class="fixed bottom-[1.25rem] left-1/2 z-50 hidden -translate-x-1/2 rounded-[0.7rem] bg-[#D9363E] px-[1rem] py-[0.8rem] text-[0.85rem] font-bold text-[#FFFFFF] shadow-lg shadow-[#151A1E]/20" role="status" aria-live="polite"></div>
+
+  <script src="./inicio.js" defer></script>
+</body>
+</html>
