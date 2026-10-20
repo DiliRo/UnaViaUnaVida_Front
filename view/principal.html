@@ -12,183 +12,524 @@
 <body class="min-h-screen bg-[#F4F6F3] font-sans text-[#172026] antialiased">
   <div class="grid min-h-screen lg:grid-cols-[15rem_minmax(0,1fr)_19rem]">
 
-    
-    <aside class="flex flex-col bg-[#101417] p-[1.25rem] text-[#FFFFFF] lg:sticky lg:top-0 lg:h-screen">
-      <a href="./inicio.html" class="mb-[2rem] flex items-center gap-[0.75rem]" aria-label="Ruta Segura, inicio">
-        <span class="flex gap-[0.18rem] rounded-[0.55rem] bg-[#090C0E] p-[0.4rem]" aria-hidden="true">
+    <aside
+      class="flex flex-col bg-[#101417] p-[1.25rem]
+             text-[#FFFFFF] lg:sticky lg:top-0 lg:h-screen"
+    >
+      <a
+        href="./inicio.html"
+        class="mb-[2rem] flex items-center gap-[0.75rem]"
+        aria-label="Ruta Segura, inicio"
+      >
+        <span
+          class="flex gap-[0.18rem] rounded-[0.55rem]
+                 bg-[#090C0E] p-[0.4rem]"
+          aria-hidden="true"
+        >
           <span class="size-[0.5rem] rounded-full bg-[#D9363E]"></span>
           <span class="size-[0.5rem] rounded-full bg-[#F5C518]"></span>
           <span class="size-[0.5rem] rounded-full bg-[#168653]"></span>
         </span>
-        <span class="font-extrabold tracking-tight">Ruta Segura</span>
+
+        <span class="font-extrabold tracking-tight">
+          Ruta Segura
+        </span>
       </a>
 
-      <nav aria-label="Navegación principal" class="grid grid-cols-2 gap-[0.5rem] sm:grid-cols-4 lg:grid-cols-1">
-        <a href="./inicio.html" class="flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] text-left font-semibold text-[#CBD2D5] hover:bg-[#252D32] hover:text-[#FFFFFF]">
+      <nav
+        aria-label="Navegación principal"
+        class="grid grid-cols-2 gap-[0.5rem]
+               sm:grid-cols-4 lg:grid-cols-1"
+      >
+        <a
+          href="./inicio.html"
+          class="flex items-center gap-[0.75rem]
+                 rounded-[0.65rem] px-[1rem] py-[0.8rem]
+                 font-semibold text-[#CBD2D5]
+                 hover:bg-[#252D32] hover:text-[#FFFFFF]"
+        >
           <span aria-hidden="true">⌂</span>
           <span>Inicio</span>
         </a>
 
-        <button class="nav-button flex items-center gap-[0.75rem] rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.8rem] text-left font-bold" type="button" data-view="ruta">
+        <button
+          class="nav-button flex items-center gap-[0.75rem]
+                 rounded-[0.65rem] bg-[#168653]
+                 px-[1rem] py-[0.8rem] text-left font-bold"
+          type="button"
+          data-view="ruta"
+        >
           <span aria-hidden="true">◆</span>
           <span>Mi ruta</span>
         </button>
 
-        <button class="nav-button flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] text-left font-semibold text-[#CBD2D5] hover:bg-[#252D32] hover:text-[#FFFFFF]" type="button" data-view="modulos">
+        <button
+          class="nav-button flex items-center gap-[0.75rem]
+                 rounded-[0.65rem] px-[1rem] py-[0.8rem]
+                 text-left font-semibold text-[#CBD2D5]
+                 hover:bg-[#252D32] hover:text-[#FFFFFF]"
+          type="button"
+          data-view="modulos"
+        >
           <span aria-hidden="true">▦</span>
           <span>Módulos</span>
         </button>
 
-        <button class="nav-button flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] text-left font-semibold text-[#CBD2D5] hover:bg-[#252D32] hover:text-[#FFFFFF]" type="button" data-view="logros">
+        <button
+          class="nav-button flex items-center gap-[0.75rem]
+                 rounded-[0.65rem] px-[1rem] py-[0.8rem]
+                 text-left font-semibold text-[#CBD2D5]
+                 hover:bg-[#252D32] hover:text-[#FFFFFF]"
+          type="button"
+          data-view="logros"
+        >
           <span aria-hidden="true">★</span>
           <span>Logros</span>
         </button>
 
-        <button class="nav-button flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] text-left font-semibold text-[#CBD2D5] hover:bg-[#252D32] hover:text-[#FFFFFF]" type="button" data-view="leyes">
+        <button
+          class="nav-button flex items-center gap-[0.75rem]
+                 rounded-[0.65rem] px-[1rem] py-[0.8rem]
+                 text-left font-semibold text-[#CBD2D5]
+                 hover:bg-[#252D32] hover:text-[#FFFFFF]"
+          type="button"
+          data-view="leyes"
+        >
           <span aria-hidden="true">▤</span>
           <span>Leyes</span>
         </button>
 
-        <button class="nav-button flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] text-left font-semibold text-[#CBD2D5] hover:bg-[#252D32] hover:text-[#FFFFFF]" type="button" data-view="perfil">
+        <button
+          class="nav-button flex items-center gap-[0.75rem]
+                 rounded-[0.65rem] px-[1rem] py-[0.8rem]
+                 text-left font-semibold text-[#CBD2D5]
+                 hover:bg-[#252D32] hover:text-[#FFFFFF]"
+          type="button"
+          data-view="perfil"
+        >
           <span aria-hidden="true">●</span>
           <span>Perfil</span>
         </button>
       </nav>
 
-      <div class="mt-[1.5rem] border-t-[0.0625rem] border-[#252D32] pt-[1.5rem] lg:mt-auto">
+      <div
+        class="mt-[1.5rem] border-t-[0.0625rem]
+               border-[#252D32] pt-[1.5rem] lg:mt-auto"
+      >
         <div class="flex items-center gap-[0.75rem]">
-          <span class="grid size-[2.6rem] place-items-center rounded-full bg-[#E0EFE7] font-extrabold text-[#0F6840]">LN</span>
+          <span
+            class="grid size-[2.6rem] place-items-center
+                   rounded-full bg-[#E0EFE7]
+                   font-extrabold text-[#0F6840]"
+          >
+            LN
+          </span>
+
           <div class="min-w-0">
-            <p class="truncate text-[0.85rem] font-bold">Luis Núñez</p>
-            <p class="text-[0.72rem] text-[#8F9A9F]">Nivel <span id="sidebar-level">1</span></p>
+            <p class="truncate text-[0.85rem] font-bold">
+              Luis Núñez
+            </p>
+
+            <p class="text-[0.72rem] text-[#8F9A9F]">
+              Nivel <span id="sidebar-level">1</span>
+            </p>
           </div>
         </div>
       </div>
     </aside>
 
-  
     <main class="min-w-0 p-[1rem] sm:p-[1.5rem] xl:p-[2rem]">
-     
-      <header class="rounded-[1rem] bg-[#FFFFFF] p-[1.25rem] shadow-lg shadow-[#151A1E]/10 sm:p-[1.5rem]">
-        <div class="flex flex-col gap-[1rem] sm:flex-row sm:items-center sm:justify-between">
+      <header
+        class="rounded-[1rem] bg-[#FFFFFF] p-[1.25rem]
+               shadow-lg shadow-[#151A1E]/10 sm:p-[1.5rem]"
+      >
+        <div
+          class="flex flex-col gap-[1rem]
+                 sm:flex-row sm:items-center sm:justify-between"
+        >
           <div>
-            <p class="text-[0.72rem] font-extrabold uppercase tracking-[0.12em] text-[#168653]">Ruta de aprendizaje</p>
-            <h1 id="module-title" class="mt-[0.35rem] text-[1.7rem] font-extrabold tracking-[-0.04em] sm:text-[2rem]">Señales de tránsito</h1>
-            <p id="module-description" class="mt-[0.45rem] max-w-[42rem] text-[0.85rem] leading-[1.6] text-[#68747B]"></p>
+            <p
+              class="text-[0.72rem] font-extrabold uppercase
+                     tracking-[0.12em] text-[#168653]"
+            >
+              Ruta de aprendizaje
+            </p>
+
+            <h1
+              id="module-title"
+              class="mt-[0.35rem] text-[1.7rem]
+                     font-extrabold tracking-[-0.04em]
+                     sm:text-[2rem]"
+            >
+              Señales de tránsito
+            </h1>
+
+            <p
+              id="module-description"
+              class="mt-[0.45rem] max-w-[42rem]
+                     text-[0.85rem] leading-[1.6]
+                     text-[#68747B]"
+            ></p>
           </div>
 
           <div class="flex items-center gap-[0.8rem]">
             <div class="text-right">
-              <p class="text-[0.7rem] font-bold uppercase text-[#8A959A]">Progreso</p>
-              <p id="progress-label" class="text-[1.35rem] font-extrabold text-[#0F6840]">0%</p>
+              <p
+                class="text-[0.7rem] font-bold
+                       uppercase text-[#8A959A]"
+              >
+                Progreso
+              </p>
+
+              <p
+                id="progress-label"
+                class="text-[1.35rem] font-extrabold
+                       text-[#0F6840]"
+              >
+                0%
+              </p>
             </div>
-            <div class="grid size-[3.6rem] place-items-center rounded-full bg-[#E0EFE7] font-extrabold text-[#0F6840]" id="progress-ring">0%</div>
+
+            <div
+              id="progress-ring"
+              class="grid size-[3.6rem] place-items-center
+                     rounded-full bg-[#E0EFE7]
+                     font-extrabold text-[#0F6840]"
+            >
+              0%
+            </div>
           </div>
         </div>
 
-        <div class="mt-[1.2rem] h-[0.55rem] overflow-hidden rounded-full bg-[#DBE0DC]">
-          <div id="progress-bar" class="h-full rounded-full bg-[#168653] transition-all duration-500" style="width: 0%"></div>
+        <div
+          class="mt-[1.2rem] h-[0.55rem]
+                 overflow-hidden rounded-full bg-[#DBE0DC]"
+        >
+          <div
+            id="progress-bar"
+            class="h-full rounded-full bg-[#168653]
+                   transition-all duration-500"
+            style="width: 0%"
+          ></div>
         </div>
       </header>
 
- 
-      <section class="mt-[1rem] flex gap-[0.65rem] overflow-x-auto pb-[0.35rem]" id="module-selector" aria-label="Seleccionar módulo"></section>
+      <section class="mt-[1rem] flex items-center gap-[0.65rem]">
+        <div
+          id="module-selector"
+          class="flex min-w-0 flex-1 gap-[0.65rem]
+                 overflow-x-auto pb-[0.35rem]"
+          aria-label="Seleccionar módulo"
+        ></div>
 
-   
-      <section class="relative mt-[1rem] min-h-[45rem] overflow-hidden rounded-[1rem] bg-[#FFFFFF] p-[1rem] shadow-lg shadow-[#151A1E]/10 sm:p-[1.5rem]" aria-labelledby="road-title">
-        <div class="mb-[1rem] flex items-center justify-between gap-[1rem]">
+        <a
+          href="./agregar-modulo.html"
+          class="flex shrink-0 items-center gap-[0.45rem]
+                 rounded-[0.7rem] bg-[#168653]
+                 px-[1rem] py-[0.7rem] text-[0.78rem]
+                 font-extrabold text-[#FFFFFF]
+                 transition hover:bg-[#0F6840]"
+        >
+          <span
+            class="text-[1.1rem] leading-none"
+            aria-hidden="true"
+          >
+            +
+          </span>
+
+          <span>Agregar módulo</span>
+        </a>
+      </section>
+
+      <section
+        class="relative mt-[1rem] min-h-[45rem]
+               overflow-hidden rounded-[1rem]
+               bg-[#FFFFFF] p-[1rem]
+               shadow-lg shadow-[#151A1E]/10
+               sm:p-[1.5rem]"
+        aria-labelledby="road-title"
+      >
+        <div
+          class="mb-[1rem] flex items-center
+                 justify-between gap-[1rem]"
+        >
           <div>
-            <p class="text-[0.72rem] font-bold uppercase tracking-[0.1em] text-[#8A959A]">Recorrido del módulo</p>
-            <h2 id="road-title" class="text-[1.25rem] font-extrabold">Avanza por la carretera</h2>
+            <p
+              class="text-[0.72rem] font-bold uppercase
+                     tracking-[0.1em] text-[#8A959A]"
+            >
+              Recorrido del módulo
+            </p>
+
+            <h2
+              id="road-title"
+              class="text-[1.25rem] font-extrabold"
+            >
+              Avanza por la carretera
+            </h2>
           </div>
 
-          <button id="complete-level-button" type="button" class="rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.7rem] text-[0.8rem] font-extrabold text-[#FFFFFF] transition hover:bg-[#0F6840] disabled:cursor-not-allowed disabled:bg-[#8A959A]">
+          <button
+            id="complete-level-button"
+            type="button"
+            class="rounded-[0.65rem] bg-[#168653]
+                   px-[1rem] py-[0.7rem]
+                   text-[0.8rem] font-extrabold
+                   text-[#FFFFFF] transition
+                   hover:bg-[#0F6840]
+                   disabled:cursor-not-allowed
+                   disabled:bg-[#8A959A]"
+          >
             Completar nivel actual
           </button>
         </div>
 
-        <div id="road-map" class="relative min-h-[38rem] overflow-hidden rounded-[0.85rem] bg-[#151A1E]">
+        <div
+          id="road-map"
+          class="relative min-h-[38rem]
+                 overflow-hidden rounded-[0.85rem]
+                 bg-[#151A1E]"
+        >
+          <svg
+            class="absolute inset-0 size-full"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M18 8 C82 8 82 24 50 24 C18 24 18 40 50 40 C82 40 82 56 50 56 C18 56 18 72 50 72 C82 72 82 88 18 92"
+              fill="none"
+              stroke="#252D32"
+              stroke-width="13"
+              stroke-linecap="round"
+            ></path>
 
-          <svg class="absolute inset-0 size-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M18 8 C82 8 82 24 50 24 C18 24 18 40 50 40 C82 40 82 56 50 56 C18 56 18 72 50 72 C82 72 82 88 18 92" fill="none" stroke="#252D32" stroke-width="13" stroke-linecap="round"/>
-            <path d="M18 8 C82 8 82 24 50 24 C18 24 18 40 50 40 C82 40 82 56 50 56 C18 56 18 72 50 72 C82 72 82 88 18 92" fill="none" stroke="#FFFFFF" stroke-width="0.45" stroke-dasharray="4 4"/>
-            <path d="M18 8 C82 8 82 24 50 24 C18 24 18 40 50 40 C82 40 82 56 50 56 C18 56 18 72 50 72 C82 72 82 88 18 92" fill="none" stroke="#F5C518" stroke-width="0.65" stroke-dasharray="7 4"/>
+            <path
+              d="M18 8 C82 8 82 24 50 24 C18 24 18 40 50 40 C82 40 82 56 50 56 C18 56 18 72 50 72 C82 72 82 88 18 92"
+              fill="none"
+              stroke="#FFFFFF"
+              stroke-width="0.45"
+              stroke-dasharray="4 4"
+            ></path>
+
+            <path
+              d="M18 8 C82 8 82 24 50 24 C18 24 18 40 50 40 C82 40 82 56 50 56 C18 56 18 72 50 72 C82 72 82 88 18 92"
+              fill="none"
+              stroke="#F5C518"
+              stroke-width="0.65"
+              stroke-dasharray="7 4"
+            ></path>
           </svg>
 
-          <div id="levels-container" class="absolute inset-0"></div>
+          <div
+            id="levels-container"
+            class="absolute inset-0"
+          ></div>
 
-   
-          <div id="player-car" class="absolute z-20 grid size-[3rem] place-items-center rounded-[0.7rem] bg-[#FFFFFF] shadow-lg shadow-[#090C0E] transition-all duration-700" aria-label="Posición actual del usuario">
-            <svg class="h-[1.7rem] w-[2.1rem]" viewBox="0 0 36 28" aria-hidden="true">
-              <path d="M8 11 12 4h13l4 7 4 2v8h-3a4 4 0 0 1-8 0h-8a4 4 0 0 1-8 0H3v-8l5-2Z" fill="#168653"/>
-              <path d="m13 7-2 5h15l-3-5H13Z" fill="#DFE5E7"/>
-              <circle cx="10" cy="21" r="3" fill="#090C0E"/>
-              <circle cx="26" cy="21" r="3" fill="#090C0E"/>
-              <circle cx="31" cy="15" r="1.5" fill="#F5C518"/>
+          <div
+            id="player-car"
+            class="absolute z-20 grid size-[3rem]
+                   place-items-center rounded-[0.7rem]
+                   bg-[#FFFFFF] shadow-lg shadow-[#090C0E]
+                   transition-all duration-700"
+            aria-label="Posición actual del usuario"
+          >
+            <svg
+              class="h-[1.7rem] w-[2.1rem]"
+              viewBox="0 0 36 28"
+              aria-hidden="true"
+            >
+              <path
+                d="M8 11 12 4h13l4 7 4 2v8h-3a4 4 0 0 1-8 0h-8a4 4 0 0 1-8 0H3v-8l5-2Z"
+                fill="#168653"
+              ></path>
+
+              <path
+                d="m13 7-2 5h15l-3-5H13Z"
+                fill="#DFE5E7"
+              ></path>
+
+              <circle cx="10" cy="21" r="3" fill="#090C0E"></circle>
+              <circle cx="26" cy="21" r="3" fill="#090C0E"></circle>
+              <circle cx="31" cy="15" r="1.5" fill="#F5C518"></circle>
             </svg>
           </div>
         </div>
 
-        <div class="mt-[1rem] flex flex-wrap gap-[1rem] text-[0.75rem] font-bold text-[#68747B]">
-          <span class="flex items-center gap-[0.4rem]"><i class="size-[0.7rem] rounded-full bg-[#168653]"></i> Completado</span>
-          <span class="flex items-center gap-[0.4rem]"><i class="size-[0.7rem] rounded-full bg-[#D9363E]"></i> Nivel actual</span>
-          <span class="flex items-center gap-[0.4rem]"><i class="size-[0.7rem] rounded-full bg-[#F5C518]"></i> Próximos niveles</span>
+        <div
+          class="mt-[1rem] flex flex-wrap gap-[1rem]
+                 text-[0.75rem] font-bold text-[#68747B]"
+        >
+          <span class="flex items-center gap-[0.4rem]">
+            <i class="size-[0.7rem] rounded-full bg-[#168653]"></i>
+            Completado
+          </span>
+
+          <span class="flex items-center gap-[0.4rem]">
+            <i class="size-[0.7rem] rounded-full bg-[#D9363E]"></i>
+            Nivel actual
+          </span>
+
+          <span class="flex items-center gap-[0.4rem]">
+            <i class="size-[0.7rem] rounded-full bg-[#F5C518]"></i>
+            Próximos niveles
+          </span>
         </div>
       </section>
     </main>
 
-
-    <aside class="space-y-[1rem] p-[1rem] sm:p-[1.5rem] lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto lg:pl-0 xl:py-[2rem] xl:pr-[2rem]">
-      <section class="rounded-[1rem] bg-[#101417] p-[1.25rem] text-[#FFFFFF] shadow-lg shadow-[#151A1E]/10">
+    <aside
+      class="space-y-[1rem] p-[1rem] sm:p-[1.5rem]
+             lg:sticky lg:top-0 lg:h-screen
+             lg:overflow-y-auto lg:pl-0
+             xl:py-[2rem] xl:pr-[2rem]"
+    >
+      <section
+        class="rounded-[1rem] bg-[#101417] p-[1.25rem]
+               text-[#FFFFFF] shadow-lg shadow-[#151A1E]/10"
+      >
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-[0.7rem] font-bold uppercase tracking-[0.1em] text-[#8F9A9F]">Tu progreso</p>
-            <h2 class="mt-[0.3rem] font-extrabold">Resumen de hoy</h2>
+            <p
+              class="text-[0.7rem] font-bold uppercase
+                     tracking-[0.1em] text-[#8F9A9F]"
+            >
+              Tu progreso
+            </p>
+
+            <h2 class="mt-[0.3rem] font-extrabold">
+              Resumen de hoy
+            </h2>
           </div>
-          <span class="grid size-[2.5rem] place-items-center rounded-full bg-[#F5C518] font-black text-[#151A1E]">★</span>
+
+          <span
+            class="grid size-[2.5rem] place-items-center
+                   rounded-full bg-[#F5C518]
+                   font-black text-[#151A1E]"
+          >
+            ★
+          </span>
         </div>
 
         <div class="mt-[1.2rem] grid grid-cols-3 gap-[0.5rem] text-center">
           <div class="rounded-[0.65rem] bg-[#252D32] p-[0.7rem]">
-            <strong id="points-value" class="block text-[1.1rem] text-[#F5C518]">0</strong>
-            <span class="text-[0.65rem] text-[#CBD2D5]">Puntos</span>
+            <strong
+              id="points-value"
+              class="block text-[1.1rem] text-[#F5C518]"
+            >
+              0
+            </strong>
+
+            <span class="text-[0.65rem] text-[#CBD2D5]">
+              Puntos
+            </span>
           </div>
+
           <div class="rounded-[0.65rem] bg-[#252D32] p-[0.7rem]">
-            <strong id="streak-value" class="block text-[1.1rem] text-[#D9363E]">0</strong>
-            <span class="text-[0.65rem] text-[#CBD2D5]">Racha</span>
+            <strong
+              id="streak-value"
+              class="block text-[1.1rem] text-[#D9363E]"
+            >
+              0
+            </strong>
+
+            <span class="text-[0.65rem] text-[#CBD2D5]">
+              Racha
+            </span>
           </div>
+
           <div class="rounded-[0.65rem] bg-[#252D32] p-[0.7rem]">
-            <strong id="completed-value" class="block text-[1.1rem] text-[#168653]">0</strong>
-            <span class="text-[0.65rem] text-[#CBD2D5]">Niveles</span>
+            <strong
+              id="completed-value"
+              class="block text-[1.1rem] text-[#168653]"
+            >
+              0
+            </strong>
+
+            <span class="text-[0.65rem] text-[#CBD2D5]">
+              Niveles
+            </span>
           </div>
         </div>
       </section>
 
-      <section class="rounded-[1rem] bg-[#FFFFFF] p-[1.25rem] shadow-lg shadow-[#151A1E]/10">
+      <section
+        class="rounded-[1rem] bg-[#FFFFFF] p-[1.25rem]
+               shadow-lg shadow-[#151A1E]/10"
+      >
         <div class="flex items-center justify-between">
           <h2 class="font-extrabold">Amigos</h2>
-          <button type="button" class="text-[0.75rem] font-bold text-[#168653] hover:text-[#0F6840]">Ver todos</button>
+
+          <button
+            type="button"
+            class="text-[0.75rem] font-bold
+                   text-[#168653] hover:text-[#0F6840]"
+          >
+            Ver todos
+          </button>
         </div>
-        <div id="friends-list" class="mt-[1rem] space-y-[0.8rem]"></div>
+
+        <div
+          id="friends-list"
+          class="mt-[1rem] space-y-[0.8rem]"
+        ></div>
       </section>
 
-      <section class="rounded-[1rem] bg-[#FFFFFF] p-[1.25rem] shadow-lg shadow-[#151A1E]/10">
+      <section
+        class="rounded-[1rem] bg-[#FFFFFF] p-[1.25rem]
+               shadow-lg shadow-[#151A1E]/10"
+      >
         <div class="flex items-center justify-between">
           <h2 class="font-extrabold">Logros recientes</h2>
-          <span class="rounded-full bg-[#E0EFE7] px-[0.65rem] py-[0.25rem] text-[0.7rem] font-bold text-[#0F6840]" id="achievement-count">0</span>
+
+          <span
+            id="achievement-count"
+            class="rounded-full bg-[#E0EFE7]
+                   px-[0.65rem] py-[0.25rem]
+                   text-[0.7rem] font-bold text-[#0F6840]"
+          >
+            0
+          </span>
         </div>
-        <div id="achievements-list" class="mt-[1rem] space-y-[0.8rem]"></div>
+
+        <div
+          id="achievements-list"
+          class="mt-[1rem] space-y-[0.8rem]"
+        ></div>
       </section>
 
-      <section class="rounded-[1rem] border-l-[0.3rem] border-[#F5C518] bg-[#FFFFFF] p-[1.1rem] shadow-lg shadow-[#151A1E]/10">
-        <p class="text-[0.72rem] font-extrabold uppercase tracking-[0.1em] text-[#8A959A]">Consejo vial</p>
-        <p id="road-tip" class="mt-[0.45rem] text-[0.82rem] leading-[1.55] text-[#68747B]"></p>
+      <section
+        class="rounded-[1rem] border-l-[0.3rem]
+               border-[#F5C518] bg-[#FFFFFF]
+               p-[1.1rem] shadow-lg shadow-[#151A1E]/10"
+      >
+        <p
+          class="text-[0.72rem] font-extrabold
+                 uppercase tracking-[0.1em]
+                 text-[#8A959A]"
+        >
+          Consejo vial
+        </p>
+
+        <p
+          id="road-tip"
+          class="mt-[0.45rem] text-[0.82rem]
+                 leading-[1.55] text-[#68747B]"
+        ></p>
       </section>
     </aside>
   </div>
 
-
-  <div id="toast" class="fixed bottom-[1.25rem] left-1/2 z-50 hidden -translate-x-1/2 rounded-[0.7rem] px-[1rem] py-[0.8rem] text-[0.85rem] font-bold text-[#FFFFFF] shadow-lg shadow-[#151A1E]/20" role="status" aria-live="polite"></div>
+  <div
+    id="toast"
+    class="fixed bottom-[1.25rem] left-1/2
+           z-50 hidden -translate-x-1/2
+           rounded-[0.7rem] px-[1rem] py-[0.8rem]
+           text-[0.85rem] font-bold text-[#FFFFFF]
+           shadow-lg shadow-[#151A1E]/20"
+    role="status"
+    aria-live="polite"
+  ></div>
 
   <script src="./principal.js" defer></script>
 </body>

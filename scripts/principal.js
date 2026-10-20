@@ -1,5 +1,9 @@
-const appData = {
-  selectedModuleId: 1,
+const savedModules = JSON.parse(
+  localStorage.getItem("rutaSeguraModules") || "[]"
+);
+
+const data = {
+  selectedId: 1,
   points: 340,
   streak: 5,
 
@@ -45,99 +49,104 @@ const appData = {
         "Emergencias",
         "Evaluación final"
       ]
-    }
-  ],
+    },
 
-  friends: [
-    { initials: "JR", name: "Jonathan", points: 520, online: true },
-    { initials: "DR", name: "Dilan", points: 460, online: true },
-    { initials: "MG", name: "María", points: 390, online: false }
-  ],
-
-  achievements: [
-    { icon: "★", title: "Primer recorrido", unlocked: true },
-    { icon: "◆", title: "Tres niveles seguidos", unlocked: true },
-    { icon: "●", title: "Experto en señales", unlocked: false }
-  ],
-
-  tips: [
-    "Reduce la velocidad antes de llegar a una intersección.",
-    "Mantén una distancia segura con el vehículo de adelante.",
-    "Las señales preventivas advierten sobre riesgos en la vía."
+    ...savedModules
   ]
 };
 
+const $ = selector => document.querySelector(selector);
 
 const elements = {
-  moduleSelector: document.querySelector("#module-selector"),
-  moduleTitle: document.querySelector("#module-title"),
-  moduleDescription: document.querySelector("#module-description"),
-  levelsContainer: document.querySelector("#levels-container"),
-  playerCar: document.querySelector("#player-car"),
-  progressLabel: document.querySelector("#progress-label"),
-  progressRing: document.querySelector("#progress-ring"),
-  progressBar: document.querySelector("#progress-bar"),
-  completeButton: document.querySelector("#complete-level-button"),
-  points: document.querySelector("#points-value"),
-  streak: document.querySelector("#streak-value"),
-  completed: document.querySelector("#completed-value"),
-  sidebarLevel: document.querySelector("#sidebar-level"),
-  friendsList: document.querySelector("#friends-list"),
-  achievementsList: document.querySelector("#achievements-list"),
-  achievementCount: document.querySelector("#achievement-count"),
-  roadTip: document.querySelector("#road-tip"),
-  toast: document.querySelector("#toast")
+  selector: $("#module-selector"),
+  title: $("#module-title"),
+  description: $("#module-description"),
+  levels: $("#levels-container"),
+  car: $("#player-car"),
+  progress: $("#progress-label"),
+  ring: $("#progress-ring"),
+  bar: $("#progress-bar"),
+  completeButton: $("#complete-level-button"),
+  points: $("#points-value"),
+  streak: $("#streak-value"),
+  completed: $("#completed-value"),
+  sidebarLevel: $("#sidebar-level"),
+  friends: $("#friends-list"),
+  achievements: $("#achievements-list"),
+  achievementCount: $("#achievement-count"),
+  tip: $("#road-tip"),
+  toast: $("#toast")
 };
 
-
-const levelPositions = [
-  { left: 18, top: 8 },
-  { left: 68, top: 17 },
-  { left: 50, top: 32 },
-  { left: 27, top: 48 },
-  { left: 68, top: 65 },
-  { left: 18, top: 88 }
+const positions = [
+  [18, 8],
+  [68, 17],
+  [50, 32],
+  [27, 48],
+  [68, 65],
+  [18, 88]
 ];
 
-function getSelectedModule() {
-  return appData.modules.find(
-    module => module.id === appData.selectedModuleId
+const friends = [
+  ["JR", "Jonathan", 520, true],
+  ["DR", "Dilan", 460, true],
+  ["MG", "María", 390, false]
+];
+
+const achievements = [
+  ["★", "Primer recorrido", true],
+  ["◆", "Tres niveles seguidos", true],
+  ["●", "Experto en señales", false]
+];
+
+const tips = [
+  "Reduce la velocidad antes de llegar a una intersección.",
+  "Mantén una distancia segura con el vehículo de adelante.",
+  "Las señales preventivas advierten sobre riesgos en la vía."
+];
+
+function getModule() {
+  return data.modules.find(
+    module => module.id === data.selectedId
   );
 }
 
-function getLevelStatus(level, currentLevel) {
-  if (level < currentLevel) return "completed";
-  if (level === currentLevel) return "current";
-  return "locked";
+function showToast(message, error = false) {
+  elements.toast.textContent = message;
+
+  elements.toast.className = `
+    fixed bottom-[1.25rem] left-1/2 z-50
+    -translate-x-1/2 rounded-[0.7rem]
+    px-[1rem] py-[0.8rem] text-[0.85rem]
+    font-bold text-[#FFFFFF] shadow-lg
+    ${error ? "bg-[#D9363E]" : "bg-[#168653]"}
+  `;
+
+  clearTimeout(showToast.timer);
+
+  showToast.timer = setTimeout(
+    () => elements.toast.classList.add("hidden"),
+    2500
+  );
 }
 
-function getLevelColor(status) {
-  const colors = {
-    completed: "#168653",
-    current: "#D9363E",
-    locked: "#F5C518"
-  };
-
-  return colors[status];
-}
-
-
-function renderModules() {
-  elements.moduleSelector.innerHTML = appData.modules
+function renderModuleButtons() {
+  elements.selector.innerHTML = data.modules
     .map((module, index) => {
-      const selected = module.id === appData.selectedModuleId;
-
-      const classes = selected
-        ? "bg-[#168653] text-[#FFFFFF]"
-        : "bg-[#FFFFFF] text-[#68747B] hover:bg-[#E0EFE7]";
+      const selected = module.id === data.selectedId;
 
       return `
         <button
           type="button"
-          data-module-id="${module.id}"
+          data-id="${module.id}"
           class="module-button shrink-0 rounded-[0.7rem]
                  px-[1rem] py-[0.7rem] text-[0.78rem]
-                 font-extrabold shadow-sm ${classes}"
+                 font-extrabold shadow-sm
+                 ${
+                   selected
+                     ? "bg-[#168653] text-[#FFFFFF]"
+                     : "bg-[#FFFFFF] text-[#68747B] hover:bg-[#E0EFE7]"
+                 }"
         >
           Módulo ${index + 1}
         </button>
@@ -147,40 +156,49 @@ function renderModules() {
 
   document.querySelectorAll(".module-button").forEach(button => {
     button.addEventListener("click", () => {
-      appData.selectedModuleId = Number(button.dataset.moduleId);
-      renderApp();
+      data.selectedId = Number(button.dataset.id);
+      render();
     });
   });
 }
 
+function renderLevels() {
+  const module = getModule();
 
-function renderRoad() {
-  const module = getSelectedModule();
-
-  elements.levelsContainer.innerHTML = module.levels
+  elements.levels.innerHTML = module.levels
+    .slice(0, 6)
     .map((title, index) => {
       const level = index + 1;
-      const position = levelPositions[index];
-      const status = getLevelStatus(level, module.currentLevel);
-      const color = getLevelColor(status);
-      const disabled = status === "locked" ? "disabled" : "";
+      const [left, top] = positions[index];
+
+      let color = "#F5C518";
+      let disabled = "disabled";
+
+      if (level < module.currentLevel) {
+        color = "#168653";
+        disabled = "";
+      }
+
+      if (level === module.currentLevel) {
+        color = "#D9363E";
+        disabled = "";
+      }
 
       return `
         <div
           class="absolute z-10 -translate-x-1/2 -translate-y-1/2"
-          style="left:${position.left}%; top:${position.top}%"
+          style="left:${left}%; top:${top}%"
         >
           <button
             type="button"
-            ${disabled}
+            class="level-button flex flex-col items-center"
             data-level="${level}"
-            class="level-button group flex flex-col items-center"
+            ${disabled}
           >
             <span
               class="grid size-[3.2rem] place-items-center
                      rounded-[0.75rem] bg-[#090C0E]
-                     shadow-lg shadow-[#090C0E]
-                     group-enabled:hover:-translate-y-[0.15rem]"
+                     shadow-lg shadow-[#090C0E]"
             >
               <span
                 class="size-[1.55rem] rounded-full
@@ -190,10 +208,11 @@ function renderRoad() {
             </span>
 
             <span
-              class="mt-[0.4rem] max-w-[8rem] rounded-[0.45rem]
-                     bg-[#FFFFFF] px-[0.55rem] py-[0.3rem]
-                     text-center text-[0.65rem] font-extrabold
-                     text-[#172026] shadow-md shadow-[#090C0E]"
+              class="mt-[0.4rem] max-w-[8rem]
+                     rounded-[0.45rem] bg-[#FFFFFF]
+                     px-[0.55rem] py-[0.3rem]
+                     text-center text-[0.65rem]
+                     font-extrabold text-[#172026]"
             >
               ${level}. ${title}
             </span>
@@ -203,203 +222,193 @@ function renderRoad() {
     })
     .join("");
 
-  document.querySelectorAll(".level-button:not(:disabled)").forEach(button => {
-    button.addEventListener("click", () => {
-      const level = Number(button.dataset.level);
-      showToast(`Nivel ${level}: ${module.levels[level - 1]}`);
-    });
-  });
+  document
+    .querySelectorAll(".level-button:not(:disabled)")
+    .forEach(button => {
+      button.addEventListener("click", () => {
+        const level = Number(button.dataset.level);
 
-  const currentIndex = Math.min(
+        showToast(
+          `Nivel ${level}: ${module.levels[level - 1]}`
+        );
+      });
+    });
+
+  const positionIndex = Math.min(
     module.currentLevel - 1,
-    levelPositions.length - 1
+    positions.length - 1
   );
 
-  const carPosition = levelPositions[currentIndex];
+  const [left, top] = positions[positionIndex];
 
-  elements.playerCar.style.left =
-    `calc(${carPosition.left}% + 2.8rem)`;
-
-  elements.playerCar.style.top =
-    `calc(${carPosition.top}% - 1.2rem)`;
-
-  elements.playerCar.style.transform =
-    "translate(-50%, -50%)";
+  elements.car.style.left = `calc(${left}% + 2.8rem)`;
+  elements.car.style.top = `calc(${top}% - 1.2rem)`;
+  elements.car.style.transform = "translate(-50%, -50%)";
 }
 
-
 function renderProgress() {
-  const module = getSelectedModule();
-  const completed = Math.max(module.currentLevel - 1, 0);
+  const module = getModule();
+
+  const completed = Math.min(
+    module.currentLevel - 1,
+    module.levels.length
+  );
 
   const percentage = Math.round(
     completed / module.levels.length * 100
   );
 
-  const totalCompleted = appData.modules.reduce(
-    (total, item) => total + Math.max(item.currentLevel - 1, 0),
+  const totalCompleted = data.modules.reduce(
+    (total, item) =>
+      total + Math.min(
+        item.currentLevel - 1,
+        item.levels.length
+      ),
     0
   );
 
-  elements.moduleTitle.textContent = module.title;
-  elements.moduleDescription.textContent = module.description;
-  elements.progressLabel.textContent = `${percentage}%`;
-  elements.progressRing.textContent = `${percentage}%`;
-  elements.progressBar.style.width = `${percentage}%`;
-  elements.points.textContent = appData.points;
-  elements.streak.textContent = appData.streak;
+  elements.title.textContent = module.title;
+  elements.description.textContent = module.description;
+  elements.progress.textContent = `${percentage}%`;
+  elements.ring.textContent = `${percentage}%`;
+  elements.bar.style.width = `${percentage}%`;
+  elements.points.textContent = data.points;
+  elements.streak.textContent = data.streak;
   elements.completed.textContent = totalCompleted;
   elements.sidebarLevel.textContent = totalCompleted + 1;
 
-  const finished = module.currentLevel > module.levels.length;
+  const finished =
+    module.currentLevel > module.levels.length;
 
   elements.completeButton.disabled = finished;
+
   elements.completeButton.textContent = finished
     ? "Módulo completado"
     : "Completar nivel actual";
 }
 
-
 function renderFriends() {
-  elements.friendsList.innerHTML = appData.friends
-    .map(friend => `
+  elements.friends.innerHTML = friends
+    .map(([initials, name, points, online]) => `
       <div class="flex items-center gap-[0.7rem]">
         <span
-          class="relative grid size-[2.4rem] place-items-center
-                 rounded-full bg-[#E0EFE7] text-[0.72rem]
+          class="relative grid size-[2.4rem]
+                 place-items-center rounded-full
+                 bg-[#E0EFE7] text-[0.72rem]
                  font-extrabold text-[#0F6840]"
         >
-          ${friend.initials}
+          ${initials}
 
           <i
-            class="absolute bottom-0 right-0 size-[0.55rem]
-                   rounded-full border-[0.12rem] border-[#FFFFFF]
-                   ${friend.online ? "bg-[#168653]" : "bg-[#8A959A]"}"
+            class="absolute bottom-0 right-0
+                   size-[0.55rem] rounded-full
+                   border-[0.12rem] border-[#FFFFFF]
+                   ${online ? "bg-[#168653]" : "bg-[#8A959A]"}"
           ></i>
         </span>
 
         <div class="flex-1">
-          <p class="text-[0.8rem] font-bold">${friend.name}</p>
+          <p class="text-[0.8rem] font-bold">${name}</p>
+
           <p class="text-[0.68rem] text-[#8A959A]">
-            ${friend.points} puntos
+            ${points} puntos
           </p>
         </div>
 
-        <span class="font-extrabold text-[#F5C518]">★</span>
+        <span class="text-[#F5C518]">★</span>
       </div>
     `)
     .join("");
 }
 
 function renderAchievements() {
-  const unlocked = appData.achievements.filter(
-    achievement => achievement.unlocked
+  const unlocked = achievements.filter(
+    achievement => achievement[2]
   ).length;
 
   elements.achievementCount.textContent =
-    `${unlocked}/${appData.achievements.length}`;
+    `${unlocked}/${achievements.length}`;
 
-  elements.achievementsList.innerHTML = appData.achievements
-    .map(achievement => `
+  elements.achievements.innerHTML = achievements
+    .map(([icon, title, isUnlocked]) => `
       <div
         class="flex items-center gap-[0.7rem]
-               ${achievement.unlocked ? "" : "opacity-50"}"
+               ${isUnlocked ? "" : "opacity-50"}"
       >
         <span
           class="grid size-[2.4rem] place-items-center
                  rounded-[0.65rem] font-black
                  ${
-                   achievement.unlocked
+                   isUnlocked
                      ? "bg-[#F5C518] text-[#151A1E]"
                      : "bg-[#DBE0DC] text-[#68747B]"
                  }"
         >
-          ${achievement.icon}
+          ${icon}
         </span>
 
         <div>
           <p class="text-[0.78rem] font-bold">
-            ${achievement.title}
+            ${title}
           </p>
 
           <p class="text-[0.66rem] text-[#8A959A]">
-            ${achievement.unlocked ? "Desbloqueado" : "Pendiente"}
+            ${isUnlocked ? "Desbloqueado" : "Pendiente"}
           </p>
         </div>
       </div>
     `)
     .join("");
 }
-function showToast(message, type = "success") {
-  const color = type === "success"
-    ? "bg-[#168653]"
-    : "bg-[#D9363E]";
 
-  elements.toast.textContent = message;
+function completeLevel() {
+  const module = getModule();
 
-  elements.toast.className = `
-    fixed bottom-[1.25rem] left-1/2 z-50
-    -translate-x-1/2 rounded-[0.7rem]
-    px-[1rem] py-[0.8rem] text-[0.85rem]
-    font-bold text-[#FFFFFF] shadow-lg
-    shadow-[#151A1E]/20 ${color}
-  `;
-
-  clearTimeout(showToast.timeout);
-
-  showToast.timeout = setTimeout(() => {
-    elements.toast.classList.add("hidden");
-  }, 2500);
-}
-
-function completeCurrentLevel() {
-  const module = getSelectedModule();
-
-  if (module.currentLevel > module.levels.length) return;
+  if (module.currentLevel > module.levels.length) {
+    return;
+  }
 
   module.currentLevel++;
-  appData.points += 100;
-  appData.streak++;
-
-  const finished = module.currentLevel > module.levels.length;
+  data.points += 100;
+  data.streak++;
 
   showToast(
-    finished
+    module.currentLevel > module.levels.length
       ? "¡Módulo completado!"
-      : "¡Nivel completado! Avanzaste al siguiente semáforo."
+      : "¡Nivel completado!"
   );
 
-  renderRoad();
+  renderLevels();
   renderProgress();
 }
-function setupNavigation() {
-  document.querySelectorAll(".nav-button").forEach(button => {
-    button.addEventListener("click", () => {
-      if (button.dataset.view !== "ruta") {
-        showToast(
-          `La vista ${button.textContent.trim()} estará disponible próximamente.`,
-          "error"
-        );
-      }
-    });
-  });
-}
-function renderApp() {
-  renderModules();
-  renderRoad();
-  renderProgress();
-  renderFriends();
-  renderAchievements();
 
-  elements.roadTip.textContent =
-    appData.tips[appData.selectedModuleId - 1] ||
-    appData.tips[0];
+function render() {
+  const moduleIndex = data.modules.indexOf(getModule());
+
+  renderModuleButtons();
+  renderLevels();
+  renderProgress();
+
+  elements.tip.textContent =
+    tips[moduleIndex] || tips[0];
 }
+
+document.querySelectorAll(".nav-button").forEach(button => {
+  button.addEventListener("click", () => {
+    if (button.dataset.view !== "ruta") {
+      showToast(
+        `La vista ${button.textContent.trim()} estará disponible próximamente.`,
+        true
+      );
+    }
+  });
+});
 
 elements.completeButton.addEventListener(
   "click",
-  completeCurrentLevel
+  completeLevel
 );
 
-setupNavigation();
-renderApp();
+renderFriends();
+renderAchievements();
+render();
