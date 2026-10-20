@@ -1,4 +1,5 @@
 
+
 const appData = {
     selectedModuleId: null,
     points: 340,
@@ -35,6 +36,31 @@ const levelPositions = [
 
 let elements;
 let nombre = '';
+
+
+function obtenerModulosLocales() {
+    try {
+        const modulos = JSON.parse(
+            localStorage.getItem('rutaSeguraModules') || '[]'
+        );
+
+        if (!Array.isArray(modulos)) {
+            return [];
+        }
+
+        return modulos.map(modulo => ({
+            ...modulo,
+            id: String(modulo.id)
+        }));
+    } catch (error) {
+        console.error(
+            'Error al cargar módulos locales:',
+            error
+        );
+
+        return [];
+    }
+}
 
 function getSelectedModule() {
     return appData.modules.find(
@@ -454,10 +480,14 @@ function renderApp() {
 
 async function obtenerModulos(token) {
     try {
+        const token = localStorage.getItem('token')
         const response = await fetch(
             'http://localhost:3641/v1/modulos/',
             {
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                'Authorization': `Bearer ${token}`
+            }
             }
         );
 
@@ -492,6 +522,9 @@ async function obtenerModulos(token) {
             nivelRequerido: modulo.nivel,
             puedeAcceder: modulo.puedeAcceder
         }));
+
+        /* Agrega los módulos creados desde el formulario. */
+        appData.modules.push(...obtenerModulosLocales());
 
         appData.selectedModuleId =
             appData.modules[0]?.id ?? null;
@@ -536,7 +569,6 @@ function obtenerPayloadJWT(token) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
-
     if (!token) {
         window.location.replace('./login.html');
         return;
@@ -546,7 +578,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const payload = obtenerPayloadJWT(token);
 
         nombre = payload.nombre ?? '';
+        
 
+        const rol = payload.rol;
+
+        if (rol === 'ADMIN') {
+            console.log('Soy')
+            const boton = document.getElementById('btn-agregar-modulo');
+            console.log(boton)
+            boton.style.display='flex'
+        }
         console.log('Rol:', payload.rol);
 
         if (
@@ -563,6 +604,8 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.replace('./login.html');
         return;
     }
+
+    
 
     elements = {
         moduleSelector: document.querySelector('#module-selector'),
