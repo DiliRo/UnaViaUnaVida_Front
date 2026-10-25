@@ -2,17 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <meta
-    name="description"
-    content="Agregar un módulo a Ruta Segura"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Agregar un módulo a Ruta Segura">
   <title>Agregar módulo | Ruta Segura</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -21,162 +12,83 @@
 <body class="min-h-screen bg-[#F4F6F3] font-sans text-[#172026] antialiased">
   <div class="grid min-h-screen lg:grid-cols-[15rem_minmax(0,1fr)]">
 
-    <aside
-      class="flex flex-col bg-[#101417] p-[1.25rem]
-             text-[#FFFFFF] lg:sticky lg:top-0 lg:h-screen"
-    >
-      <a
-        href="./inicio.html"
-        class="mb-[2rem] flex items-center gap-[0.75rem]"
-      >
-        <span
-          class="flex gap-[0.18rem] rounded-[0.55rem]
-                 bg-[#090C0E] p-[0.4rem]"
-          aria-hidden="true"
-        >
+    <!-- Sidebar -->
+    <aside class="flex flex-col bg-[#101417] p-[1.25rem] text-[#FFFFFF] lg:sticky lg:top-0 lg:h-screen">
+      <a href="./inicio.html" class="mb-[2rem] flex items-center gap-[0.75rem]">
+        <span class="flex gap-[0.18rem] rounded-[0.55rem] bg-[#090C0E] p-[0.4rem]">
           <span class="size-[0.5rem] rounded-full bg-[#D9363E]"></span>
           <span class="size-[0.5rem] rounded-full bg-[#F5C518]"></span>
           <span class="size-[0.5rem] rounded-full bg-[#168653]"></span>
         </span>
 
-        <span class="font-extrabold tracking-tight">
+        <span class="font-extrabold">
           Ruta Segura
         </span>
       </a>
 
-      <nav
-        class="grid grid-cols-2 gap-[0.5rem]
-               sm:grid-cols-4 lg:grid-cols-1"
-        aria-label="Navegación principal"
-      >
-        <a
-          href="./inicio.html"
-          class="flex items-center gap-[0.75rem]
-                 rounded-[0.65rem] px-[1rem] py-[0.8rem]
-                 font-semibold text-[#CBD2D5]
-                 hover:bg-[#252D32] hover:text-[#FFFFFF]"
-        >
-          <span aria-hidden="true">⌂</span>
+      <nav class="grid grid-cols-2 gap-[0.5rem] sm:grid-cols-4 lg:grid-cols-1">
+        <a href="./inicio.html" class="flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] font-semibold text-[#CBD2D5] hover:bg-[#252D32] hover:text-[#FFFFFF]">
+          <span>⌂</span>
           <span>Inicio</span>
         </a>
 
-        <a
-          href="./principal.html"
-          class="flex items-center gap-[0.75rem]
-                 rounded-[0.65rem] bg-[#168653]
-                 px-[1rem] py-[0.8rem] font-bold"
-        >
-          <span aria-hidden="true">◆</span>
+        <a href="./principal.html" class="flex items-center gap-[0.75rem] rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.8rem] font-bold text-[#FFFFFF]">
+          <span>◆</span>
           <span>Mi ruta</span>
         </a>
 
-        <button
-          type="button"
-          class="flex items-center gap-[0.75rem]
-                 rounded-[0.65rem] px-[1rem] py-[0.8rem]
-                 text-left font-semibold text-[#CBD2D5]"
-          disabled
-        >
-          <span aria-hidden="true">▦</span>
+        <button type="button" disabled class="flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] text-left font-semibold text-[#CBD2D5]">
+          <span>▦</span>
           <span>Módulos</span>
         </button>
 
-        <button
-          type="button"
-          class="flex items-center gap-[0.75rem]
-                 rounded-[0.65rem] px-[1rem] py-[0.8rem]
-                 text-left font-semibold text-[#CBD2D5]"
-          disabled
-        >
-          <span aria-hidden="true">★</span>
+        <button type="button" disabled class="flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] text-left font-semibold text-[#CBD2D5]">
+          <span>★</span>
           <span>Logros</span>
         </button>
       </nav>
 
-      <a
-        href="./principal.html"
-        class="mt-[1.5rem] rounded-[0.65rem]
-               border-[0.0625rem] border-[#8A959A]
-               px-[1rem] py-[0.75rem] text-center
-               text-[0.78rem] font-bold text-[#CBD2D5]
-               hover:bg-[#252D32] lg:mt-auto"
-      >
+      <a href="./principal.html" class="mt-[1.5rem] rounded-[0.65rem] border-[0.0625rem] border-[#8A959A] px-[1rem] py-[0.75rem] text-center text-[0.78rem] font-bold text-[#CBD2D5] hover:bg-[#252D32] lg:mt-auto">
         Volver a mi ruta
       </a>
     </aside>
 
+    <!-- Contenido principal -->
     <main class="p-[1rem] sm:p-[1.5rem] xl:p-[2rem]">
       <div class="mx-auto max-w-[54rem]">
-        <header
-          class="rounded-[1rem] bg-[#151A1E]
-                 p-[1.5rem] text-[#FFFFFF]
-                 shadow-lg shadow-[#151A1E]/10
-                 sm:p-[2rem]"
-        >
-          <p
-            class="text-[0.72rem] font-extrabold
-                   uppercase tracking-[0.12em]
-                   text-[#F5C518]"
-          >
+
+        <!-- Encabezado -->
+        <header class="rounded-[1rem] bg-[#151A1E] p-[1.5rem] text-[#FFFFFF] shadow-lg shadow-[#151A1E]/10 sm:p-[2rem]">
+          <p class="text-[0.72rem] font-extrabold uppercase tracking-[0.12em] text-[#F5C518]">
             Administración de contenido
           </p>
 
-          <h1
-            id="page-title"
-            class="mt-[0.45rem] text-[2rem]
-                   font-extrabold tracking-[-0.04em]"
-          >
+          <h1 id="page-title" class="mt-[0.45rem] text-[2rem] font-extrabold tracking-[-0.04em]">
             Agregar módulo
           </h1>
 
-          <p
-            id="page-description"
-            class="mt-[0.55rem] text-[0.88rem]
-                   text-[#CBD2D5]"
-          >
+          <p id="page-description" class="mt-[0.55rem] text-[0.88rem] text-[#CBD2D5]">
             Primero completa la información general del módulo.
           </p>
 
           <div class="mt-[1.3rem] flex items-center gap-[0.6rem]">
-            <span
-              id="step-one-indicator"
-              class="grid size-[2rem] place-items-center
-                     rounded-full bg-[#168653]
-                     text-[0.75rem] font-extrabold"
-            >
+            <span id="step-one-indicator" class="grid size-[2rem] place-items-center rounded-full bg-[#168653] text-[0.75rem] font-extrabold text-[#FFFFFF]">
               1
             </span>
 
             <span class="h-[0.18rem] w-[3rem] bg-[#8A959A]"></span>
 
-            <span
-              id="step-two-indicator"
-              class="grid size-[2rem] place-items-center
-                     rounded-full bg-[#252D32]
-                     text-[0.75rem] font-extrabold
-                     text-[#CBD2D5]"
-            >
+            <span id="step-two-indicator" class="grid size-[2rem] place-items-center rounded-full bg-[#252D32] text-[0.75rem] font-extrabold text-[#CBD2D5]">
               2
             </span>
           </div>
         </header>
 
-        <div
-          id="form-message"
-          class="mt-[1rem] hidden rounded-[0.7rem]
-                 p-[1rem] text-[0.82rem] font-bold"
-          role="alert"
-          aria-live="polite"
-        ></div>
+        <!-- Mensajes -->
+        <div id="form-message" class="mt-[1rem] hidden rounded-[0.7rem] p-[1rem] text-[0.82rem] font-bold" role="alert" aria-live="polite"></div>
 
-        <form
-          id="module-form"
-          class="mt-[1rem] rounded-[1rem]
-                 bg-[#FFFFFF] p-[1.5rem]
-                 shadow-lg shadow-[#151A1E]/10
-                 sm:p-[2rem]"
-          novalidate
-        >
+        <!-- Paso 1: información del módulo -->
+        <form id="module-form" class="mt-[1rem] rounded-[1rem] bg-[#FFFFFF] p-[1.5rem] shadow-lg shadow-[#151A1E]/10 sm:p-[2rem]" novalidate>
           <h2 class="text-[1.3rem] font-extrabold">
             Información del módulo
           </h2>
@@ -193,14 +105,7 @@
                 maxlength="70"
                 required
                 placeholder="Ej. Seguridad para peatones"
-                class="mt-[0.45rem] min-h-[3.3rem]
-                       w-full rounded-[0.65rem]
-                       border-[0.0625rem] border-[#DBE0DC]
-                       bg-[#FFFFFF] px-[1rem] outline-none
-                       placeholder:text-[#9AA3A7]
-                       focus:border-[#168653]
-                       focus:ring-[0.2rem]
-                       focus:ring-[#E0EFE7]"
+                class="mt-[0.45rem] min-h-[3.3rem] w-full rounded-[0.65rem] border-[0.0625rem] border-[#DBE0DC] bg-[#FFFFFF] px-[1rem] outline-none placeholder:text-[#9AA3A7] focus:border-[#168653]"
               >
             </label>
 
@@ -215,14 +120,7 @@
                 maxlength="300"
                 required
                 placeholder="Describe qué aprenderá el usuario"
-                class="mt-[0.45rem] w-full resize-none
-                       rounded-[0.65rem]
-                       border-[0.0625rem] border-[#DBE0DC]
-                       bg-[#FFFFFF] p-[1rem] outline-none
-                       placeholder:text-[#9AA3A7]
-                       focus:border-[#168653]
-                       focus:ring-[0.2rem]
-                       focus:ring-[#E0EFE7]"
+                class="mt-[0.45rem] w-full resize-none rounded-[0.65rem] border-[0.0625rem] border-[#DBE0DC] bg-[#FFFFFF] p-[1rem] outline-none placeholder:text-[#9AA3A7] focus:border-[#168653]"
               ></textarea>
             </label>
 
@@ -238,116 +136,56 @@
                 max="99"
                 value="1"
                 required
-                class="mt-[0.45rem] min-h-[3.3rem]
-                       w-full rounded-[0.65rem]
-                       border-[0.0625rem] border-[#DBE0DC]
-                       bg-[#FFFFFF] px-[1rem] outline-none
-                       focus:border-[#168653]
-                       focus:ring-[0.2rem]
-                       focus:ring-[#E0EFE7]"
+                class="mt-[0.45rem] min-h-[3.3rem] w-full rounded-[0.65rem] border-[0.0625rem] border-[#DBE0DC] bg-[#FFFFFF] px-[1rem] outline-none focus:border-[#168653]"
               >
             </label>
           </div>
 
           <div class="mt-[1.5rem] flex justify-end">
-            <button
-              type="submit"
-              class="rounded-[0.65rem] bg-[#168653]
-                     px-[1.3rem] py-[0.8rem]
-                     text-[0.85rem] font-extrabold
-                     text-[#FFFFFF] hover:bg-[#0F6840]"
-            >
+            <button type="submit" class="rounded-[0.65rem] bg-[#168653] px-[1.3rem] py-[0.8rem] text-[0.85rem] font-extrabold text-[#FFFFFF] hover:bg-[#0F6840]">
               Siguiente →
             </button>
           </div>
         </form>
 
-        <form
-          id="lessons-form"
-          class="mt-[1rem] hidden rounded-[1rem]
-                 bg-[#FFFFFF] p-[1.5rem]
-                 shadow-lg shadow-[#151A1E]/10
-                 sm:p-[2rem]"
-          novalidate
-        >
-          <div
-            class="flex flex-col gap-[0.8rem]
-                   sm:flex-row sm:items-center
-                   sm:justify-between"
-          >
+        <!-- Paso 2: lecciones -->
+        <form id="lessons-form" class="mt-[1rem] hidden rounded-[1rem] bg-[#FFFFFF] p-[1.5rem] shadow-lg shadow-[#151A1E]/10 sm:p-[2rem]" novalidate>
+          <div class="flex flex-col gap-[0.8rem] sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 class="text-[1.3rem] font-extrabold">
                 Agregar lecciones
               </h2>
 
               <p class="mt-[0.3rem] text-[0.78rem] text-[#68747B]">
-                Puedes agregar un máximo de seis lecciones.
+                Debes crear obligatoriamente seis lecciones.
               </p>
             </div>
 
-            <span
-              id="lesson-count"
-              class="rounded-full bg-[#E0EFE7]
-                     px-[0.8rem] py-[0.35rem]
-                     text-[0.75rem] font-extrabold
-                     text-[#0F6840]"
-            >
+            <span id="lesson-count" class="rounded-full bg-[#E0EFE7] px-[0.8rem] py-[0.35rem] text-[0.75rem] font-extrabold text-[#0F6840]">
               1 / 6
             </span>
           </div>
 
-          <div
-            id="lessons-container"
-            class="mt-[1.3rem] space-y-[1rem]"
-          ></div>
+          <!-- Formularios o cards de las lecciones -->
+          <div id="lessons-container" class="mt-[1.3rem] space-y-[1rem]"></div>
 
-          <div
-            class="mt-[1.3rem] flex flex-col-reverse
-                   gap-[0.7rem] sm:flex-row
-                   sm:justify-between"
-          >
-            <button
-              id="back-button"
-              type="button"
-              class="rounded-[0.65rem]
-                     border-[0.0625rem]
-                     border-[#8A959A]
-                     px-[1.1rem] py-[0.75rem]
-                     text-[0.82rem] font-bold
-                     text-[#68747B]
-                     hover:bg-[#F4F6F3]"
-            >
+          <div class="mt-[1.3rem] flex flex-col-reverse gap-[0.7rem] sm:flex-row sm:justify-between">
+            <button id="back-button" type="button" class="rounded-[0.65rem] border-[0.0625rem] border-[#8A959A] px-[1.1rem] py-[0.75rem] text-[0.82rem] font-bold text-[#68747B] hover:bg-[#F4F6F3]">
               ← Regresar
             </button>
 
             <div class="flex flex-col gap-[0.7rem] sm:flex-row">
-              <button
-                id="add-lesson-button"
-                type="button"
-                class="rounded-[0.65rem] bg-[#F5C518]
-                       px-[1.1rem] py-[0.75rem]
-                       text-[0.82rem] font-extrabold
-                       text-[#151A1E]
-                       disabled:cursor-not-allowed
-                       disabled:bg-[#DBE0DC]
-                       disabled:text-[#8A959A]"
-              >
+              <button id="add-lesson-button" type="button" class="rounded-[0.65rem] bg-[#F5C518] px-[1.1rem] py-[0.75rem] text-[0.82rem] font-extrabold text-[#151A1E] disabled:cursor-not-allowed disabled:bg-[#DBE0DC] disabled:text-[#8A959A]">
                 + Agregar otra lección
               </button>
 
-              <button
-                type="submit"
-                class="rounded-[0.65rem] bg-[#168653]
-                       px-[1.2rem] py-[0.75rem]
-                       text-[0.82rem] font-extrabold
-                       text-[#FFFFFF]
-                       hover:bg-[#0F6840]"
-              >
-                Guardar módulo
+              <button type="submit" class="rounded-[0.65rem] bg-[#168653] px-[1.2rem] py-[0.75rem] text-[0.82rem] font-extrabold text-[#FFFFFF] hover:bg-[#0F6840]">
+                Continuar
               </button>
             </div>
           </div>
         </form>
+
       </div>
     </main>
   </div>
