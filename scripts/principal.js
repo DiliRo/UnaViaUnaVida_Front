@@ -222,17 +222,25 @@ function renderLevels() {
     })
     .join("");
 
-  document
-    .querySelectorAll(".level-button:not(:disabled)")
-    .forEach(button => {
-      button.addEventListener("click", () => {
-        const level = Number(button.dataset.level);
+document
+  .querySelectorAll(".level-button:not(:disabled)")
+  .forEach(button => {
+    button.addEventListener("click", () => {
+      const level = Number(button.dataset.level);
 
+      if (!module.lessons?.[level - 1]) {
         showToast(
-          `Nivel ${level}: ${module.levels[level - 1]}`
+          "Esta lección todavía no tiene preguntas.",
+          true
         );
-      });
+
+        return;
+      }
+
+      window.location.href =
+        `./leccion.html?module=${module.id}&lesson=${level - 1}`;
     });
+  });
 
   const positionIndex = Math.min(
     module.currentLevel - 1,
