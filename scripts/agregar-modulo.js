@@ -1,7 +1,8 @@
+
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
-const STORAGE_KEY = "rutaSeguraModules";
 const MAX_LESSONS = 6;
+
 const moduleForm = $("#module-form");
 const lessonsForm = $("#lessons-form");
 const lessonsContainer = $("#lessons-container");
@@ -40,11 +41,11 @@ questionsView.innerHTML = `
     <label><span class="text-[0.78rem] font-bold">Retroalimentación</span>
       <textarea id="feedback" required rows="3" class="mt-[0.4rem] w-full rounded-[0.6rem] border-[0.0625rem] border-[#DBE0DC] p-[0.9rem] outline-none focus:border-[#168653]"></textarea>
     </label>
-    <button class="rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.75rem] font-bold text-[#FFFFFF]">Guardar pregunta</button>
+    <button type="submit" class="rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.75rem] font-bold text-[#FFFFFF]">Guardar pregunta</button>
   </form>
-  <button id="another-question" class="mt-[1rem] hidden rounded-[0.65rem] bg-[#F5C518] px-[1rem] py-[0.75rem] font-bold">+ Crear otra pregunta</button>
+  <button id="another-question" type="button" class="mt-[1rem] hidden rounded-[0.65rem] bg-[#F5C518] px-[1rem] py-[0.75rem] font-bold">+ Crear otra pregunta</button>
   <div id="question-cards" class="mt-[1rem] grid gap-[1rem]"></div>
-  <button id="back-lessons" class="mt-[1rem] rounded-[0.65rem] border-[0.0625rem] border-[#8A959A] px-[1rem] py-[0.75rem] font-bold text-[#68747B]">← Regresar a lecciones</button>
+  <button id="back-lessons" type="button" class="mt-[1rem] rounded-[0.65rem] border-[0.0625rem] border-[#8A959A] px-[1rem] py-[0.75rem] font-bold text-[#68747B]">← Regresar a lecciones</button>
 `;
 
 summaryView.id = "summary-view";
@@ -52,28 +53,32 @@ summaryView.className = "mt-[1rem] hidden space-y-[1rem]";
 summaryView.innerHTML = `
   <div id="summary" class="space-y-[1rem]"></div>
   <div class="flex justify-between gap-[1rem]">
-    <button id="back-summary" class="rounded-[0.65rem] border-[0.0625rem] border-[#8A959A] px-[1rem] py-[0.75rem] font-bold text-[#68747B]">← Regresar</button>
-    <button id="create-module" class="rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.75rem] font-bold text-[#FFFFFF]">Crear módulo</button>
+    <button id="back-summary" type="button" class="rounded-[0.65rem] border-[0.0625rem] border-[#8A959A] px-[1rem] py-[0.75rem] font-bold text-[#68747B]">← Regresar</button>
+    <button id="create-module" type="button" class="rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.75rem] font-bold text-[#FFFFFF]">Preparar datos</button>
   </div>
 `;
 
 lessonsForm.after(questionsView, summaryView);
 
 const questionForm = $("#question-form");
+
 const showMessage = (text, success = false) => {
   message.textContent = text;
   message.className = `mt-[1rem] rounded-[0.7rem] p-[1rem] text-[0.82rem] font-bold ${success ? "bg-[#E0EFE7] text-[#0F6840]" : "bg-[#FDE8E9] text-[#A9242B]"}`;
 };
+
 const hideMessage = () => message.classList.add("hidden");
+
 const escapeHTML = text => {
   const element = document.createElement("div");
-  element.textContent = text;
+  element.textContent = String(text ?? "");
   return element.innerHTML;
 };
 
 function showView(step) {
-  [moduleForm, lessonsForm, questionsView, summaryView].forEach(view => view.classList.add("hidden"));
-  [null, moduleForm, lessonsForm, questionsView, summaryView][step].classList.remove("hidden");
+  const views = [null, moduleForm, lessonsForm, questionsView, summaryView];
+  views.slice(1).forEach(view => view.classList.add("hidden"));
+  views[step].classList.remove("hidden");
 
   const data = [
     null,
@@ -84,8 +89,10 @@ function showView(step) {
   ][step];
 
   [pageTitle.textContent, pageDescription.textContent] = data;
+
   stepOne.className = `grid size-[2rem] place-items-center rounded-full text-[0.75rem] font-extrabold ${step === 1 ? "bg-[#168653] text-[#FFFFFF]" : "bg-[#E0EFE7] text-[#0F6840]"}`;
   stepTwo.className = `grid size-[2rem] place-items-center rounded-full text-[0.75rem] font-extrabold ${step >= 2 ? "bg-[#168653] text-[#FFFFFF]" : "bg-[#252D32] text-[#CBD2D5]"}`;
+
   hideMessage();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -97,6 +104,7 @@ function updateCount() {
 
 function addLesson() {
   if (lessonsReady || lessonsContainer.children.length >= MAX_LESSONS) return;
+
   const number = lessonsContainer.children.length + 1;
   const card = document.createElement("section");
 
@@ -114,16 +122,16 @@ function addLesson() {
     updateCount();
   };
 
-  lessonsContainer.append(card);
+  lessonsContainer.appendChild(card);
   updateCount();
 }
 
 function renderLessons() {
   lessonsContainer.innerHTML = lessons.map((lesson, index) => `
     <article class="rounded-[0.8rem] border-[0.0625rem] border-[#DBE0DC] bg-[#F4F6F3] p-[1rem]">
-      <div class="flex justify-between gap-[1rem]"><h3 class="font-extrabold">Lección ${index + 1}: ${escapeHTML(lesson.title)}</h3><span class="text-[0.72rem] font-bold text-[#0F6840]">${lesson.questions.length} preguntas</span></div>
-      <p class="mt-[0.5rem] text-[0.8rem] text-[#68747B]">${escapeHTML(lesson.description)}</p>
-      <p class="mt-[0.4rem] text-[0.75rem] font-bold">Intentos máximos: ${lesson.maxAttempts}</p>
+      <div class="flex justify-between gap-[1rem]"><h3 class="font-extrabold">Lección ${index + 1}: ${escapeHTML(lesson.titulo)}</h3><span class="text-[0.72rem] font-bold text-[#0F6840]">${lesson.questions.length} preguntas</span></div>
+      <p class="mt-[0.5rem] text-[0.8rem] text-[#68747B]">${escapeHTML(lesson.descripcion)}</p>
+      <p class="mt-[0.4rem] text-[0.75rem] font-bold">Intentos máximos: ${lesson.intentosMaximos}</p>
       <button type="button" data-lesson="${index}" class="questions mt-[0.8rem] rounded-[0.6rem] bg-[#168653] px-[0.9rem] py-[0.65rem] text-[0.75rem] font-bold text-[#FFFFFF]">${lesson.questions.length ? "Ver o crear preguntas" : "Crear preguntas"}</button>
     </article>
   `).join("");
@@ -134,6 +142,7 @@ function renderLessons() {
 
 function resetQuestionForm() {
   questionForm.reset();
+
   $("#options").innerHTML = Array.from({ length: 4 }, (_, index) => `
     <div class="flex gap-[0.6rem] rounded-[0.6rem] bg-[#F4F6F3] p-[0.6rem]">
       <input type="checkbox" value="${index}" class="correct size-[1.1rem] accent-[#168653]">
@@ -142,7 +151,9 @@ function resetQuestionForm() {
   `).join("");
 
   $$(".correct").forEach(box => box.onchange = () => {
-    if (box.checked) $$(".correct").forEach(other => other !== box && (other.checked = false));
+    if (box.checked) $$(".correct").forEach(other => {
+      if (other !== box) other.checked = false;
+    });
   });
 
   questionForm.classList.remove("hidden");
@@ -151,7 +162,7 @@ function resetQuestionForm() {
 
 function openQuestions(index) {
   selectedLesson = index;
-  $("#lesson-name").textContent = `Lección ${index + 1}: ${lessons[index].title}`;
+  $("#lesson-name").textContent = `Lección ${index + 1}: ${lessons[index].titulo}`;
   renderQuestions();
   resetQuestionForm();
   showView(3);
@@ -160,10 +171,10 @@ function openQuestions(index) {
 function renderQuestions() {
   $("#question-cards").innerHTML = lessons[selectedLesson].questions.map((question, index) => `
     <article class="rounded-[0.7rem] bg-[#F4F6F3] p-[1rem]">
-      <div class="flex justify-between"><h3 class="font-bold">Pregunta ${index + 1}</h3><button data-delete="${index}" class="delete-question text-[0.75rem] font-bold text-[#A9242B]">Eliminar</button></div>
-      <p class="mt-[0.5rem]">${escapeHTML(question.statement)}</p>
-      ${question.options.map((option, optionIndex) => `<p class="mt-[0.4rem] rounded-[0.5rem] p-[0.5rem] text-[0.78rem] ${optionIndex === question.correctOption ? "bg-[#E0EFE7] font-bold text-[#0F6840]" : "bg-[#FFFFFF]"}">${escapeHTML(option)} ${optionIndex === question.correctOption ? "✓" : ""}</p>`).join("")}
-      <p class="mt-[0.6rem] text-[0.75rem] text-[#68747B]">Retroalimentación: ${escapeHTML(question.feedback)}</p>
+      <div class="flex justify-between"><h3 class="font-bold">Pregunta ${index + 1}</h3><button type="button" data-delete="${index}" class="delete-question text-[0.75rem] font-bold text-[#A9242B]">Eliminar</button></div>
+      <p class="mt-[0.5rem]">${escapeHTML(question.enunciado)}</p>
+      ${question.opciones.map((option, optionIndex) => `<p class="mt-[0.4rem] rounded-[0.5rem] p-[0.5rem] text-[0.78rem] ${optionIndex === question.respuestaCorrecta ? "bg-[#E0EFE7] font-bold text-[#0F6840]" : "bg-[#FFFFFF]"}">${escapeHTML(option)} ${optionIndex === question.respuestaCorrecta ? "✓" : ""}</p>`).join("")}
+      <p class="mt-[0.6rem] text-[0.75rem] text-[#68747B]">Retroalimentación: ${escapeHTML(question.retroalimentacion)}</p>
     </article>
   `).join("");
 
@@ -175,35 +186,71 @@ function renderQuestions() {
 
 function renderSummary() {
   $("#summary").innerHTML = `
-    <article class="rounded-[1rem] bg-[#151A1E] p-[1.5rem] text-[#FFFFFF]"><h2 class="text-[1.4rem] font-extrabold">${escapeHTML(moduleData.title)}</h2><p class="mt-[0.5rem] text-[#CBD2D5]">${escapeHTML(moduleData.description)}</p><p class="mt-[0.5rem]">Nivel: ${moduleData.levelNumber}</p></article>
-    ${lessons.map((lesson, index) => `<article class="rounded-[1rem] bg-[#FFFFFF] p-[1.3rem] shadow-lg"><h3 class="font-extrabold">Lección ${index + 1}: ${escapeHTML(lesson.title)}</h3><p class="mt-[0.4rem] text-[#68747B]">${escapeHTML(lesson.description)}</p><p class="mt-[0.4rem] text-[0.78rem]">Intentos: ${lesson.maxAttempts}</p>${lesson.questions.map((question, questionIndex) => `<div class="mt-[0.7rem] rounded-[0.6rem] bg-[#F4F6F3] p-[0.8rem]"><p class="font-bold">${questionIndex + 1}. ${escapeHTML(question.statement)}</p><p class="text-[0.75rem] text-[#0F6840]">Correcta: ${escapeHTML(question.options[question.correctOption])}</p><p class="text-[0.75rem] text-[#68747B]">${escapeHTML(question.feedback)}</p></div>`).join("")}</article>`).join("")}
+    <article class="rounded-[1rem] bg-[#151A1E] p-[1.5rem] text-[#FFFFFF]"><h2 class="text-[1.4rem] font-extrabold">${escapeHTML(moduleData.nombre)}</h2><p class="mt-[0.5rem] text-[#CBD2D5]">${escapeHTML(moduleData.descripcion)}</p><p class="mt-[0.5rem]">Nivel: ${moduleData.nivel}</p></article>
+    ${lessons.map((lesson, index) => `<article class="rounded-[1rem] bg-[#FFFFFF] p-[1.3rem] shadow-lg"><h3 class="font-extrabold">Lección ${index + 1}: ${escapeHTML(lesson.titulo)}</h3><p class="mt-[0.4rem] text-[#68747B]">${escapeHTML(lesson.descripcion)}</p><p class="mt-[0.4rem] text-[0.78rem]">Intentos: ${lesson.intentosMaximos}</p>${lesson.questions.map((question, questionIndex) => `<div class="mt-[0.7rem] rounded-[0.6rem] bg-[#F4F6F3] p-[0.8rem]"><p class="font-bold">${questionIndex + 1}. ${escapeHTML(question.enunciado)}</p><p class="text-[0.75rem] text-[#0F6840]">Correcta: ${escapeHTML(question.opciones[question.respuestaCorrecta])}</p><p class="text-[0.75rem] text-[#68747B]">${escapeHTML(question.retroalimentacion)}</p></div>`).join("")}</article>`).join("")}
   `;
+}
+
+function obtenerDatosModulo() {
+  return {
+    nombre: moduleData.nombre,
+    descripcion: moduleData.descripcion,
+    nivel: moduleData.nivel
+  };
+}
+
+function obtenerDatosLecciones() {
+  return lessons.map(lesson => ({
+    titulo: lesson.titulo,
+    descripcion: lesson.descripcion,
+    intentosMaximos: lesson.intentosMaximos
+  }));
+}
+
+function obtenerDatosPreguntas() {
+  return lessons.map((lesson) => ({
+    indiceLeccion: lesson.leccionNivel,
+    preguntas: lesson.questions.map(question => ({
+      enunciado: question.enunciado,
+      opciones: [...question.opciones],
+      respuestaCorrecta: question.respuestaCorrecta,
+      retroalimentacion: question.retroalimentacion
+    }))
+  }));
+}
+
+function prepararDatosAPI() {
+  return {
+    modulo: obtenerDatosModulo(),
+    lecciones: obtenerDatosLecciones(),
+    preguntas: obtenerDatosPreguntas()
+  };
 }
 
 moduleForm.onsubmit = event => {
   event.preventDefault();
   if (!moduleForm.checkValidity()) return moduleForm.reportValidity();
-
+  
   moduleData = {
-    title: $("#module-name").value.trim(),
-    description: $("#module-description").value.trim(),
-    levelNumber: Number($("#module-level").value)
+    nombre: $("#module-name").value.trim(),
+    descripcion: $("#module-description").value.trim(),
+    nivel: Number($("#module-level").value)
   };
-
+  
   showView(2);
+  crearModulo()
 };
 
 lessonsForm.onsubmit = event => {
   event.preventDefault();
-
   if (!lessonsReady) {
     if ($$(".lesson-card").length !== MAX_LESSONS) return showMessage("Debes crear obligatoriamente seis lecciones.");
     if (!lessonsForm.checkValidity()) return lessonsForm.reportValidity();
 
     lessons = $$(".lesson-card").map(card => ({
-      title: card.querySelector(".title").value.trim(),
-      description: card.querySelector(".description").value.trim(),
-      maxAttempts: Number(card.querySelector(".attempts").value),
+      titulo: card.querySelector(".title").value.trim(),
+      descripcion: card.querySelector(".description").value.trim(),
+      intentosMaximos: Number(card.querySelector(".attempts").value),
       questions: []
     }));
 
@@ -211,34 +258,111 @@ lessonsForm.onsubmit = event => {
     addLessonButton.classList.add("hidden");
     backButton.classList.add("hidden");
     submitLessons.textContent = "Ver resumen";
+
     renderLessons();
     return showMessage("Ahora agrega preguntas a cada lección.", true);
   }
 
   if (lessons.some(lesson => !lesson.questions.length)) return showMessage("Cada lección debe tener al menos una pregunta.");
+
   renderSummary();
   showView(4);
+  crearLeccion()
 };
 
 questionForm.onsubmit = event => {
   event.preventDefault();
+
   if (!questionForm.checkValidity()) return questionForm.reportValidity();
 
   const correct = $(".correct:checked");
   if (!correct) return showMessage("Selecciona la respuesta correcta.");
 
-  lessons[selectedLesson].questions.push({
-    statement: $("#statement").value.trim(),
-    options: $$(".option").map(input => input.value.trim()),
-    correctOption: Number(correct.value),
-    feedback: $("#feedback").value.trim()
-  });
+  const opciones = $$(".option").map(input => input.value.trim());
+  if (opciones.some(opcion => opcion === "")) return showMessage("Todas las opciones deben tener contenido.");
 
+  lessons[selectedLesson].questions.push({
+    enunciado: $("#statement").value.trim(),
+    opciones,
+    respuestaCorrecta: Number(correct.value),
+    retroalimentacion: $("#feedback").value.trim()
+  });
+  
   renderQuestions();
   questionForm.classList.add("hidden");
   $("#another-question").classList.remove("hidden");
-  showMessage("Pregunta creada correctamente.", true);
+  showMessage("Pregunta preparada correctamente.", true);
+  console.log( lessons[selectedLesson])
 };
+
+async function crearModulo (){
+    const modulo = obtenerDatosModulo()
+    let nombre = modulo.nombre
+    let descripcion = modulo.descripcion
+    let nivel = modulo.nivel
+
+    const token = localStorage.getItem('token')
+    const response = await fetch("http://localhost:3641/v1/modulos/", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+              nombre,
+              descripcion,
+              nivel
+          })
+      });
+      const data = await response.json();
+    console.log(data)
+    console.log(response)
+
+  };
+
+  async function crearLeccion (){
+    const modulo = obtenerDatosModulo()
+    const leccion = obtenerDatosLecciones()
+    let nivel = modulo.nivel
+    const token = localStorage.getItem('token')
+    const responseModulo = await fetch(`http://localhost:3641/v1/modulos/nivel/${nivel}`, {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+              'Authorization': `Bearer ${token}`
+          }
+      });
+      console.log("Este es mi modulo")
+      const data = await responseModulo.json();
+      const idModulo= data.modulos._id
+
+
+      
+      for(lec of leccion){
+        const titulo = lec.titulo
+        const descripcion = lec.descripcion
+        const intentosMaximos = lec.intentosMaximos
+        let nivelLeccion =+ 1
+
+        const responseleccion = await fetch("http://localhost:3641/v1/lecciones/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                idModulo,
+                titulo,
+                descripcion,
+                intentosMaximos,
+                nivelLeccion              
+            })
+        });
+        const data2 = await responseleccion.json();
+        console.log(data2)
+      }
+  };
+
 
 addLessonButton.onclick = addLesson;
 backButton.onclick = () => showView(1);
@@ -247,11 +371,20 @@ $("#back-lessons").onclick = () => { renderLessons(); showView(2); };
 $("#back-summary").onclick = () => { renderLessons(); showView(2); };
 
 $("#create-module").onclick = () => {
-  const modules = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  modules.push({ id: Date.now(), ...moduleData, currentLevel: 1, levels: lessons.map(lesson => lesson.title), lessons });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(modules));
-  showMessage("Módulo guardado correctamente.", true);
-  setTimeout(() => window.location.href = "./principal.html", 900);
+  if (!moduleData.nombre || lessons.length !== MAX_LESSONS || lessons.some(lesson => !lesson.questions.length)) {
+    return showMessage("Debes completar el módulo, las seis lecciones y sus preguntas.");
+  }
+
+  const datos = prepararDatosAPI();
+
+  console.log("MÓDULO:", datos.modulo);
+  crearModulo()
+  console.log("LECCIONES:", datos.lecciones);
+  crearLeccion()
+  console.log("PREGUNTAS:", datos.preguntas);
+  console.log("Esto es resumen")
+
+  showMessage("Datos preparados correctamente para conectar con la API.", true);
 };
 
 addLesson();

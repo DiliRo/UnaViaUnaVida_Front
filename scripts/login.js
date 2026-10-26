@@ -7,7 +7,7 @@ form.addEventListener("submit", async (event) => {
     const nombreUsuario = document.getElementById("username").value;
     const contrasena = document.getElementById("password").value;
 
-    localStorage
+    
     const response = await fetch("http://localhost:3641/v1/auth/login", {
         method: "POST",
         headers: {
