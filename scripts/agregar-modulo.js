@@ -20,6 +20,7 @@ let moduleData = {};
 let lessons = [];
 let selectedLesson = 0;
 let lessonsReady = false;
+let idModulo = null;
 
 const questionsView = document.createElement("section");
 const summaryView = document.createElement("section");
@@ -173,7 +174,7 @@ function renderQuestions() {
     <article class="rounded-[0.7rem] bg-[#F4F6F3] p-[1rem]">
       <div class="flex justify-between"><h3 class="font-bold">Pregunta ${index + 1}</h3><button type="button" data-delete="${index}" class="delete-question text-[0.75rem] font-bold text-[#A9242B]">Eliminar</button></div>
       <p class="mt-[0.5rem]">${escapeHTML(question.enunciado)}</p>
-      ${question.opciones.map((option, optionIndex) => `<p class="mt-[0.4rem] rounded-[0.5rem] p-[0.5rem] text-[0.78rem] ${optionIndex === question.respuestaCorrecta ? "bg-[#E0EFE7] font-bold text-[#0F6840]" : "bg-[#FFFFFF]"}">${escapeHTML(option)} ${optionIndex === question.respuestaCorrecta ? "✓" : ""}</p>`).join("")}
+      ${question.opciones.map(option => `<p class="mt-[0.4rem] rounded-[0.5rem] p-[0.5rem] text-[0.78rem] ${option.esCorrecta ? "bg-[#E0EFE7] font-bold text-[#0F6840]" : "bg-[#FFFFFF]"}">${escapeHTML(option.texto)} ${option.esCorrecta ? "✓" : ""}</p>`).join("")}
       <p class="mt-[0.6rem] text-[0.75rem] text-[#68747B]">Retroalimentación: ${escapeHTML(question.retroalimentacion)}</p>
     </article>
   `).join("");
@@ -187,7 +188,7 @@ function renderQuestions() {
 function renderSummary() {
   $("#summary").innerHTML = `
     <article class="rounded-[1rem] bg-[#151A1E] p-[1.5rem] text-[#FFFFFF]"><h2 class="text-[1.4rem] font-extrabold">${escapeHTML(moduleData.nombre)}</h2><p class="mt-[0.5rem] text-[#CBD2D5]">${escapeHTML(moduleData.descripcion)}</p><p class="mt-[0.5rem]">Nivel: ${moduleData.nivel}</p></article>
-    ${lessons.map((lesson, index) => `<article class="rounded-[1rem] bg-[#FFFFFF] p-[1.3rem] shadow-lg"><h3 class="font-extrabold">Lección ${index + 1}: ${escapeHTML(lesson.titulo)}</h3><p class="mt-[0.4rem] text-[#68747B]">${escapeHTML(lesson.descripcion)}</p><p class="mt-[0.4rem] text-[0.78rem]">Intentos: ${lesson.intentosMaximos}</p>${lesson.questions.map((question, questionIndex) => `<div class="mt-[0.7rem] rounded-[0.6rem] bg-[#F4F6F3] p-[0.8rem]"><p class="font-bold">${questionIndex + 1}. ${escapeHTML(question.enunciado)}</p><p class="text-[0.75rem] text-[#0F6840]">Correcta: ${escapeHTML(question.opciones[question.respuestaCorrecta])}</p><p class="text-[0.75rem] text-[#68747B]">${escapeHTML(question.retroalimentacion)}</p></div>`).join("")}</article>`).join("")}
+    ${lessons.map((lesson, index) => `<article class="rounded-[1rem] bg-[#FFFFFF] p-[1.3rem] shadow-lg"><h3 class="font-extrabold">Lección ${index + 1}: ${escapeHTML(lesson.titulo)}</h3><p class="mt-[0.4rem] text-[#68747B]">${escapeHTML(lesson.descripcion)}</p><p class="mt-[0.4rem] text-[0.78rem]">Intentos: ${lesson.intentosMaximos}</p>${lesson.questions.map((question, questionIndex) => `<div class="mt-[0.7rem] rounded-[0.6rem] bg-[#F4F6F3] p-[0.8rem]"><p class="font-bold">${questionIndex + 1}. ${escapeHTML(question.enunciado)}</p><p class="text-[0.75rem] text-[#0F6840]">Correcta: ${escapeHTML(question.opciones.find(opcion => opcion.esCorrecta)?.texto)}</p><p class="text-[0.75rem] text-[#68747B]">${escapeHTML(question.retroalimentacion)}</p></div>`).join("")}</article>`).join("")}
   `;
 }
 
@@ -203,17 +204,20 @@ function obtenerDatosLecciones() {
   return lessons.map(lesson => ({
     titulo: lesson.titulo,
     descripcion: lesson.descripcion,
-    intentosMaximos: lesson.intentosMaximos
+    intentosMaximos: lesson.intentosMaximos,
+    numeroLeccion: lesson.numeroLeccion
   }));
 }
 
 function obtenerDatosPreguntas() {
-  return lessons.map((lesson) => ({
-    indiceLeccion: lesson.leccionNivel,
+  return lessons.map(lesson => ({
+    numeroLeccion: lesson.numeroLeccion,
     preguntas: lesson.questions.map(question => ({
       enunciado: question.enunciado,
-      opciones: [...question.opciones],
-      respuestaCorrecta: question.respuestaCorrecta,
+      opciones: question.opciones.map(opcion => ({
+        texto: opcion.texto,
+        esCorrecta: opcion.esCorrecta
+      })),
       retroalimentacion: question.retroalimentacion
     }))
   }));
@@ -247,11 +251,12 @@ lessonsForm.onsubmit = event => {
     if ($$(".lesson-card").length !== MAX_LESSONS) return showMessage("Debes crear obligatoriamente seis lecciones.");
     if (!lessonsForm.checkValidity()) return lessonsForm.reportValidity();
 
-    lessons = $$(".lesson-card").map(card => ({
+    lessons = $$(".lesson-card").map((card,index) => ({
       titulo: card.querySelector(".title").value.trim(),
       descripcion: card.querySelector(".description").value.trim(),
       intentosMaximos: Number(card.querySelector(".attempts").value),
-      questions: []
+      questions: [],
+      numeroLeccion: index +1
     }));
 
     lessonsReady = true;
@@ -278,21 +283,28 @@ questionForm.onsubmit = event => {
   const correct = $(".correct:checked");
   if (!correct) return showMessage("Selecciona la respuesta correcta.");
 
-  const opciones = $$(".option").map(input => input.value.trim());
-  if (opciones.some(opcion => opcion === "")) return showMessage("Todas las opciones deben tener contenido.");
+  const opciones = $$(".option").map((input, index) => ({
+    texto: input.value.trim(),
+    esCorrecta: index === Number(correct.value)
+  }));
+
+  if (opciones.some(opcion => opcion.texto === "")) {
+    return showMessage("Todas las opciones deben tener contenido.");
+  }
 
   lessons[selectedLesson].questions.push({
     enunciado: $("#statement").value.trim(),
     opciones,
-    respuestaCorrecta: Number(correct.value),
     retroalimentacion: $("#feedback").value.trim()
   });
-  
+
   renderQuestions();
   questionForm.classList.add("hidden");
   $("#another-question").classList.remove("hidden");
+
   showMessage("Pregunta preparada correctamente.", true);
-  console.log( lessons[selectedLesson])
+
+  console.log("numeroLeccion",lessons[selectedLesson]);
 };
 
 async function crearModulo (){
@@ -314,8 +326,8 @@ async function crearModulo (){
               nivel
           })
       });
-      const data = await response.json();
-    console.log(data)
+      dataModulo = await response.json();
+    console.log(dataModulo)
     console.log(response)
 
   };
@@ -334,15 +346,15 @@ async function crearModulo (){
       });
       console.log("Este es mi modulo")
       const data = await responseModulo.json();
-      const idModulo= data.modulos._id
+      idModulo= data.modulos._id
 
 
       
-      for(lec of leccion){
+      for(const [index,lec] of leccion.entries()){
         const titulo = lec.titulo
         const descripcion = lec.descripcion
         const intentosMaximos = lec.intentosMaximos
-        let nivelLeccion =+ 1
+        const numeroLeccion = lec.numeroLeccion
 
         const responseleccion = await fetch("http://localhost:3641/v1/lecciones/", {
             method: "POST",
@@ -355,13 +367,65 @@ async function crearModulo (){
                 titulo,
                 descripcion,
                 intentosMaximos,
-                nivelLeccion              
+                numeroLeccion              
             })
         });
         const data2 = await responseleccion.json();
         console.log(data2)
       }
+
+      const preguntas = obtenerDatosPreguntas()
+      console.log("Para pregunta",preguntas)
+      for(const leccionPreguntas of preguntas){
+      const numeroLeccion = leccionPreguntas.numeroLeccion
+      const preguntas = leccionPreguntas.preguntas
+      console.log(numeroLeccion)
+      const token = localStorage.getItem('token')
+      const responseModulo = await fetch(`http://localhost:3641/v1/modulos/${idModulo}`, {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+              'Authorization': `Bearer ${token}`
+          }
+      });
+        const dataModulo = await responseModulo.json();
+        console.log(dataModulo.modulo.lecciones)
+        
+        for(const pregunta of preguntas){
+          console.log("Pregunta",pregunta)
+        }
+    }
+   
   };
+
+  async function crearPreguntas() {
+
+    const preguntas = obtenerDatosPreguntas()
+    for(const leccionPreguntas of preguntas){
+
+      const numeroLeccion = leccionPreguntas.numeroLeccion
+      const preguntas = leccionPreguntas.preguntas
+      const responseLeccion = await fetch(`http://localhost:3641/v1/lecciones/nivel/${numeroLeccion}`, {
+           method: "GET",
+           headers: {
+               "Content-Type": "application/json",
+               'Authorization': `Bearer ${token}`
+           }
+       });
+        const data = await responseLeccion.json();
+        const idLeccion= data.leccion._id
+        console.log("Leccion",idLeccion)
+
+        for(const pregunta of preguntas){
+          console.log("Pregunta",pregunta)
+        }
+    }
+    
+
+
+  }
+
+  
 
 
 addLessonButton.onclick = addLesson;
@@ -382,6 +446,7 @@ $("#create-module").onclick = () => {
   console.log("LECCIONES:", datos.lecciones);
   crearLeccion()
   console.log("PREGUNTAS:", datos.preguntas);
+  console.log("Para pregunta",dataModulo.modulo.lecciones)
   console.log("Esto es resumen")
 
   showMessage("Datos preparados correctamente para conectar con la API.", true);
