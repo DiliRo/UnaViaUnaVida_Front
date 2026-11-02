@@ -242,7 +242,6 @@ moduleForm.onsubmit = event => {
   };
   
   showView(2);
-  crearModulo()
 };
 
 lessonsForm.onsubmit = event => {
@@ -272,7 +271,6 @@ lessonsForm.onsubmit = event => {
 
   renderSummary();
   showView(4);
-  crearLeccion()
 };
 
 questionForm.onsubmit = event => {
@@ -327,15 +325,19 @@ async function crearModulo (){
           })
       });
       dataModulo = await response.json();
-    console.log(dataModulo)
-    console.log(response)
+      idModulo = dataModulo.modulo._id
+        console.log(dataModulo)
+        console.log(response)
 
   };
 
   async function crearLeccion (){
+    const datos = prepararDatosAPI();
     const modulo = obtenerDatosModulo()
-    const leccion = obtenerDatosLecciones()
-    let nivel = modulo.nivel
+
+    const leccion = datos.lecciones
+    const nivel = modulo.nivel
+    console.log(nivel)
     const token = localStorage.getItem('token')
     const responseModulo = await fetch(`http://localhost:3641/v1/modulos/nivel/${nivel}`, {
           method: "GET",
@@ -346,8 +348,8 @@ async function crearModulo (){
       });
       console.log("Este es mi modulo")
       const data = await responseModulo.json();
-      idModulo= data.modulos._id
-
+      
+      console.log(data)
 
       
       for(const [index,lec] of leccion.entries()){
@@ -355,7 +357,7 @@ async function crearModulo (){
         const descripcion = lec.descripcion
         const intentosMaximos = lec.intentosMaximos
         const numeroLeccion = lec.numeroLeccion
-
+        console.log(idModulo)
         const responseleccion = await fetch("http://localhost:3641/v1/lecciones/", {
             method: "POST",
             headers: {
@@ -374,13 +376,16 @@ async function crearModulo (){
         console.log(data2)
       }
 
-      const preguntas = obtenerDatosPreguntas()
-      console.log("Para pregunta",preguntas)
+  };
+
+  async function crearPreguntas() {
+    const datos = prepararDatosAPI();
+    const token = localStorage.getItem('token')
+    const preguntas = datos.preguntas
+
       for(const leccionPreguntas of preguntas){
       const numeroLeccion = leccionPreguntas.numeroLeccion
       const preguntas = leccionPreguntas.preguntas
-      console.log(numeroLeccion)
-      const token = localStorage.getItem('token')
       const responseModulo = await fetch(`http://localhost:3641/v1/modulos/${idModulo}`, {
           method: "GET",
           headers: {
@@ -389,40 +394,42 @@ async function crearModulo (){
           }
       });
         const dataModulo = await responseModulo.json();
-        console.log(dataModulo.modulo.lecciones)
+
+
         
-        for(const pregunta of preguntas){
-          console.log("Pregunta",pregunta)
-        }
-    }
-   
-  };
 
-  async function crearPreguntas() {
-
-    const preguntas = obtenerDatosPreguntas()
-    for(const leccionPreguntas of preguntas){
-
-      const numeroLeccion = leccionPreguntas.numeroLeccion
-      const preguntas = leccionPreguntas.preguntas
-      const responseLeccion = await fetch(`http://localhost:3641/v1/lecciones/nivel/${numeroLeccion}`, {
-           method: "GET",
-           headers: {
-               "Content-Type": "application/json",
-               'Authorization': `Bearer ${token}`
-           }
-       });
-        const data = await responseLeccion.json();
-        const idLeccion= data.leccion._id
-        console.log("Leccion",idLeccion)
-
-        for(const pregunta of preguntas){
-          console.log("Pregunta",pregunta)
-        }
+         const responseLeccion = await fetch(`http://localhost:3641/v1/lecciones/modulo/${idModulo}/numeroLeccion/${numeroLeccion}`, {
+              method: "GET",
+              headers: {
+                  "Content-Type": "application/json",
+                  'Authorization': `Bearer ${token}`
+              }
+          });
+          const dataLeccion2 = await responseLeccion.json()
+          const idLeccion  = dataLeccion2.leccion[0]._id
+          for(const pregunta of preguntas){
+            console.log(idLeccion)
+            const enunciado= pregunta.enunciado
+            const opciones= pregunta.opciones
+            const retroalimentacion = pregunta.retroalimentacion
+             const responsePregunta = await fetch("http://localhost:3641/v1/preguntas/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    idLeccion,
+                    enunciado,
+                    opciones,
+                    retroalimentacion
+                })
+            });
+            const dataPregunta = await responsePregunta.json()
+            console.log(dataPregunta)
+          }
     }
     
-
-
   }
 
   
@@ -446,7 +453,7 @@ $("#create-module").onclick = () => {
   console.log("LECCIONES:", datos.lecciones);
   crearLeccion()
   console.log("PREGUNTAS:", datos.preguntas);
-  console.log("Para pregunta",dataModulo.modulo.lecciones)
+  crearPreguntas()
   console.log("Esto es resumen")
 
   showMessage("Datos preparados correctamente para conectar con la API.", true);
