@@ -302,7 +302,7 @@ questionForm.onsubmit = event => {
 
   showMessage("Pregunta preparada correctamente.", true);
 
-  console.log("numeroLeccion",lessons[selectedLesson]);
+
 };
 
 async function crearModulo (){
@@ -326,8 +326,7 @@ async function crearModulo (){
       });
       dataModulo = await response.json();
       idModulo = dataModulo.modulo._id
-        console.log(dataModulo)
-        console.log(response)
+
 
   };
 
@@ -337,7 +336,7 @@ async function crearModulo (){
 
     const leccion = datos.lecciones
     const nivel = modulo.nivel
-    console.log(nivel)
+
     const token = localStorage.getItem('token')
     const responseModulo = await fetch(`http://localhost:3641/v1/modulos/nivel/${nivel}`, {
           method: "GET",
@@ -346,10 +345,10 @@ async function crearModulo (){
               'Authorization': `Bearer ${token}`
           }
       });
-      console.log("Este es mi modulo")
+
       const data = await responseModulo.json();
       
-      console.log(data)
+
 
       
       for(const [index,lec] of leccion.entries()){
@@ -357,7 +356,7 @@ async function crearModulo (){
         const descripcion = lec.descripcion
         const intentosMaximos = lec.intentosMaximos
         const numeroLeccion = lec.numeroLeccion
-        console.log(idModulo)
+
         const responseleccion = await fetch("http://localhost:3641/v1/lecciones/", {
             method: "POST",
             headers: {
@@ -373,7 +372,7 @@ async function crearModulo (){
             })
         });
         const data2 = await responseleccion.json();
-        console.log(data2)
+
       }
 
   };
@@ -382,7 +381,6 @@ async function crearModulo (){
     const datos = prepararDatosAPI();
     const token = localStorage.getItem('token')
     const preguntas = datos.preguntas
-
       for(const leccionPreguntas of preguntas){
       const numeroLeccion = leccionPreguntas.numeroLeccion
       const preguntas = leccionPreguntas.preguntas
@@ -408,7 +406,7 @@ async function crearModulo (){
           const dataLeccion2 = await responseLeccion.json()
           const idLeccion  = dataLeccion2.leccion[0]._id
           for(const pregunta of preguntas){
-            console.log(idLeccion)
+            
             const enunciado= pregunta.enunciado
             const opciones= pregunta.opciones
             const retroalimentacion = pregunta.retroalimentacion
@@ -426,7 +424,6 @@ async function crearModulo (){
                 })
             });
             const dataPregunta = await responsePregunta.json()
-            console.log(dataPregunta)
           }
     }
     
@@ -441,22 +438,36 @@ $("#another-question").onclick = resetQuestionForm;
 $("#back-lessons").onclick = () => { renderLessons(); showView(2); };
 $("#back-summary").onclick = () => { renderLessons(); showView(2); };
 
-$("#create-module").onclick = () => {
+$("#create-module").onclick = async () => {
   if (!moduleData.nombre || lessons.length !== MAX_LESSONS || lessons.some(lesson => !lesson.questions.length)) {
     return showMessage("Debes completar el módulo, las seis lecciones y sus preguntas.");
   }
+  const boton = $("#create-module");
 
-  const datos = prepararDatosAPI();
+  if (boton.disabled) return;
 
-  console.log("MÓDULO:", datos.modulo);
-  crearModulo()
-  console.log("LECCIONES:", datos.lecciones);
-  crearLeccion()
-  console.log("PREGUNTAS:", datos.preguntas);
-  crearPreguntas()
-  console.log("Esto es resumen")
+  boton.disabled = true;
+  boton.textContent = "Guardando datos...";
+  boton.classList.add("opacity-50", "cursor-not-allowed");
 
-  showMessage("Datos preparados correctamente para conectar con la API.", true);
+   try {
+    const datos = prepararDatosAPI();
+
+    await crearModulo();
+    await crearLeccion();
+    await crearPreguntas();
+
+    showMessage("Módulo creado correctamente.", true);
+
+    window.location.href = "./principal.html";
+
+  } catch (e) {
+    console.error(e);
+    showMessage("Error al crear el módulo, las lecciones o las preguntas.");
+     boton.disabled = false;
+    boton.textContent = "Preparar datos";
+    boton.classList.remove("opacity-50", "cursor-not-allowed");
+  } 
 };
 
 addLesson();
