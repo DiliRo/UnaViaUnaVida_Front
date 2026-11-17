@@ -1,414 +1,695 @@
-const savedModules = JSON.parse(
-  localStorage.getItem("rutaSeguraModules") || "[]"
-);
 
-const data = {
-  selectedId: 1,
-  points: 340,
-  streak: 5,
 
-  modules: [
-    {
-      id: 1,
-      title: "Señales de tránsito",
-      description: "Aprende a reconocer las principales señales de tránsito.",
-      currentLevel: 3,
-      levels: [
-        "Introducción",
-        "Señales preventivas",
-        "Señales reglamentarias",
-        "Señales informativas",
-        "Señales de obras",
-        "Evaluación"
-      ]
-    },
-    {
-      id: 2,
-      title: "Normas de circulación",
-      description: "Practica las reglas esenciales para circular con seguridad.",
-      currentLevel: 1,
-      levels: [
-        "Prioridad de paso",
-        "Uso de carriles",
-        "Límites de velocidad",
-        "Intersecciones",
-        "Rotondas",
-        "Evaluación"
-      ]
-    },
-    {
-      id: 3,
-      title: "Seguridad vial",
-      description: "Identifica riesgos y toma mejores decisiones en la vía.",
-      currentLevel: 1,
-      levels: [
-        "Conducción preventiva",
-        "Peatones y ciclistas",
-        "Uso del cinturón",
-        "Distracciones",
-        "Emergencias",
-        "Evaluación final"
-      ]
-    },
+const appData = {
+    selectedModuleId: null,
+    userProgress: { nivel: 1, numeroLeccion: 1 },
+    points: 340,
+    streak: 5,
+    modules: [],
 
-    ...savedModules
-  ]
+    friends: [
+        { initials: 'JR', name: 'Jonathan', points: 520, online: true },
+        { initials: 'DR', name: 'Dilan', points: 460, online: true },
+        { initials: 'MG', name: 'María', points: 390, online: false }
+    ],
+
+    achievements: [
+        { icon: '★', title: 'Primer recorrido', unlocked: true },
+        { icon: '◆', title: 'Tres niveles seguidos', unlocked: true },
+        { icon: '●', title: 'Experto en señales', unlocked: false }
+    ],
+
+    tips: [
+        'Reduce la velocidad antes de llegar a una intersección.',
+        'Mantén una distancia segura con el vehículo de adelante.',
+        'Las señales preventivas advierten sobre riesgos en la vía.'
+    ]
 };
 
-const $ = selector => document.querySelector(selector);
-
-const elements = {
-  selector: $("#module-selector"),
-  title: $("#module-title"),
-  description: $("#module-description"),
-  levels: $("#levels-container"),
-  car: $("#player-car"),
-  progress: $("#progress-label"),
-  ring: $("#progress-ring"),
-  bar: $("#progress-bar"),
-  completeButton: $("#complete-level-button"),
-  points: $("#points-value"),
-  streak: $("#streak-value"),
-  completed: $("#completed-value"),
-  sidebarLevel: $("#sidebar-level"),
-  friends: $("#friends-list"),
-  achievements: $("#achievements-list"),
-  achievementCount: $("#achievement-count"),
-  tip: $("#road-tip"),
-  toast: $("#toast")
-};
-
-const positions = [
-  [18, 8],
-  [68, 17],
-  [50, 32],
-  [27, 48],
-  [68, 65],
-  [18, 88]
+const levelPositions = [
+    { left: 18, top: 8 },
+    { left: 68, top: 17 },
+    { left: 50, top: 32 },
+    { left: 27, top: 48 },
+    { left: 68, top: 65 },
+    { left: 18, top: 88 }
 ];
 
-const friends = [
-  ["JR", "Jonathan", 520, true],
-  ["DR", "Dilan", 460, true],
-  ["MG", "María", 390, false]
-];
+let elements;
+let nombre = '';
 
-const achievements = [
-  ["★", "Primer recorrido", true],
-  ["◆", "Tres niveles seguidos", true],
-  ["●", "Experto en señales", false]
-];
 
-const tips = [
-  "Reduce la velocidad antes de llegar a una intersección.",
-  "Mantén una distancia segura con el vehículo de adelante.",
-  "Las señales preventivas advierten sobre riesgos en la vía."
-];
-
-function getModule() {
-  return data.modules.find(
-    module => module.id === data.selectedId
-  );
-}
-
-function showToast(message, error = false) {
-  elements.toast.textContent = message;
-
-  elements.toast.className = `
-    fixed bottom-[1.25rem] left-1/2 z-50
-    -translate-x-1/2 rounded-[0.7rem]
-    px-[1rem] py-[0.8rem] text-[0.85rem]
-    font-bold text-[#FFFFFF] shadow-lg
-    ${error ? "bg-[#D9363E]" : "bg-[#168653]"}
-  `;
-
-  clearTimeout(showToast.timer);
-
-  showToast.timer = setTimeout(
-    () => elements.toast.classList.add("hidden"),
-    2500
-  );
-}
-
-function renderModuleButtons() {
-  elements.selector.innerHTML = data.modules
-    .map((module, index) => {
-      const selected = module.id === data.selectedId;
-
-      return `
-        <button
-          type="button"
-          data-id="${module.id}"
-          class="module-button shrink-0 rounded-[0.7rem]
-                 px-[1rem] py-[0.7rem] text-[0.78rem]
-                 font-extrabold shadow-sm
-                 ${
-                   selected
-                     ? "bg-[#168653] text-[#FFFFFF]"
-                     : "bg-[#FFFFFF] text-[#68747B] hover:bg-[#E0EFE7]"
-                 }"
-        >
-          Módulo ${index + 1}
-        </button>
-      `;
-    })
-    .join("");
-
-  document.querySelectorAll(".module-button").forEach(button => {
-    button.addEventListener("click", () => {
-      data.selectedId = Number(button.dataset.id);
-      render();
-    });
-  });
-}
-
-function renderLevels() {
-  const module = getModule();
-
-  elements.levels.innerHTML = module.levels
-    .slice(0, 6)
-    .map((title, index) => {
-      const level = index + 1;
-      const [left, top] = positions[index];
-
-      let color = "#F5C518";
-      let disabled = "disabled";
-
-      if (level < module.currentLevel) {
-        color = "#168653";
-        disabled = "";
-      }
-
-      if (level === module.currentLevel) {
-        color = "#D9363E";
-        disabled = "";
-      }
-
-      return `
-        <div
-          class="absolute z-10 -translate-x-1/2 -translate-y-1/2"
-          style="left:${left}%; top:${top}%"
-        >
-          <button
-            type="button"
-            class="level-button flex flex-col items-center"
-            data-level="${level}"
-            ${disabled}
-          >
-            <span
-              class="grid size-[3.2rem] place-items-center
-                     rounded-[0.75rem] bg-[#090C0E]
-                     shadow-lg shadow-[#090C0E]"
-            >
-              <span
-                class="size-[1.55rem] rounded-full
-                       border-[0.18rem] border-[#FFFFFF]"
-                style="background-color:${color}"
-              ></span>
-            </span>
-
-            <span
-              class="mt-[0.4rem] max-w-[8rem]
-                     rounded-[0.45rem] bg-[#FFFFFF]
-                     px-[0.55rem] py-[0.3rem]
-                     text-center text-[0.65rem]
-                     font-extrabold text-[#172026]"
-            >
-              ${level}. ${title}
-            </span>
-          </button>
-        </div>
-      `;
-    })
-    .join("");
-
-  document
-    .querySelectorAll(".level-button:not(:disabled)")
-    .forEach(button => {
-      button.addEventListener("click", () => {
-        const level = Number(button.dataset.level);
-
-        showToast(
-          `Nivel ${level}: ${module.levels[level - 1]}`
+function obtenerModulosLocales() {
+    try {
+        const modulos = JSON.parse(
+            localStorage.getItem('rutaSeguraModules') || '[]'
         );
-      });
+
+        if (!Array.isArray(modulos)) {
+            return [];
+        }
+
+        return modulos.map(modulo => ({
+            ...modulo,
+            id: String(modulo.id)
+        }));
+    } catch (error) {
+        console.error(
+            'Error al cargar módulos locales:',
+            error
+        );
+
+        return [];
+    }
+}
+
+function getSelectedModule() {
+    return appData.modules.find(
+        module => module.id === appData.selectedModuleId
+    );
+}
+
+/* Un módulo está bloqueado si su nivel es mayor al nivel del usuario.
+   Los ADMIN tienen acceso a todos los módulos. */
+function isModuleLocked(module) {
+    if (Progreso.esAdmin()) return false;
+
+    return Number.isFinite(module.nivelRequerido) &&
+        module.nivelRequerido > appData.userProgress.nivel;
+}
+
+/* Lección en la que va el usuario dentro de un módulo. */
+function getCurrentLevelForModule(nivelModulo, totalLecciones) {
+    const { nivel, numeroLeccion } = appData.userProgress;
+
+    if (!Number.isFinite(nivelModulo)) return 1;
+    if (nivelModulo < nivel) return totalLecciones + 1;
+    if (nivelModulo > nivel) return 1;
+    return numeroLeccion;
+}
+
+function goToLesson(module, numeroLeccion) {
+    window.location.href =
+        `./leccion.html?modulo=${encodeURIComponent(module.id)}&leccion=${numeroLeccion}`;
+}
+
+function getLevelStatus(level, currentLevel) {
+    if (level < currentLevel) return 'completed';
+    if (level === currentLevel) return 'current';
+    return 'locked';
+}
+
+function getLevelColor(status) {
+    return {
+        completed: '#168653',
+        current: '#D9363E',
+        locked: '#F5C518'
+    }[status];
+}
+
+function renderModules() {
+    elements.moduleSelector.replaceChildren();
+
+    appData.modules.forEach((module, index) => {
+        const selected = module.id === appData.selectedModuleId;
+        const locked = isModuleLocked(module);
+
+        const button = document.createElement('button');
+
+        button.type = 'button';
+        button.dataset.moduleId = module.id;
+        button.disabled = locked;
+
+        button.className = `
+            module-button shrink-0 rounded-[0.7rem]
+            px-[1rem] py-[0.7rem] text-[0.78rem]
+            font-extrabold shadow-sm
+            ${
+                locked
+                    ? 'cursor-not-allowed bg-[#FFFFFF] text-[#68747B] opacity-50'
+                    : selected
+                        ? 'bg-[#168653] text-[#FFFFFF]'
+                        : 'bg-[#FFFFFF] text-[#68747B] hover:bg-[#E0EFE7]'
+            }
+        `;
+
+        button.textContent = locked
+            ? `🔒 Módulo ${module.nivelRequerido ?? index + 1}`
+            : `Módulo ${module.nivelRequerido ?? index + 1}`;
+
+        if (locked) {
+            button.title = `Necesitas llegar al nivel ${module.nivelRequerido} para desbloquearlo`;
+        }
+
+        button.addEventListener('click', () => {
+            if (locked) return;
+            appData.selectedModuleId = button.dataset.moduleId;
+            renderApp();
+        });
+
+        elements.moduleSelector.appendChild(button);
+    });
+}
+
+function renderRoad() {
+    const module = getSelectedModule();
+
+    elements.levelsContainer.replaceChildren();
+
+    if (!module || module.levels.length === 0) {
+        elements.playerCar.classList.add('hidden');
+        return;
+    }
+
+    elements.playerCar.classList.remove('hidden');
+
+    module.levels.forEach((title, index) => {
+        const level = index + 1;
+
+        const position =
+            levelPositions[index % levelPositions.length];
+
+        const status = isModuleLocked(module)
+            ? 'locked'
+            : getLevelStatus(level, module.currentLevel);
+
+        const color = getLevelColor(status);
+
+        const wrapper = document.createElement('div');
+
+        wrapper.className =
+            'absolute z-10 -translate-x-1/2 -translate-y-1/2';
+
+        wrapper.style.left = `${position.left}%`;
+        wrapper.style.top = `${position.top}%`;
+
+        const button = document.createElement('button');
+
+        button.type = 'button';
+        const esAdmin = Progreso.esAdmin();
+
+        button.disabled = status === 'locked' && !esAdmin;
+        button.dataset.level = String(level);
+
+        button.className =
+            'level-button group flex flex-col items-center';
+
+        const outer = document.createElement('span');
+
+        outer.className = `
+            grid size-[3.2rem] place-items-center
+            rounded-[0.75rem] bg-[#090C0E]
+            shadow-lg shadow-[#090C0E]
+            group-enabled:hover:-translate-y-[0.15rem]
+        `;
+
+        const circle = document.createElement('span');
+
+        circle.className = `
+            size-[1.55rem] rounded-full
+            border-[0.18rem] border-[#FFFFFF]
+        `;
+
+        circle.style.backgroundColor = color;
+
+        outer.appendChild(circle);
+
+        const label = document.createElement('span');
+
+        label.className = `
+            mt-[0.4rem] max-w-[8rem] rounded-[0.45rem]
+            bg-[#FFFFFF] px-[0.55rem] py-[0.3rem]
+            text-center text-[0.65rem] font-extrabold
+            text-[#172026] shadow-md shadow-[#090C0E]
+        `;
+
+        label.textContent = `${level}. ${title}`;
+
+        button.append(outer, label);
+
+        button.addEventListener('click', () => {
+            if ((status === 'locked' && !esAdmin) || isModuleLocked(module)) return;
+            goToLesson(module, level);
+        });
+
+        wrapper.appendChild(button);
+        elements.levelsContainer.appendChild(wrapper);
     });
 
-  const positionIndex = Math.min(
-    module.currentLevel - 1,
-    positions.length - 1
-  );
+    const currentIndex = Math.max(
+        0,
+        Math.min(
+            module.currentLevel - 1,
+            module.levels.length - 1
+        )
+    );
 
-  const [left, top] = positions[positionIndex];
+    const carPosition =
+        levelPositions[currentIndex % levelPositions.length];
 
-  elements.car.style.left = `calc(${left}% + 2.8rem)`;
-  elements.car.style.top = `calc(${top}% - 1.2rem)`;
-  elements.car.style.transform = "translate(-50%, -50%)";
+    elements.playerCar.style.left =
+        `calc(${carPosition.left}% + 2.8rem)`;
+
+    elements.playerCar.style.top =
+        `calc(${carPosition.top}% - 1.2rem)`;
+
+    elements.playerCar.style.transform =
+        'translate(-50%, -50%)';
 }
 
 function renderProgress() {
-  const module = getModule();
+    const module = getSelectedModule();
 
-  const completed = Math.min(
-    module.currentLevel - 1,
-    module.levels.length
-  );
+    if (!module) {
+        elements.moduleTitle.textContent =
+            'No hay módulos disponibles';
 
-  const percentage = Math.round(
-    completed / module.levels.length * 100
-  );
+        elements.moduleDescription.textContent = '';
+        elements.progressLabel.textContent = '0%';
+        elements.progressRing.textContent = '0%';
+        elements.progressBar.style.width = '0%';
 
-  const totalCompleted = data.modules.reduce(
-    (total, item) =>
-      total + Math.min(
-        item.currentLevel - 1,
-        item.levels.length
-      ),
-    0
-  );
+        elements.completeButton.disabled = true;
+        elements.completeButton.textContent = 'Sin módulos';
 
-  elements.title.textContent = module.title;
-  elements.description.textContent = module.description;
-  elements.progress.textContent = `${percentage}%`;
-  elements.ring.textContent = `${percentage}%`;
-  elements.bar.style.width = `${percentage}%`;
-  elements.points.textContent = data.points;
-  elements.streak.textContent = data.streak;
-  elements.completed.textContent = totalCompleted;
-  elements.sidebarLevel.textContent = totalCompleted + 1;
+        elements.points.textContent = appData.points;
+        elements.streak.textContent = appData.streak;
+        elements.completed.textContent = '0';
+        elements.sidebarLevel.textContent = '1';
 
-  const finished =
-    module.currentLevel > module.levels.length;
+        return;
+    }
 
-  elements.completeButton.disabled = finished;
+    const completed = Math.max(
+        module.currentLevel - 1,
+        0
+    );
 
-  elements.completeButton.textContent = finished
-    ? "Módulo completado"
-    : "Completar nivel actual";
+    const percentage = module.levels.length > 0
+        ? Math.round(
+            Math.min(completed, module.levels.length)
+            / module.levels.length * 100
+        )
+        : 0;
+
+    const totalCompleted = appData.modules.reduce(
+        (total, item) =>
+            total + Math.min(
+                Math.max(item.currentLevel - 1, 0),
+                item.levels.length
+            ),
+        0
+    );
+
+    elements.moduleTitle.textContent = module.title;
+
+    elements.moduleDescription.textContent =
+        module.description;
+
+    elements.progressLabel.textContent = `${percentage}%`;
+    elements.progressRing.textContent = `${percentage}%`;
+    elements.progressBar.style.width = `${percentage}%`;
+
+    elements.points.textContent = appData.points;
+    elements.streak.textContent = appData.streak;
+    elements.completed.textContent = totalCompleted;
+    elements.sidebarLevel.textContent = appData.userProgress.nivel;
+
+    const noLevels = module.levels.length === 0;
+    const locked = isModuleLocked(module);
+
+    const finished =
+        !noLevels &&
+        module.currentLevel > module.levels.length;
+
+    elements.completeButton.disabled = noLevels || finished || locked;
+
+    elements.completeButton.textContent = locked
+        ? 'Módulo bloqueado'
+        : noLevels
+            ? 'Sin lecciones disponibles'
+            : finished
+                ? 'Módulo completado'
+                : `Comenzar lección ${module.currentLevel}`;
 }
 
 function renderFriends() {
-  elements.friends.innerHTML = friends
-    .map(([initials, name, points, online]) => `
-      <div class="flex items-center gap-[0.7rem]">
-        <span
-          class="relative grid size-[2.4rem]
-                 place-items-center rounded-full
-                 bg-[#E0EFE7] text-[0.72rem]
-                 font-extrabold text-[#0F6840]"
-        >
-          ${initials}
+    elements.friendsList.replaceChildren();
 
-          <i
-            class="absolute bottom-0 right-0
-                   size-[0.55rem] rounded-full
-                   border-[0.12rem] border-[#FFFFFF]
-                   ${online ? "bg-[#168653]" : "bg-[#8A959A]"}"
-          ></i>
-        </span>
+    appData.friends.forEach(friend => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center gap-[0.7rem]';
 
-        <div class="flex-1">
-          <p class="text-[0.8rem] font-bold">${name}</p>
+        const avatar = document.createElement('span');
 
-          <p class="text-[0.68rem] text-[#8A959A]">
-            ${points} puntos
-          </p>
-        </div>
+        avatar.className = `
+            relative grid size-[2.4rem] place-items-center
+            rounded-full bg-[#E0EFE7] text-[0.72rem]
+            font-extrabold text-[#0F6840]
+        `;
 
-        <span class="text-[#F5C518]">★</span>
-      </div>
-    `)
-    .join("");
+        avatar.textContent = friend.initials;
+
+        const dot = document.createElement('i');
+
+        dot.className = `
+            absolute bottom-0 right-0 size-[0.55rem]
+            rounded-full border-[0.12rem] border-[#FFFFFF]
+            ${
+                friend.online
+                    ? 'bg-[#168653]'
+                    : 'bg-[#8A959A]'
+            }
+        `;
+
+        avatar.appendChild(dot);
+
+        const details = document.createElement('div');
+        details.className = 'flex-1';
+
+        const name = document.createElement('p');
+        name.className = 'text-[0.8rem] font-bold';
+        name.textContent = friend.name;
+
+        const points = document.createElement('p');
+        points.className = 'text-[0.68rem] text-[#8A959A]';
+        points.textContent = `${friend.points} puntos`;
+
+        details.append(name, points);
+
+        const star = document.createElement('span');
+        star.className = 'font-extrabold text-[#F5C518]';
+        star.textContent = '★';
+
+        row.append(avatar, details, star);
+
+        elements.friendsList.appendChild(row);
+    });
 }
 
 function renderAchievements() {
-  const unlocked = achievements.filter(
-    achievement => achievement[2]
-  ).length;
+    const unlocked = appData.achievements.filter(
+        achievement => achievement.unlocked
+    ).length;
 
-  elements.achievementCount.textContent =
-    `${unlocked}/${achievements.length}`;
+    elements.achievementCount.textContent =
+        `${unlocked}/${appData.achievements.length}`;
 
-  elements.achievements.innerHTML = achievements
-    .map(([icon, title, isUnlocked]) => `
-      <div
-        class="flex items-center gap-[0.7rem]
-               ${isUnlocked ? "" : "opacity-50"}"
-      >
-        <span
-          class="grid size-[2.4rem] place-items-center
-                 rounded-[0.65rem] font-black
-                 ${
-                   isUnlocked
-                     ? "bg-[#F5C518] text-[#151A1E]"
-                     : "bg-[#DBE0DC] text-[#68747B]"
-                 }"
-        >
-          ${icon}
-        </span>
+    elements.achievementsList.replaceChildren();
 
-        <div>
-          <p class="text-[0.78rem] font-bold">
-            ${title}
-          </p>
+    appData.achievements.forEach(achievement => {
+        const row = document.createElement('div');
 
-          <p class="text-[0.66rem] text-[#8A959A]">
-            ${isUnlocked ? "Desbloqueado" : "Pendiente"}
-          </p>
-        </div>
-      </div>
-    `)
-    .join("");
+        row.className = `
+            flex items-center gap-[0.7rem]
+            ${achievement.unlocked ? '' : 'opacity-50'}
+        `;
+
+        const icon = document.createElement('span');
+
+        icon.className = `
+            grid size-[2.4rem] place-items-center
+            rounded-[0.65rem] font-black
+            ${
+                achievement.unlocked
+                    ? 'bg-[#F5C518] text-[#151A1E]'
+                    : 'bg-[#DBE0DC] text-[#68747B]'
+            }
+        `;
+
+        icon.textContent = achievement.icon;
+
+        const details = document.createElement('div');
+
+        const title = document.createElement('p');
+        title.className = 'text-[0.78rem] font-bold';
+        title.textContent = achievement.title;
+
+        const status = document.createElement('p');
+        status.className = 'text-[0.66rem] text-[#8A959A]';
+
+        status.textContent = achievement.unlocked
+            ? 'Desbloqueado'
+            : 'Pendiente';
+
+        details.append(title, status);
+        row.append(icon, details);
+
+        elements.achievementsList.appendChild(row);
+    });
 }
 
-function completeLevel() {
-  const module = getModule();
+function showToast(message, type = 'success') {
+    const color = type === 'success'
+        ? 'bg-[#168653]'
+        : 'bg-[#D9363E]';
 
-  if (module.currentLevel > module.levels.length) {
-    return;
-  }
+    elements.toast.textContent = message;
 
-  module.currentLevel++;
-  data.points += 100;
-  data.streak++;
+    elements.toast.className = `
+        fixed bottom-[1.25rem] left-1/2 z-50
+        -translate-x-1/2 rounded-[0.7rem]
+        px-[1rem] py-[0.8rem] text-[0.85rem]
+        font-bold text-[#FFFFFF] shadow-lg
+        shadow-[#151A1E]/20 ${color}
+    `;
 
-  showToast(
-    module.currentLevel > module.levels.length
-      ? "¡Módulo completado!"
-      : "¡Nivel completado!"
-  );
+    clearTimeout(showToast.timeout);
 
-  renderLevels();
-  renderProgress();
+    showToast.timeout = setTimeout(() => {
+        elements.toast.classList.add('hidden');
+    }, 2500);
 }
 
-function render() {
-  const moduleIndex = data.modules.indexOf(getModule());
+/* Botón verde: lleva a la vista de la lección actual del módulo. */
+function completeCurrentLevel() {
+    const module = getSelectedModule();
 
-  renderModuleButtons();
-  renderLevels();
-  renderProgress();
-
-  elements.tip.textContent =
-    tips[moduleIndex] || tips[0];
-}
-
-document.querySelectorAll(".nav-button").forEach(button => {
-  button.addEventListener("click", () => {
-    if (button.dataset.view !== "ruta") {
-      showToast(
-        `La vista ${button.textContent.trim()} estará disponible próximamente.`,
-        true
-      );
+    if (
+        !module ||
+        isModuleLocked(module) ||
+        module.levels.length === 0 ||
+        module.currentLevel > module.levels.length
+    ) {
+        return;
     }
-  });
-});
 
-elements.completeButton.addEventListener(
-  "click",
-  completeLevel
-);
+    goToLesson(module, module.currentLevel);
+}
 
-renderFriends();
-renderAchievements();
-render();
+function setupNavigation() {
+    document.querySelectorAll('.nav-button').forEach(button => {
+        button.addEventListener('click', () => {
+            /* El cierre de sesión lo maneja progreso.js ([data-logout]). */
+            if (button.dataset.view === 'cerrarSesion') return;
+
+            if (button.dataset.view === 'leyes') {
+                window.location.href = './leyes.html';
+                return;
+            }
+
+            if (button.dataset.view !== 'ruta') {
+                showToast(
+                    `La vista ${button.textContent.trim()} estará disponible próximamente.`,
+                    'error'
+                );
+            }
+        });
+    });
+}
+
+function renderApp() {
+    renderModules();
+    renderRoad();
+    renderProgress();
+    renderFriends();
+    renderAchievements();
+
+    const selectedIndex = appData.modules.findIndex(
+        module => module.id === appData.selectedModuleId
+    );
+
+    elements.roadTip.textContent =
+        appData.tips[
+            Math.max(0, selectedIndex) % appData.tips.length
+        ];
+}
+
+async function obtenerModulos(token) {
+    try {
+        const token = localStorage.getItem('token')
+        const response = await fetch(
+            'http://localhost:3641/v1/modulos/',
+            {
+                method: 'GET',
+                headers: {
+                'Authorization': `Bearer ${token}`
+            }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Error al obtener módulos: HTTP ${response.status}`
+            );
+        }
+
+        const data = await response.json();
+
+        if (!data.success || !Array.isArray(data.modulos)) {
+            throw new Error('Respuesta de módulos inválida');
+        }
+
+        appData.userProgress = await Progreso.obtenerProgreso();
+
+        appData.modules = data.modulos
+            .map(modulo => {
+                const lecciones = [...(modulo.lecciones ?? [])].sort(
+                    (a, b) => (a?.numeroLeccion ?? 0) - (b?.numeroLeccion ?? 0)
+                );
+
+                const nivel = Number(modulo.nivel);
+
+                return {
+                    id: String(modulo._id),
+                    title: modulo.nombre,
+                    description: modulo.descripcion ?? '',
+                    currentLevel: getCurrentLevelForModule(nivel, lecciones.length),
+
+                    levels: lecciones.map(
+                        (leccion, index) =>
+                            typeof leccion === 'string'
+                                ? leccion
+                                : (
+                                    leccion.titulo ??
+                                    leccion.nombre ??
+                                    `Lección ${index + 1}`
+                                )
+                    ),
+
+                    nivelRequerido: nivel,
+                    puedeAcceder: nivel <= appData.userProgress.nivel
+                };
+            })
+            .sort((a, b) => a.nivelRequerido - b.nivelRequerido);
+
+        /* Agrega los módulos creados desde el formulario. */
+        appData.modules.push(...obtenerModulosLocales());
+
+        /* Selecciona el módulo del nivel del usuario (o el último desbloqueado). */
+        const desbloqueados = appData.modules.filter(m => !isModuleLocked(m));
+
+        appData.selectedModuleId = (
+            appData.modules.find(m => m.nivelRequerido === appData.userProgress.nivel) ??
+            desbloqueados[desbloqueados.length - 1] ??
+            appData.modules[0]
+        )?.id ?? null;
+
+        renderApp();
+
+    } catch (error) {
+        console.error('Error al cargar módulos:', error);
+
+        showToast(
+            'No se pudieron cargar los módulos',
+            'error'
+        );
+    }
+}
+
+function obtenerPayloadJWT(token) {
+    const parte = token.split('.')[1];
+
+    if (!parte) {
+        throw new Error('JWT sin payload');
+    }
+
+    const base64 = parte
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+
+    const padded = base64.padEnd(
+        Math.ceil(base64.length / 4) * 4,
+        '='
+    );
+
+    const bytes = Uint8Array.from(
+        atob(padded),
+        c => c.charCodeAt(0)
+    );
+
+    return JSON.parse(
+        new TextDecoder().decode(bytes)
+    );
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.replace('./login.html');
+        return;
+    }
+
+    try {
+        const payload = obtenerPayloadJWT(token);
+
+        nombre = payload.nombre ?? '';
+        
+
+        const rol = payload.rol;
+
+        if (rol === 'ADMIN') {
+            console.log('Soy')
+            const boton = document.getElementById('btn-agregar-modulo');
+            console.log(boton)
+            boton.style.display='flex'
+        }
+        console.log('Rol:', payload.rol);
+
+        if (
+            typeof payload.exp === 'number' &&
+            Date.now() >= payload.exp * 1000
+        ) {
+            throw new Error('Token expirado');
+        }
+
+    } catch (error) {
+        console.error('Token inválido:', error);
+
+        localStorage.removeItem('token');
+        window.location.replace('./login.html');
+        return;
+    }
+
+    
+
+    elements = {
+        moduleSelector: document.querySelector('#module-selector'),
+        moduleTitle: document.querySelector('#module-title'),
+        moduleDescription: document.querySelector('#module-description'),
+        levelsContainer: document.querySelector('#levels-container'),
+        playerCar: document.querySelector('#player-car'),
+        progressLabel: document.querySelector('#progress-label'),
+        progressRing: document.querySelector('#progress-ring'),
+        progressBar: document.querySelector('#progress-bar'),
+        completeButton: document.querySelector('#complete-level-button'),
+        points: document.querySelector('#points-value'),
+        streak: document.querySelector('#streak-value'),
+        completed: document.querySelector('#completed-value'),
+        sidebarLevel: document.querySelector('#sidebar-level'),
+        friendsList: document.querySelector('#friends-list'),
+        achievementsList: document.querySelector('#achievements-list'),
+        achievementCount: document.querySelector('#achievement-count'),
+        roadTip: document.querySelector('#road-tip'),
+        toast: document.querySelector('#toast')
+    };
+
+    elements.completeButton.addEventListener(
+        'click',
+        completeCurrentLevel
+    );
+
+    setupNavigation();
+
+    obtenerModulos(token);
+});

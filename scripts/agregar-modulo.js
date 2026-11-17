@@ -1,375 +1,473 @@
-const STORAGE_KEY = "rutaSeguraModules";
+
+const $ = selector => document.querySelector(selector);
+const $$ = selector => [...document.querySelectorAll(selector)];
 const MAX_LESSONS = 6;
 
-const moduleForm =
-  document.querySelector("#module-form");
-
-const lessonsForm =
-  document.querySelector("#lessons-form");
-
-const lessonsContainer =
-  document.querySelector("#lessons-container");
-
-const addLessonButton =
-  document.querySelector("#add-lesson-button");
-
-const backButton =
-  document.querySelector("#back-button");
-
-const lessonCount =
-  document.querySelector("#lesson-count");
-
-const message =
-  document.querySelector("#form-message");
-
-const pageTitle =
-  document.querySelector("#page-title");
-
-const pageDescription =
-  document.querySelector("#page-description");
-
-const stepOne =
-  document.querySelector("#step-one-indicator");
-
-const stepTwo =
-  document.querySelector("#step-two-indicator");
+const moduleForm = $("#module-form");
+const lessonsForm = $("#lessons-form");
+const lessonsContainer = $("#lessons-container");
+const addLessonButton = $("#add-lesson-button");
+const backButton = $("#back-button");
+const lessonCount = $("#lesson-count");
+const message = $("#form-message");
+const pageTitle = $("#page-title");
+const pageDescription = $("#page-description");
+const stepOne = $("#step-one-indicator");
+const stepTwo = $("#step-two-indicator");
+const submitLessons = lessonsForm.querySelector('[type="submit"]');
 
 let moduleData = {};
-let lessonTotal = 0;
+let lessons = [];
+let selectedLesson = 0;
+let lessonsReady = false;
+let idModulo = null;
 
-function showMessage(
-  text,
-  type = "error"
-) {
+const questionsView = document.createElement("section");
+const summaryView = document.createElement("section");
+
+questionsView.id = "questions-view";
+questionsView.className = "mt-[1rem] hidden rounded-[1rem] bg-[#FFFFFF] p-[1.5rem] shadow-lg";
+questionsView.innerHTML = `
+  <h2 class="text-[1.3rem] font-extrabold">Crear preguntas</h2>
+  <p id="lesson-name" class="mt-[0.3rem] font-bold text-[#168653]"></p>
+  <form id="question-form" class="mt-[1rem] grid gap-[1rem]">
+    <label><span class="text-[0.78rem] font-bold">Enunciado</span>
+      <textarea id="statement" required rows="3" class="mt-[0.4rem] w-full rounded-[0.6rem] border-[0.0625rem] border-[#DBE0DC] p-[0.9rem] outline-none focus:border-[#168653]"></textarea>
+    </label>
+    <fieldset>
+      <legend class="text-[0.78rem] font-bold">Opciones</legend>
+      <p class="text-[0.72rem] text-[#68747B]">Marca la respuesta correcta.</p>
+      <div id="options" class="mt-[0.7rem] grid gap-[0.6rem]"></div>
+    </fieldset>
+    <label><span class="text-[0.78rem] font-bold">Retroalimentación</span>
+      <textarea id="feedback" required rows="3" class="mt-[0.4rem] w-full rounded-[0.6rem] border-[0.0625rem] border-[#DBE0DC] p-[0.9rem] outline-none focus:border-[#168653]"></textarea>
+    </label>
+    <button type="submit" class="rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.75rem] font-bold text-[#FFFFFF]">Guardar pregunta</button>
+  </form>
+  <button id="another-question" type="button" class="mt-[1rem] hidden rounded-[0.65rem] bg-[#F5C518] px-[1rem] py-[0.75rem] font-bold">+ Crear otra pregunta</button>
+  <div id="question-cards" class="mt-[1rem] grid gap-[1rem]"></div>
+  <button id="back-lessons" type="button" class="mt-[1rem] rounded-[0.65rem] border-[0.0625rem] border-[#8A959A] px-[1rem] py-[0.75rem] font-bold text-[#68747B]">← Regresar a lecciones</button>
+`;
+
+summaryView.id = "summary-view";
+summaryView.className = "mt-[1rem] hidden space-y-[1rem]";
+summaryView.innerHTML = `
+  <div id="summary" class="space-y-[1rem]"></div>
+  <div class="flex justify-between gap-[1rem]">
+    <button id="back-summary" type="button" class="rounded-[0.65rem] border-[0.0625rem] border-[#8A959A] px-[1rem] py-[0.75rem] font-bold text-[#68747B]">← Regresar</button>
+    <button id="create-module" type="button" class="rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.75rem] font-bold text-[#FFFFFF]">Preparar datos</button>
+  </div>
+`;
+
+lessonsForm.after(questionsView, summaryView);
+
+const questionForm = $("#question-form");
+
+const showMessage = (text, success = false) => {
   message.textContent = text;
+  message.className = `mt-[1rem] rounded-[0.7rem] p-[1rem] text-[0.82rem] font-bold ${success ? "bg-[#E0EFE7] text-[#0F6840]" : "bg-[#FDE8E9] text-[#A9242B]"}`;
+};
 
-  message.className =
-    type === "success"
-      ? "mt-[1rem] rounded-[0.7rem] bg-[#E0EFE7] p-[1rem] text-[0.82rem] font-bold text-[#0F6840]"
-      : "mt-[1rem] rounded-[0.7rem] bg-[#FDE8E9] p-[1rem] text-[0.82rem] font-bold text-[#A9242B]";
+const hideMessage = () => message.classList.add("hidden");
+
+const escapeHTML = text => {
+  const element = document.createElement("div");
+  element.textContent = String(text ?? "");
+  return element.innerHTML;
+};
+
+function showView(step) {
+  const views = [null, moduleForm, lessonsForm, questionsView, summaryView];
+  views.slice(1).forEach(view => view.classList.add("hidden"));
+  views[step].classList.remove("hidden");
+
+  const data = [
+    null,
+    ["Agregar módulo", "Primero completa la información general del módulo."],
+    ["Agregar lecciones", lessonsReady ? "Agrega preguntas a las seis lecciones." : "Completa obligatoriamente seis lecciones."],
+    ["Crear preguntas", "Crea las preguntas de la lección seleccionada."],
+    ["Resumen del módulo", "Revisa la información antes de crear el módulo."]
+  ][step];
+
+  [pageTitle.textContent, pageDescription.textContent] = data;
+
+  stepOne.className = `grid size-[2rem] place-items-center rounded-full text-[0.75rem] font-extrabold ${step === 1 ? "bg-[#168653] text-[#FFFFFF]" : "bg-[#E0EFE7] text-[#0F6840]"}`;
+  stepTwo.className = `grid size-[2rem] place-items-center rounded-full text-[0.75rem] font-extrabold ${step >= 2 ? "bg-[#168653] text-[#FFFFFF]" : "bg-[#252D32] text-[#CBD2D5]"}`;
+
+  hideMessage();
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function hideMessage() {
-  message.classList.add("hidden");
-}
-
-function updateLessonCount() {
-  lessonTotal =
-    lessonsContainer.children.length;
-
-  lessonCount.textContent =
-    `${lessonTotal} / ${MAX_LESSONS}`;
-
-  addLessonButton.disabled =
-    lessonTotal >= MAX_LESSONS;
+function updateCount() {
+  lessonCount.textContent = `${lessonsContainer.children.length} / ${MAX_LESSONS}`;
+  addLessonButton.disabled = lessonsContainer.children.length >= MAX_LESSONS;
 }
 
 function addLesson() {
-  if (
-    lessonsContainer.children.length >=
-    MAX_LESSONS
-  ) {
-    return;
-  }
+  if (lessonsReady || lessonsContainer.children.length >= MAX_LESSONS) return;
 
-  const number =
-    lessonsContainer.children.length + 1;
+  const number = lessonsContainer.children.length + 1;
+  const card = document.createElement("section");
 
-  const lesson =
-    document.createElement("section");
-
-  lesson.className =
-    "lesson-card rounded-[0.8rem] border-[0.0625rem] border-[#DBE0DC] bg-[#F4F6F3] p-[1rem]";
-
-  lesson.innerHTML = `
-    <div class="flex items-center justify-between">
-      <h3 class="font-extrabold">
-        Lección ${number}
-      </h3>
-
-      <button
-        type="button"
-        class="remove-lesson text-[0.75rem]
-               font-bold text-[#A9242B]
-               ${number === 1 ? "hidden" : ""}"
-      >
-        Eliminar
-      </button>
-    </div>
-
-    <div
-      class="mt-[0.9rem] grid gap-[1rem]
-             sm:grid-cols-2"
-    >
-      <label class="sm:col-span-2">
-        <span class="text-[0.78rem] font-bold">
-          Título
-        </span>
-
-        <input
-          type="text"
-          maxlength="80"
-          required
-          class="lesson-title mt-[0.4rem]
-                 min-h-[3.1rem] w-full
-                 rounded-[0.6rem]
-                 border-[0.0625rem]
-                 border-[#DBE0DC]
-                 bg-[#FFFFFF] px-[0.9rem]
-                 outline-none
-                 focus:border-[#168653]"
-        >
-      </label>
-
-      <label class="sm:col-span-2">
-        <span class="text-[0.78rem] font-bold">
-          Descripción
-        </span>
-
-        <textarea
-          rows="3"
-          maxlength="300"
-          required
-          class="lesson-description
-                 mt-[0.4rem] w-full
-                 resize-none rounded-[0.6rem]
-                 border-[0.0625rem]
-                 border-[#DBE0DC]
-                 bg-[#FFFFFF] p-[0.9rem]
-                 outline-none
-                 focus:border-[#168653]"
-        ></textarea>
-      </label>
-
-      <label>
-        <span class="text-[0.78rem] font-bold">
-          Intentos máximos
-        </span>
-
-        <input
-          type="number"
-          min="1"
-          max="10"
-          value="3"
-          required
-          class="lesson-attempts mt-[0.4rem]
-                 min-h-[3.1rem] w-full
-                 rounded-[0.6rem]
-                 border-[0.0625rem]
-                 border-[#DBE0DC]
-                 bg-[#FFFFFF] px-[0.9rem]
-                 outline-none
-                 focus:border-[#168653]"
-        >
-      </label>
-    </div>
+  card.className = "lesson-card rounded-[0.8rem] border-[0.0625rem] border-[#DBE0DC] bg-[#F4F6F3] p-[1rem]";
+  card.innerHTML = `
+    <div class="flex justify-between"><h3 class="font-extrabold">Lección ${number}</h3><button type="button" class="remove text-[0.75rem] font-bold text-[#A9242B]">Eliminar</button></div>
+    <label class="mt-[0.8rem] block"><span class="text-[0.78rem] font-bold">Título</span><input required class="title mt-[0.4rem] min-h-[3rem] w-full rounded-[0.6rem] border-[0.0625rem] border-[#DBE0DC] bg-[#FFFFFF] px-[0.9rem]"></label>
+    <label class="mt-[0.8rem] block"><span class="text-[0.78rem] font-bold">Descripción</span><textarea required rows="3" class="description mt-[0.4rem] w-full rounded-[0.6rem] border-[0.0625rem] border-[#DBE0DC] bg-[#FFFFFF] p-[0.9rem]"></textarea></label>
+    <label class="mt-[0.8rem] block"><span class="text-[0.78rem] font-bold">Intentos máximos</span><input required type="number" min="1" max="10" value="3" class="attempts mt-[0.4rem] min-h-[3rem] w-full rounded-[0.6rem] border-[0.0625rem] border-[#DBE0DC] bg-[#FFFFFF] px-[0.9rem]"></label>
   `;
 
-  const removeButton =
-    lesson.querySelector(
-      ".remove-lesson"
-    );
+  card.querySelector(".remove").onclick = () => {
+    card.remove();
+    $$(".lesson-card h3").forEach((title, index) => title.textContent = `Lección ${index + 1}`);
+    updateCount();
+  };
 
-  removeButton.addEventListener(
-    "click",
-    () => {
-      lesson.remove();
-      renumberLessons();
-    }
-  );
-
-  lessonsContainer.appendChild(lesson);
-  updateLessonCount();
+  lessonsContainer.appendChild(card);
+  updateCount();
 }
 
-function renumberLessons() {
-  [...lessonsContainer.children]
-    .forEach((lesson, index) => {
-      lesson.querySelector(
-        "h3"
-      ).textContent =
-        `Lección ${index + 1}`;
+function renderLessons() {
+  lessonsContainer.innerHTML = lessons.map((lesson, index) => `
+    <article class="rounded-[0.8rem] border-[0.0625rem] border-[#DBE0DC] bg-[#F4F6F3] p-[1rem]">
+      <div class="flex justify-between gap-[1rem]"><h3 class="font-extrabold">Lección ${index + 1}: ${escapeHTML(lesson.titulo)}</h3><span class="text-[0.72rem] font-bold text-[#0F6840]">${lesson.questions.length} preguntas</span></div>
+      <p class="mt-[0.5rem] text-[0.8rem] text-[#68747B]">${escapeHTML(lesson.descripcion)}</p>
+      <p class="mt-[0.4rem] text-[0.75rem] font-bold">Intentos máximos: ${lesson.intentosMaximos}</p>
+      <button type="button" data-lesson="${index}" class="questions mt-[0.8rem] rounded-[0.6rem] bg-[#168653] px-[0.9rem] py-[0.65rem] text-[0.75rem] font-bold text-[#FFFFFF]">${lesson.questions.length ? "Ver o crear preguntas" : "Crear preguntas"}</button>
+    </article>
+  `).join("");
 
-      lesson
-        .querySelector(".remove-lesson")
-        .classList.toggle(
-          "hidden",
-          index === 0
-        );
+  $$(".questions").forEach(button => button.onclick = () => openQuestions(Number(button.dataset.lesson)));
+  lessonCount.textContent = `${MAX_LESSONS} / ${MAX_LESSONS}`;
+}
+
+function resetQuestionForm() {
+  questionForm.reset();
+
+  $("#options").innerHTML = Array.from({ length: 4 }, (_, index) => `
+    <div class="flex gap-[0.6rem] rounded-[0.6rem] bg-[#F4F6F3] p-[0.6rem]">
+      <input type="checkbox" value="${index}" class="correct size-[1.1rem] accent-[#168653]">
+      <input required placeholder="Opción ${index + 1}" class="option min-h-[2.7rem] flex-1 rounded-[0.5rem] border-[0.0625rem] border-[#DBE0DC] bg-[#FFFFFF] px-[0.8rem]">
+    </div>
+  `).join("");
+
+  $$(".correct").forEach(box => box.onchange = () => {
+    if (box.checked) $$(".correct").forEach(other => {
+      if (other !== box) other.checked = false;
     });
+  });
 
-  updateLessonCount();
+  questionForm.classList.remove("hidden");
+  $("#another-question").classList.add("hidden");
 }
 
-function showStep(step) {
-  const lessonsStep =
-    step === 2;
-
-  moduleForm.classList.toggle(
-    "hidden",
-    lessonsStep
-  );
-
-  lessonsForm.classList.toggle(
-    "hidden",
-    !lessonsStep
-  );
-
-  pageTitle.textContent =
-    lessonsStep
-      ? "Agregar lecciones"
-      : "Agregar módulo";
-
-  pageDescription.textContent =
-    lessonsStep
-      ? "Completa la información de las lecciones que tendrá el módulo."
-      : "Primero completa la información general del módulo.";
-
-  stepOne.className = `
-    grid size-[2rem] place-items-center
-    rounded-full text-[0.75rem]
-    font-extrabold
-    ${
-      lessonsStep
-        ? "bg-[#E0EFE7] text-[#0F6840]"
-        : "bg-[#168653] text-[#FFFFFF]"
-    }
-  `;
-
-  stepTwo.className = `
-    grid size-[2rem] place-items-center
-    rounded-full text-[0.75rem]
-    font-extrabold
-    ${
-      lessonsStep
-        ? "bg-[#168653] text-[#FFFFFF]"
-        : "bg-[#252D32] text-[#CBD2D5]"
-    }
-  `;
-
-  hideMessage();
+function openQuestions(index) {
+  selectedLesson = index;
+  $("#lesson-name").textContent = `Lección ${index + 1}: ${lessons[index].titulo}`;
+  renderQuestions();
+  resetQuestionForm();
+  showView(3);
 }
 
-moduleForm.addEventListener(
-  "submit",
-  event => {
-    event.preventDefault();
+function renderQuestions() {
+  $("#question-cards").innerHTML = lessons[selectedLesson].questions.map((question, index) => `
+    <article class="rounded-[0.7rem] bg-[#F4F6F3] p-[1rem]">
+      <div class="flex justify-between"><h3 class="font-bold">Pregunta ${index + 1}</h3><button type="button" data-delete="${index}" class="delete-question text-[0.75rem] font-bold text-[#A9242B]">Eliminar</button></div>
+      <p class="mt-[0.5rem]">${escapeHTML(question.enunciado)}</p>
+      ${question.opciones.map(option => `<p class="mt-[0.4rem] rounded-[0.5rem] p-[0.5rem] text-[0.78rem] ${option.esCorrecta ? "bg-[#E0EFE7] font-bold text-[#0F6840]" : "bg-[#FFFFFF]"}">${escapeHTML(option.texto)} ${option.esCorrecta ? "✓" : ""}</p>`).join("")}
+      <p class="mt-[0.6rem] text-[0.75rem] text-[#68747B]">Retroalimentación: ${escapeHTML(question.retroalimentacion)}</p>
+    </article>
+  `).join("");
 
-    if (!moduleForm.checkValidity()) {
-      moduleForm.reportValidity();
+  $$(".delete-question").forEach(button => button.onclick = () => {
+    lessons[selectedLesson].questions.splice(Number(button.dataset.delete), 1);
+    renderQuestions();
+  });
+}
 
-      showMessage(
-        "Completa correctamente todos los datos del módulo."
-      );
+function renderSummary() {
+  $("#summary").innerHTML = `
+    <article class="rounded-[1rem] bg-[#151A1E] p-[1.5rem] text-[#FFFFFF]"><h2 class="text-[1.4rem] font-extrabold">${escapeHTML(moduleData.nombre)}</h2><p class="mt-[0.5rem] text-[#CBD2D5]">${escapeHTML(moduleData.descripcion)}</p><p class="mt-[0.5rem]">Nivel: ${moduleData.nivel}</p></article>
+    ${lessons.map((lesson, index) => `<article class="rounded-[1rem] bg-[#FFFFFF] p-[1.3rem] shadow-lg"><h3 class="font-extrabold">Lección ${index + 1}: ${escapeHTML(lesson.titulo)}</h3><p class="mt-[0.4rem] text-[#68747B]">${escapeHTML(lesson.descripcion)}</p><p class="mt-[0.4rem] text-[0.78rem]">Intentos: ${lesson.intentosMaximos}</p>${lesson.questions.map((question, questionIndex) => `<div class="mt-[0.7rem] rounded-[0.6rem] bg-[#F4F6F3] p-[0.8rem]"><p class="font-bold">${questionIndex + 1}. ${escapeHTML(question.enunciado)}</p><p class="text-[0.75rem] text-[#0F6840]">Correcta: ${escapeHTML(question.opciones.find(opcion => opcion.esCorrecta)?.texto)}</p><p class="text-[0.75rem] text-[#68747B]">${escapeHTML(question.retroalimentacion)}</p></div>`).join("")}</article>`).join("")}
+  `;
+}
 
-      return;
-    }
+function obtenerDatosModulo() {
+  return {
+    nombre: moduleData.nombre,
+    descripcion: moduleData.descripcion,
+    nivel: moduleData.nivel
+  };
+}
 
-    moduleData = {
-      title: document
-        .querySelector("#module-name")
-        .value
-        .trim(),
+function obtenerDatosLecciones() {
+  return lessons.map(lesson => ({
+    titulo: lesson.titulo,
+    descripcion: lesson.descripcion,
+    intentosMaximos: lesson.intentosMaximos,
+    numeroLeccion: lesson.numeroLeccion
+  }));
+}
 
-      description: document
-        .querySelector("#module-description")
-        .value
-        .trim(),
+function obtenerDatosPreguntas() {
+  return lessons.map(lesson => ({
+    numeroLeccion: lesson.numeroLeccion,
+    preguntas: lesson.questions.map(question => ({
+      enunciado: question.enunciado,
+      opciones: question.opciones.map(opcion => ({
+        texto: opcion.texto,
+        esCorrecta: opcion.esCorrecta
+      })),
+      retroalimentacion: question.retroalimentacion
+    }))
+  }));
+}
 
-      levelNumber: Number(
-        document
-          .querySelector("#module-level")
-          .value
-      )
-    };
+function prepararDatosAPI() {
+  return {
+    modulo: obtenerDatosModulo(),
+    lecciones: obtenerDatosLecciones(),
+    preguntas: obtenerDatosPreguntas()
+  };
+}
 
-    showStep(2);
-  }
-);
+moduleForm.onsubmit = event => {
+  event.preventDefault();
+  if (!moduleForm.checkValidity()) return moduleForm.reportValidity();
+  
+  moduleData = {
+    nombre: $("#module-name").value.trim(),
+    descripcion: $("#module-description").value.trim(),
+    nivel: Number($("#module-level").value)
+  };
+  
+  showView(2);
+};
 
-lessonsForm.addEventListener(
-  "submit",
-  event => {
-    event.preventDefault();
+lessonsForm.onsubmit = event => {
+  event.preventDefault();
+  if (!lessonsReady) {
+    if ($$(".lesson-card").length !== MAX_LESSONS) return showMessage("Debes crear obligatoriamente seis lecciones.");
+    if (!lessonsForm.checkValidity()) return lessonsForm.reportValidity();
 
-    if (!lessonsForm.checkValidity()) {
-      lessonsForm.reportValidity();
-
-      showMessage(
-        "Completa correctamente los datos de todas las lecciones."
-      );
-
-      return;
-    }
-
-    const lessons = [
-      ...document.querySelectorAll(
-        ".lesson-card"
-      )
-    ].map(card => ({
-      title: card
-        .querySelector(".lesson-title")
-        .value
-        .trim(),
-
-      description: card
-        .querySelector(
-          ".lesson-description"
-        )
-        .value
-        .trim(),
-
-      maxAttempts: Number(
-        card.querySelector(
-          ".lesson-attempts"
-        ).value
-      )
+    lessons = $$(".lesson-card").map((card,index) => ({
+      titulo: card.querySelector(".title").value.trim(),
+      descripcion: card.querySelector(".description").value.trim(),
+      intentosMaximos: Number(card.querySelector(".attempts").value),
+      questions: [],
+      numeroLeccion: index +1
     }));
 
-    const storedModules = JSON.parse(
-      localStorage.getItem(
-        STORAGE_KEY
-      ) || "[]"
-    );
+    lessonsReady = true;
+    addLessonButton.classList.add("hidden");
+    backButton.classList.add("hidden");
+    submitLessons.textContent = "Ver resumen";
 
-    storedModules.push({
-      id: Date.now(),
-      ...moduleData,
-      currentLevel: 1,
-      levels: lessons.map(
-        lesson => lesson.title
-      ),
-      lessons
-    });
-
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(storedModules)
-    );
-
-    showMessage(
-      "Módulo guardado correctamente.",
-      "success"
-    );
-
-    setTimeout(
-      () => {
-        window.location.href =
-          "./principal.html";
-      },
-      900
-    );
+    renderLessons();
+    return showMessage("Ahora agrega preguntas a cada lección.", true);
   }
-);
 
-addLessonButton.addEventListener(
-  "click",
-  addLesson
-);
+  if (lessons.some(lesson => !lesson.questions.length)) return showMessage("Cada lección debe tener al menos una pregunta.");
 
-backButton.addEventListener(
-  "click",
-  () => showStep(1)
-);
+  renderSummary();
+  showView(4);
+};
+
+questionForm.onsubmit = event => {
+  event.preventDefault();
+
+  if (!questionForm.checkValidity()) return questionForm.reportValidity();
+
+  const correct = $(".correct:checked");
+  if (!correct) return showMessage("Selecciona la respuesta correcta.");
+
+  const opciones = $$(".option").map((input, index) => ({
+    texto: input.value.trim(),
+    esCorrecta: index === Number(correct.value)
+  }));
+
+  if (opciones.some(opcion => opcion.texto === "")) {
+    return showMessage("Todas las opciones deben tener contenido.");
+  }
+
+  lessons[selectedLesson].questions.push({
+    enunciado: $("#statement").value.trim(),
+    opciones,
+    retroalimentacion: $("#feedback").value.trim()
+  });
+
+  renderQuestions();
+  questionForm.classList.add("hidden");
+  $("#another-question").classList.remove("hidden");
+
+  showMessage("Pregunta preparada correctamente.", true);
+
+
+};
+
+async function crearModulo (){
+    const modulo = obtenerDatosModulo()
+    let nombre = modulo.nombre
+    let descripcion = modulo.descripcion
+    let nivel = modulo.nivel
+
+    const token = localStorage.getItem('token')
+    const response = await fetch("http://localhost:3641/v1/modulos/", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+              nombre,
+              descripcion,
+              nivel
+          })
+      });
+      dataModulo = await response.json();
+      idModulo = dataModulo.modulo._id
+
+
+  };
+
+  async function crearLeccion (){
+    const datos = prepararDatosAPI();
+    const modulo = obtenerDatosModulo()
+
+    const leccion = datos.lecciones
+    const nivel = modulo.nivel
+
+    const token = localStorage.getItem('token')
+    const responseModulo = await fetch(`http://localhost:3641/v1/modulos/nivel/${nivel}`, {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+              'Authorization': `Bearer ${token}`
+          }
+      });
+
+      const data = await responseModulo.json();
+      
+
+
+      
+      for(const [index,lec] of leccion.entries()){
+        const titulo = lec.titulo
+        const descripcion = lec.descripcion
+        const intentosMaximos = lec.intentosMaximos
+        const numeroLeccion = lec.numeroLeccion
+
+        const responseleccion = await fetch("http://localhost:3641/v1/lecciones/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                idModulo,
+                titulo,
+                descripcion,
+                intentosMaximos,
+                numeroLeccion              
+            })
+        });
+        const data2 = await responseleccion.json();
+
+      }
+
+  };
+
+  async function crearPreguntas() {
+    const datos = prepararDatosAPI();
+    const token = localStorage.getItem('token')
+    const preguntas = datos.preguntas
+      for(const leccionPreguntas of preguntas){
+      const numeroLeccion = leccionPreguntas.numeroLeccion
+      const preguntas = leccionPreguntas.preguntas
+      const responseModulo = await fetch(`http://localhost:3641/v1/modulos/${idModulo}`, {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+              'Authorization': `Bearer ${token}`
+          }
+      });
+        const dataModulo = await responseModulo.json();
+
+
+        
+
+         const responseLeccion = await fetch(`http://localhost:3641/v1/lecciones/modulo/${idModulo}/numeroLeccion/${numeroLeccion}`, {
+              method: "GET",
+              headers: {
+                  "Content-Type": "application/json",
+                  'Authorization': `Bearer ${token}`
+              }
+          });
+          const dataLeccion2 = await responseLeccion.json()
+          const idLeccion  = dataLeccion2.leccion[0]._id
+          for(const pregunta of preguntas){
+            
+            const enunciado= pregunta.enunciado
+            const opciones= pregunta.opciones
+            const retroalimentacion = pregunta.retroalimentacion
+             const responsePregunta = await fetch("http://localhost:3641/v1/preguntas/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    idLeccion,
+                    enunciado,
+                    opciones,
+                    retroalimentacion
+                })
+            });
+            const dataPregunta = await responsePregunta.json()
+          }
+    }
+    
+  }
+
+  
+
+
+addLessonButton.onclick = addLesson;
+backButton.onclick = () => showView(1);
+$("#another-question").onclick = resetQuestionForm;
+$("#back-lessons").onclick = () => { renderLessons(); showView(2); };
+$("#back-summary").onclick = () => { renderLessons(); showView(2); };
+
+$("#create-module").onclick = async () => {
+  if (!moduleData.nombre || lessons.length !== MAX_LESSONS || lessons.some(lesson => !lesson.questions.length)) {
+    return showMessage("Debes completar el módulo, las seis lecciones y sus preguntas.");
+  }
+  const boton = $("#create-module");
+
+  if (boton.disabled) return;
+
+  boton.disabled = true;
+  boton.textContent = "Guardando datos...";
+  boton.classList.add("opacity-50", "cursor-not-allowed");
+
+   try {
+    const datos = prepararDatosAPI();
+
+    await crearModulo();
+    await crearLeccion();
+    await crearPreguntas();
+
+    showMessage("Módulo creado correctamente.", true);
+
+    window.location.href = "./principal.html";
+
+  } catch (e) {
+    console.error(e);
+    showMessage("Error al crear el módulo, las lecciones o las preguntas.");
+     boton.disabled = false;
+    boton.textContent = "Preparar datos";
+    boton.classList.remove("opacity-50", "cursor-not-allowed");
+  } 
+};
 
 addLesson();

@@ -110,6 +110,19 @@
           <span aria-hidden="true">●</span>
           <span>Perfil</span>
         </button>
+
+        <button
+          class="nav-button flex items-center gap-[0.75rem]
+                 rounded-[0.65rem] px-[1rem] py-[0.8rem]
+                 text-left font-semibold text-[#CBD2D5]
+                 hover:bg-[#252D32] hover:text-[#FFFFFF]"
+          type="button"
+          data-view="cerrarSesion"
+          data-logout
+        >
+          <span aria-hidden="true">●</span>
+          <span>Cerrar sesión</span>
+        </button>
       </nav>
 
       <div
@@ -121,13 +134,14 @@
             class="grid size-[2.6rem] place-items-center
                    rounded-full bg-[#E0EFE7]
                    font-extrabold text-[#0F6840]"
+            data-user-initials
           >
-            LN
+            U
           </span>
 
           <div class="min-w-0">
-            <p class="truncate text-[0.85rem] font-bold">
-              Luis Núñez
+            <p class="truncate text-[0.85rem] font-bold" data-user-name>
+              Usuario
             </p>
 
             <p class="text-[0.72rem] text-[#8F9A9F]">
@@ -223,7 +237,9 @@
         ></div>
 
         <a
+          id="btn-agregar-modulo"
           href="./agregar-modulo.html"
+          style="display: none;"
           class="flex shrink-0 items-center gap-[0.45rem]
                  rounded-[0.7rem] bg-[#168653]
                  px-[1rem] py-[0.7rem] text-[0.78rem]
@@ -231,6 +247,7 @@
                  transition hover:bg-[#0F6840]"
         >
           <span
+          id="btn-agregar-modulo"
             class="text-[1.1rem] leading-none"
             aria-hidden="true"
           >
@@ -531,6 +548,7 @@
     aria-live="polite"
   ></div>
 
-  <script src="./principal.js" defer></script>
+  <script src="../scripts/progreso.js"></script>
+  <script src="../scripts/principal.js"></script>
 </body>
 </html>
