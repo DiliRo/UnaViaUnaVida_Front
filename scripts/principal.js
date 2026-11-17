@@ -2,6 +2,7 @@
 
 const appData = {
     selectedModuleId: null,
+    userProgress: { nivel: 1, numeroLeccion: 1 },
     points: 340,
     streak: 5,
     modules: [],
@@ -68,6 +69,30 @@ function getSelectedModule() {
     );
 }
 
+/* Un módulo está bloqueado si su nivel es mayor al nivel del usuario.
+   Los ADMIN tienen acceso a todos los módulos. */
+function isModuleLocked(module) {
+    if (Progreso.esAdmin()) return false;
+
+    return Number.isFinite(module.nivelRequerido) &&
+        module.nivelRequerido > appData.userProgress.nivel;
+}
+
+/* Lección en la que va el usuario dentro de un módulo. */
+function getCurrentLevelForModule(nivelModulo, totalLecciones) {
+    const { nivel, numeroLeccion } = appData.userProgress;
+
+    if (!Number.isFinite(nivelModulo)) return 1;
+    if (nivelModulo < nivel) return totalLecciones + 1;
+    if (nivelModulo > nivel) return 1;
+    return numeroLeccion;
+}
+
+function goToLesson(module, numeroLeccion) {
+    window.location.href =
+        `./leccion.html?modulo=${encodeURIComponent(module.id)}&leccion=${numeroLeccion}`;
+}
+
 function getLevelStatus(level, currentLevel) {
     if (level < currentLevel) return 'completed';
     if (level === currentLevel) return 'current';
@@ -87,26 +112,37 @@ function renderModules() {
 
     appData.modules.forEach((module, index) => {
         const selected = module.id === appData.selectedModuleId;
+        const locked = isModuleLocked(module);
 
         const button = document.createElement('button');
 
         button.type = 'button';
         button.dataset.moduleId = module.id;
+        button.disabled = locked;
 
         button.className = `
             module-button shrink-0 rounded-[0.7rem]
             px-[1rem] py-[0.7rem] text-[0.78rem]
             font-extrabold shadow-sm
             ${
-                selected
-                    ? 'bg-[#168653] text-[#FFFFFF]'
-                    : 'bg-[#FFFFFF] text-[#68747B] hover:bg-[#E0EFE7]'
+                locked
+                    ? 'cursor-not-allowed bg-[#FFFFFF] text-[#68747B] opacity-50'
+                    : selected
+                        ? 'bg-[#168653] text-[#FFFFFF]'
+                        : 'bg-[#FFFFFF] text-[#68747B] hover:bg-[#E0EFE7]'
             }
         `;
 
-        button.textContent = `Módulo ${index + 1}`;
+        button.textContent = locked
+            ? `🔒 Módulo ${module.nivelRequerido ?? index + 1}`
+            : `Módulo ${module.nivelRequerido ?? index + 1}`;
+
+        if (locked) {
+            button.title = `Necesitas llegar al nivel ${module.nivelRequerido} para desbloquearlo`;
+        }
 
         button.addEventListener('click', () => {
+            if (locked) return;
             appData.selectedModuleId = button.dataset.moduleId;
             renderApp();
         });
@@ -133,10 +169,9 @@ function renderRoad() {
         const position =
             levelPositions[index % levelPositions.length];
 
-        const status = getLevelStatus(
-            level,
-            module.currentLevel
-        );
+        const status = isModuleLocked(module)
+            ? 'locked'
+            : getLevelStatus(level, module.currentLevel);
 
         const color = getLevelColor(status);
 
@@ -151,7 +186,9 @@ function renderRoad() {
         const button = document.createElement('button');
 
         button.type = 'button';
-        button.disabled = status === 'locked';
+        const esAdmin = Progreso.esAdmin();
+
+        button.disabled = status === 'locked' && !esAdmin;
         button.dataset.level = String(level);
 
         button.className =
@@ -191,7 +228,8 @@ function renderRoad() {
         button.append(outer, label);
 
         button.addEventListener('click', () => {
-            showToast(`Nivel ${level}: ${title}`);
+            if ((status === 'locked' && !esAdmin) || isModuleLocked(module)) return;
+            goToLesson(module, level);
         });
 
         wrapper.appendChild(button);
@@ -275,21 +313,24 @@ function renderProgress() {
     elements.points.textContent = appData.points;
     elements.streak.textContent = appData.streak;
     elements.completed.textContent = totalCompleted;
-    elements.sidebarLevel.textContent = totalCompleted + 1;
+    elements.sidebarLevel.textContent = appData.userProgress.nivel;
 
     const noLevels = module.levels.length === 0;
+    const locked = isModuleLocked(module);
 
     const finished =
         !noLevels &&
         module.currentLevel > module.levels.length;
 
-    elements.completeButton.disabled = noLevels || finished;
+    elements.completeButton.disabled = noLevels || finished || locked;
 
-    elements.completeButton.textContent = noLevels
-        ? 'Sin lecciones disponibles'
-        : finished
-            ? 'Módulo completado'
-            : 'Completar nivel actual';
+    elements.completeButton.textContent = locked
+        ? 'Módulo bloqueado'
+        : noLevels
+            ? 'Sin lecciones disponibles'
+            : finished
+                ? 'Módulo completado'
+                : `Comenzar lección ${module.currentLevel}`;
 }
 
 function renderFriends() {
@@ -420,37 +461,33 @@ function showToast(message, type = 'success') {
     }, 2500);
 }
 
+/* Botón verde: lleva a la vista de la lección actual del módulo. */
 function completeCurrentLevel() {
     const module = getSelectedModule();
 
     if (
         !module ||
+        isModuleLocked(module) ||
         module.levels.length === 0 ||
         module.currentLevel > module.levels.length
     ) {
         return;
     }
 
-    module.currentLevel++;
-    appData.points += 100;
-    appData.streak++;
-
-    const finished =
-        module.currentLevel > module.levels.length;
-
-    showToast(
-        finished
-            ? '¡Módulo completado!'
-            : '¡Nivel completado! Avanzaste al siguiente semáforo.'
-    );
-
-    renderRoad();
-    renderProgress();
+    goToLesson(module, module.currentLevel);
 }
 
 function setupNavigation() {
     document.querySelectorAll('.nav-button').forEach(button => {
         button.addEventListener('click', () => {
+            /* El cierre de sesión lo maneja progreso.js ([data-logout]). */
+            if (button.dataset.view === 'cerrarSesion') return;
+
+            if (button.dataset.view === 'leyes') {
+                window.location.href = './leyes.html';
+                return;
+            }
+
             if (button.dataset.view !== 'ruta') {
                 showToast(
                     `La vista ${button.textContent.trim()} estará disponible próximamente.`,
@@ -503,31 +540,50 @@ async function obtenerModulos(token) {
             throw new Error('Respuesta de módulos inválida');
         }
 
-        appData.modules = data.modulos.map(modulo => ({
-            id: String(modulo._id),
-            title: modulo.nombre,
-            description: modulo.descripcion ?? '',
-            currentLevel: 1,
+        appData.userProgress = await Progreso.obtenerProgreso();
 
-            levels: (modulo.lecciones ?? []).map(
-                (leccion, index) =>
-                    typeof leccion === 'string'
-                        ? leccion
-                        : (
-                            leccion.nombre ??
-                            `Lección ${index + 1}`
-                        )
-            ),
+        appData.modules = data.modulos
+            .map(modulo => {
+                const lecciones = [...(modulo.lecciones ?? [])].sort(
+                    (a, b) => (a?.numeroLeccion ?? 0) - (b?.numeroLeccion ?? 0)
+                );
 
-            nivelRequerido: modulo.nivel,
-            puedeAcceder: modulo.puedeAcceder
-        }));
+                const nivel = Number(modulo.nivel);
+
+                return {
+                    id: String(modulo._id),
+                    title: modulo.nombre,
+                    description: modulo.descripcion ?? '',
+                    currentLevel: getCurrentLevelForModule(nivel, lecciones.length),
+
+                    levels: lecciones.map(
+                        (leccion, index) =>
+                            typeof leccion === 'string'
+                                ? leccion
+                                : (
+                                    leccion.titulo ??
+                                    leccion.nombre ??
+                                    `Lección ${index + 1}`
+                                )
+                    ),
+
+                    nivelRequerido: nivel,
+                    puedeAcceder: nivel <= appData.userProgress.nivel
+                };
+            })
+            .sort((a, b) => a.nivelRequerido - b.nivelRequerido);
 
         /* Agrega los módulos creados desde el formulario. */
         appData.modules.push(...obtenerModulosLocales());
 
-        appData.selectedModuleId =
-            appData.modules[0]?.id ?? null;
+        /* Selecciona el módulo del nivel del usuario (o el último desbloqueado). */
+        const desbloqueados = appData.modules.filter(m => !isModuleLocked(m));
+
+        appData.selectedModuleId = (
+            appData.modules.find(m => m.nivelRequerido === appData.userProgress.nivel) ??
+            desbloqueados[desbloqueados.length - 1] ??
+            appData.modules[0]
+        )?.id ?? null;
 
         renderApp();
 
@@ -636,4 +692,4 @@ document.addEventListener('DOMContentLoaded', () => {
     setupNavigation();
 
     obtenerModulos(token);
-});
+});

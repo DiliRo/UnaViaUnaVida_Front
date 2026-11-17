@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ley de Tránsito y su Reglamento en Ruta Segura">
+  <title>Leyes | Ruta Segura</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="min-h-screen bg-[#F4F6F3] font-sans text-[#172026] antialiased">
+  <div class="grid min-h-screen lg:grid-cols-[15rem_minmax(0,1fr)]">
+
+    <!-- Sidebar -->
+    <aside class="flex flex-col bg-[#101417] p-[1.25rem] text-[#FFFFFF] lg:sticky lg:top-0 lg:h-screen">
+      <a href="./inicio.html" class="mb-[2rem] flex items-center gap-[0.75rem]" aria-label="Ruta Segura, inicio">
+        <span class="flex gap-[0.18rem] rounded-[0.55rem] bg-[#090C0E] p-[0.4rem]" aria-hidden="true">
+          <span class="size-[0.5rem] rounded-full bg-[#D9363E]"></span>
+          <span class="size-[0.5rem] rounded-full bg-[#F5C518]"></span>
+          <span class="size-[0.5rem] rounded-full bg-[#168653]"></span>
+        </span>
+        <span class="font-extrabold tracking-tight">Ruta Segura</span>
+      </a>
+
+      <nav aria-label="Navegación principal" class="grid grid-cols-2 gap-[0.5rem] sm:grid-cols-4 lg:grid-cols-1">
+        <a href="./inicio.html" class="flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] font-semibold text-[#CBD2D5] hover:bg-[#252D32] hover:text-[#FFFFFF]">
+          <span aria-hidden="true">⌂</span>
+          <span>Inicio</span>
+        </a>
+
+        <a href="./principal.html" class="flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] font-semibold text-[#CBD2D5] hover:bg-[#252D32] hover:text-[#FFFFFF]">
+          <span aria-hidden="true">◆</span>
+          <span>Mi ruta</span>
+        </a>
+
+        <a href="./leyes.html" aria-current="page" class="flex items-center gap-[0.75rem] rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.8rem] font-bold text-[#FFFFFF]">
+          <span aria-hidden="true">▤</span>
+          <span>Leyes</span>
+        </a>
+      </nav>
+
+      <a href="./principal.html" class="mt-[1.5rem] rounded-[0.65rem] border-[0.0625rem] border-[#8A959A] px-[1rem] py-[0.75rem] text-center text-[0.78rem] font-bold text-[#CBD2D5] hover:bg-[#252D32] lg:mt-auto">
+        Volver a mi ruta
+      </a>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="min-w-0 p-[1rem] sm:p-[1.5rem] xl:p-[2rem]">
+      <div class="mx-auto max-w-[64rem]">
+
+        <!-- Encabezado -->
+        <header class="rounded-[1rem] bg-[#FFFFFF] p-[1.25rem] shadow-lg shadow-[#151A1E]/10 sm:p-[1.5rem]">
+          <div class="flex flex-col gap-[1rem] sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p class="text-[0.72rem] font-extrabold uppercase tracking-[0.12em] text-[#168653]">
+                Marco legal
+              </p>
+
+              <h1 class="mt-[0.35rem] text-[1.7rem] font-extrabold tracking-[-0.04em] sm:text-[2rem]">
+                Ley de Tránsito y su Reglamento
+              </h1>
+
+              <p class="mt-[0.45rem] max-w-[42rem] text-[0.85rem] leading-[1.6] text-[#68747B]">
+                Decreto 132-96 del Congreso de la República de Guatemala, su reglamento y acuerdos gubernativos.
+                Consúltalo aquí o descárgalo para leerlo cuando quieras.
+              </p>
+            </div>
+
+            <div class="flex shrink-0 flex-wrap gap-[0.6rem]">
+              <a
+                id="pdf-download"
+                href="../assets/Ley-y-Reglamento-Transito.pdf"
+                download="Ley-y-Reglamento-Transito.pdf"
+                class="flex items-center gap-[0.45rem] rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.75rem] text-[0.8rem] font-extrabold text-[#FFFFFF] transition hover:bg-[#0F6840]"
+              >
+                <span aria-hidden="true">↓</span>
+                <span>Descargar PDF</span>
+              </a>
+
+              <a
+                href="../assets/Ley-y-Reglamento-Transito.pdf"
+                target="_blank"
+                rel="noopener"
+                class="flex items-center gap-[0.45rem] rounded-[0.65rem] border-[0.0625rem] border-[#DBE0DC] px-[1rem] py-[0.75rem] text-[0.8rem] font-bold text-[#68747B] transition hover:bg-[#F4F6F3]"
+              >
+                <span aria-hidden="true">↗</span>
+                <span>Abrir en otra pestaña</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="mt-[1.2rem] flex flex-wrap gap-[0.5rem] text-[0.72rem] font-bold">
+            <span class="rounded-full bg-[#E0EFE7] px-[0.7rem] py-[0.3rem] text-[#0F6840]">PDF · 2 MB</span>
+            <span class="rounded-full bg-[#E0EFE7] px-[0.7rem] py-[0.3rem] text-[#0F6840]">100 páginas</span>
+          </div>
+        </header>
+
+        <!-- Visor del PDF -->
+        <section class="mt-[1rem] overflow-hidden rounded-[1rem] bg-[#151A1E] shadow-lg shadow-[#151A1E]/10">
+          <object
+            data="../assets/Ley-y-Reglamento-Transito.pdf#view=FitH"
+            type="application/pdf"
+            class="block h-[80vh] min-h-[32rem] w-full"
+            aria-label="Ley de Tránsito y su Reglamento"
+          >
+            <div class="grid h-[20rem] place-items-center p-[1.5rem] text-center text-[#CBD2D5]">
+              <div>
+                <p class="font-bold">Tu navegador no puede mostrar el PDF aquí.</p>
+                <a href="../assets/Ley-y-Reglamento-Transito.pdf" download class="mt-[1rem] inline-block rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.75rem] text-[0.8rem] font-extrabold text-[#FFFFFF]">
+                  Descargar PDF
+                </a>
+              </div>
+            </div>
+          </object>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../scripts/progreso.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => Progreso.validarSesion());
+  </script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lección del módulo en Ruta Segura">
+  <title>Lección | Ruta Segura</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="min-h-screen bg-[#F4F6F3] font-sans text-[#172026] antialiased">
+  <div class="grid min-h-screen lg:grid-cols-[15rem_minmax(0,1fr)]">
+
+    <!-- Sidebar -->
+    <aside class="flex flex-col bg-[#101417] p-[1.25rem] text-[#FFFFFF] lg:sticky lg:top-0 lg:h-screen">
+      <a href="./inicio.html" class="mb-[2rem] flex items-center gap-[0.75rem]" aria-label="Ruta Segura, inicio">
+        <span class="flex gap-[0.18rem] rounded-[0.55rem] bg-[#090C0E] p-[0.4rem]" aria-hidden="true">
+          <span class="size-[0.5rem] rounded-full bg-[#D9363E]"></span>
+          <span class="size-[0.5rem] rounded-full bg-[#F5C518]"></span>
+          <span class="size-[0.5rem] rounded-full bg-[#168653]"></span>
+        </span>
+        <span class="font-extrabold tracking-tight">Ruta Segura</span>
+      </a>
+
+      <nav aria-label="Navegación principal" class="grid grid-cols-2 gap-[0.5rem] sm:grid-cols-4 lg:grid-cols-1">
+        <a href="./inicio.html" class="flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] font-semibold text-[#CBD2D5] hover:bg-[#252D32] hover:text-[#FFFFFF]">
+          <span aria-hidden="true">⌂</span>
+          <span>Inicio</span>
+        </a>
+
+        <a href="./principal.html" class="flex items-center gap-[0.75rem] rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.8rem] font-bold text-[#FFFFFF]">
+          <span aria-hidden="true">◆</span>
+          <span>Mi ruta</span>
+        </a>
+
+        <a href="./leyes.html" class="flex items-center gap-[0.75rem] rounded-[0.65rem] px-[1rem] py-[0.8rem] font-semibold text-[#CBD2D5] hover:bg-[#252D32] hover:text-[#FFFFFF]">
+          <span aria-hidden="true">▤</span>
+          <span>Leyes</span>
+        </a>
+      </nav>
+
+      <!-- Resumen de la lección -->
+      <div class="mt-[1.5rem] space-y-[0.6rem] border-t-[0.0625rem] border-[#252D32] pt-[1.5rem]">
+        <p class="text-[0.7rem] font-bold uppercase tracking-[0.1em] text-[#8F9A9F]">Esta lección</p>
+
+        <div class="grid grid-cols-3 gap-[0.5rem] text-center lg:grid-cols-1 lg:text-left">
+          <div class="rounded-[0.65rem] bg-[#252D32] p-[0.7rem]">
+            <strong id="side-lesson-number" class="block text-[1.1rem] text-[#FFFFFF]">–</strong>
+            <span class="text-[0.65rem] text-[#CBD2D5]">Lección</span>
+          </div>
+
+          <div class="rounded-[0.65rem] bg-[#252D32] p-[0.7rem]">
+            <strong id="side-max-points" class="block text-[1.1rem] text-[#F5C518]">–</strong>
+            <span class="text-[0.65rem] text-[#CBD2D5]">Puntaje máximo</span>
+          </div>
+
+          <div class="rounded-[0.65rem] bg-[#252D32] p-[0.7rem]">
+            <strong id="side-attempts" class="block text-[1.1rem] text-[#D9363E]">–</strong>
+            <span class="text-[0.65rem] text-[#CBD2D5]">Intentos restantes</span>
+          </div>
+        </div>
+      </div>
+
+      <a href="./principal.html" class="mt-[1.5rem] rounded-[0.65rem] border-[0.0625rem] border-[#8A959A] px-[1rem] py-[0.75rem] text-center text-[0.78rem] font-bold text-[#CBD2D5] hover:bg-[#252D32] lg:mt-auto">
+        Salir de la lección
+      </a>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="min-w-0 p-[1rem] sm:p-[1.5rem] xl:p-[2rem]">
+      <div class="mx-auto max-w-[54rem]">
+
+        <!-- Encabezado -->
+        <header class="rounded-[1rem] bg-[#FFFFFF] p-[1.25rem] shadow-lg shadow-[#151A1E]/10 sm:p-[1.5rem]">
+          <p id="module-name" class="text-[0.72rem] font-extrabold uppercase tracking-[0.12em] text-[#168653]">
+            Cargando módulo...
+          </p>
+
+          <h1 id="lesson-title" class="mt-[0.35rem] text-[1.7rem] font-extrabold tracking-[-0.04em] sm:text-[2rem]">
+            Cargando lección...
+          </h1>
+
+          <p id="lesson-description" class="mt-[0.45rem] max-w-[42rem] text-[0.85rem] leading-[1.6] text-[#68747B]"></p>
+
+          <div class="mt-[1.2rem] flex items-center justify-between text-[0.75rem] font-bold text-[#68747B]">
+            <span id="question-counter">Pregunta 0 de 0</span>
+            <span id="score-counter">0 pts</span>
+          </div>
+
+          <div class="mt-[0.5rem] h-[0.55rem] overflow-hidden rounded-full bg-[#DBE0DC]">
+            <div id="lesson-progress" class="h-full rounded-full bg-[#168653] transition-all duration-500" style="width: 0%"></div>
+          </div>
+        </header>
+
+        <!-- Estado: cargando / error / bloqueado -->
+        <section id="state-view" class="mt-[1rem] rounded-[1rem] bg-[#FFFFFF] p-[1.5rem] text-center shadow-lg shadow-[#151A1E]/10">
+          <div id="state-icon" class="mx-auto grid size-[3.5rem] place-items-center rounded-full bg-[#E0EFE7] text-[1.4rem] font-black text-[#0F6840]">…</div>
+          <h2 id="state-title" class="mt-[1rem] text-[1.25rem] font-extrabold">Preparando tu lección</h2>
+          <p id="state-text" class="mx-auto mt-[0.4rem] max-w-[32rem] text-[0.85rem] leading-[1.6] text-[#68747B]">Un momento...</p>
+          <a id="state-back" href="./principal.html" class="mt-[1.2rem] hidden rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.75rem] text-[0.82rem] font-bold text-[#FFFFFF] hover:bg-[#0F6840]">
+            Volver a mi ruta
+          </a>
+        </section>
+
+        <!-- Pregunta -->
+        <section id="question-view" class="mt-[1rem] hidden rounded-[1rem] bg-[#FFFFFF] p-[1.5rem] shadow-lg shadow-[#151A1E]/10">
+          <p id="question-label" class="text-[0.72rem] font-bold uppercase tracking-[0.1em] text-[#8A959A]">Pregunta 1</p>
+          <h2 id="question-statement" class="mt-[0.4rem] text-[1.2rem] font-extrabold leading-[1.4]"></h2>
+
+          <div id="question-options" class="mt-[1.2rem] grid gap-[0.7rem]"></div>
+
+          <div id="question-feedback" class="mt-[1rem] hidden rounded-[0.7rem] p-[1rem] text-[0.85rem] leading-[1.55]"></div>
+
+          <div class="mt-[1.2rem] flex justify-end">
+            <button id="next-button" type="button" disabled class="rounded-[0.65rem] bg-[#168653] px-[1.2rem] py-[0.75rem] text-[0.82rem] font-extrabold text-[#FFFFFF] transition hover:bg-[#0F6840] disabled:cursor-not-allowed disabled:bg-[#8A959A]">
+              Siguiente
+            </button>
+          </div>
+        </section>
+
+        <!-- Resultado -->
+        <section id="result-view" class="mt-[1rem] hidden rounded-[1rem] bg-[#151A1E] p-[1.5rem] text-center text-[#FFFFFF] shadow-lg shadow-[#151A1E]/10 sm:p-[2rem]">
+          <div id="result-icon" class="mx-auto grid size-[4rem] place-items-center rounded-full bg-[#168653] text-[1.6rem] font-black">✓</div>
+          <h2 id="result-title" class="mt-[1rem] text-[1.6rem] font-extrabold"></h2>
+          <p id="result-text" class="mx-auto mt-[0.4rem] max-w-[32rem] text-[0.88rem] leading-[1.6] text-[#CBD2D5]"></p>
+
+          <div class="mx-auto mt-[1.4rem] grid max-w-[28rem] grid-cols-3 gap-[0.5rem]">
+            <div class="rounded-[0.65rem] bg-[#252D32] p-[0.8rem]">
+              <strong id="result-score" class="block text-[1.3rem] text-[#F5C518]">0</strong>
+              <span class="text-[0.65rem] text-[#CBD2D5]">Puntaje</span>
+            </div>
+            <div class="rounded-[0.65rem] bg-[#252D32] p-[0.8rem]">
+              <strong id="result-correct" class="block text-[1.3rem] text-[#168653]">0</strong>
+              <span class="text-[0.65rem] text-[#CBD2D5]">Correctas</span>
+            </div>
+            <div class="rounded-[0.65rem] bg-[#252D32] p-[0.8rem]">
+              <strong id="result-attempts" class="block text-[1.3rem] text-[#D9363E]">0</strong>
+              <span class="text-[0.65rem] text-[#CBD2D5]">Intentos restantes</span>
+            </div>
+          </div>
+
+          <div class="mt-[1.6rem] flex flex-wrap justify-center gap-[0.7rem]">
+            <a href="./principal.html" class="rounded-[0.65rem] border-[0.0625rem] border-[#8A959A] px-[1rem] py-[0.75rem] text-[0.82rem] font-bold text-[#CBD2D5] hover:bg-[#252D32]">
+              Volver a mi ruta
+            </a>
+            <button id="retry-button" type="button" class="hidden rounded-[0.65rem] bg-[#F5C518] px-[1rem] py-[0.75rem] text-[0.82rem] font-extrabold text-[#151A1E]">
+              Reintentar lección
+            </button>
+            <a id="next-lesson-button" href="#" class="hidden rounded-[0.65rem] bg-[#168653] px-[1rem] py-[0.75rem] text-[0.82rem] font-extrabold text-[#FFFFFF] hover:bg-[#0F6840]">
+              Siguiente lección →
+            </a>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast" class="fixed bottom-[1.25rem] left-1/2 z-50 hidden -translate-x-1/2 rounded-[0.7rem] px-[1rem] py-[0.8rem] text-[0.85rem] font-bold text-[#FFFFFF] shadow-lg shadow-[#151A1E]/20" role="status" aria-live="polite"></div>
+
+  <script src="../scripts/progreso.js"></script>
+  <script src="../scripts/leccion.js"></script>
+</body>
+</html>

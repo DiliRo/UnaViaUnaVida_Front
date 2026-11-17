@@ -118,6 +118,7 @@
                  hover:bg-[#252D32] hover:text-[#FFFFFF]"
           type="button"
           data-view="cerrarSesion"
+          data-logout
         >
           <span aria-hidden="true">●</span>
           <span>Cerrar sesión</span>
@@ -133,13 +134,14 @@
             class="grid size-[2.6rem] place-items-center
                    rounded-full bg-[#E0EFE7]
                    font-extrabold text-[#0F6840]"
+            data-user-initials
           >
-            LN
+            U
           </span>
 
           <div class="min-w-0">
-            <p class="truncate text-[0.85rem] font-bold">
-              Luis Núñez
+            <p class="truncate text-[0.85rem] font-bold" data-user-name>
+              Usuario
             </p>
 
             <p class="text-[0.72rem] text-[#8F9A9F]">
@@ -546,6 +548,7 @@
     aria-live="polite"
   ></div>
 
+  <script src="../scripts/progreso.js"></script>
   <script src="../scripts/principal.js"></script>
 </body>
 </html>
